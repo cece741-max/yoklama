@@ -403,10 +403,7 @@
             const absentWeeks = currentTotalWeeks - currentAttendedWeeks;
             const ratePercent = Math.round((currentAttendedWeeks / currentTotalWeeks) * 100);
 
-            const statusBadgeColor = ratePercent >= 70 ? "#22543d" : "#742a2a";
-            const statusText = ratePercent >= 70 ? "🟢 Devam Durumunuz Başarılı" : "🔴 Devamsızlık Riski Var";
-
-            const distInfoStr = distMeters !== null ? `<div style="margin-bottom: 4px; color: #4a5568;">📍 <strong>Sınıfa Uzaklığınız:</strong> ${distMeters} Metre</div>` : '';
+            const distInfoStr = distMeters !== null ? `<div style="margin-bottom: 4px; color: #4a5568;">📍 <strong>Sınıfa Uzaklık:</strong> ${distMeters} Metre</div>` : '';
 
             const summaryCardHtml = `
                 <div style="margin-top: 12px; padding: 16px; background: rgba(255,255,255,0.95); border-radius: 12px; border: 1px solid #c6f6d5; text-align: left; font-size: 14px; line-height: 1.8;">
@@ -430,11 +427,8 @@
                     <div style="margin-bottom: 4px; color: #c53030;">
                         ❌ <strong>Devamsızlık Hafta Sayısı:</strong> ${absentWeeks} Hafta
                     </div>
-                    <div style="margin-bottom: 8px; color: #2d3748;">
-                        📈 <strong>Devam Yüzdeniz:</strong> <strong style="color: ${statusBadgeColor};">%${ratePercent}</strong>
-                    </div>
-                    <div style="font-weight: bold; text-align: center; margin-top: 12px; padding: 10px; background: #ffffff; border-radius: 8px; color: ${statusBadgeColor}; border: 1px solid #e2e8f0; font-size: 14px;">
-                        ${statusText}
+                    <div style="margin-bottom: 4px; color: #2d3748;">
+                        📈 <strong>Devam Yüzdeniz:</strong> <strong>%${ratePercent}</strong>
                     </div>
                 </div>
             `;
