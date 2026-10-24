@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Tam Ekran Uygulama / Adres Çubuğu Gizleme Meta Etiketleri -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#3182ce">
+    <meta name="application-name" content="Ders Yoklama">
+
+    <title>Ders Yoklama Sistemi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        input {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            max-width: 420px;
+            width: 100%;
+            padding: 28px 24px;
+            text-align: center;
+        }
+        .header-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        h2 {
+            color: #1a202c;
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            border-color: #3182ce;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+        button:hover {
+            background-color: #2b6cb0;
+        }
+        button:disabled {
+            background-color: #cbd5e0;
+            cursor: not-allowed;
+        }
+        .result-box {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+        .result-box.success {
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            color: #22543d;
+        }
+        .result-box.error {
+            background-color: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #742a2a;
+        }
+        .result-box.warning {
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            color: #744210;
+        }
+        .result-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .result-desc {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .footer-text {
+            margin-top: 24px;
+            font-size: 12px;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="card">
+    <div class="header-icon">📚</div>
+    <h2 id="courseTitle">Ders Yoklaması</h2>
+    <p class="subtitle" id="sessionInfo">Öğrenci Numarası ile Giriş Yapınız</p>
+
+    <div id="formContainer">
+        <div class="form-group" id="sessionGroup" style="display: none;">
+            <label for="sessionIdInput">Oturum / Şifre Kodu</label>
+            <input type="number" id="sessionIdInput" inputmode="numeric" pattern="[0-9]*" placeholder="" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+            <label for="studentNoInput">Öğrenci Numarası</label>
+            <input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" placeholder="" autocomplete="off" />
+        </div>
+
+        <button id="submitBtn" onclick="submitAttendance()">Yoklamayı Onayla</button>
+    </div>
+
+    <div id="resultBox" class="result-box">
+        <div class="result-title" id="resultTitle"></div>
+        <div class="result-desc" id="resultDesc"></div>
+    </div>
+
+    <p class="footer-text">© Mobil Yoklama Sistemi</p>
+</div>
+
+<script>
+    const DEFAULT_DB = "https://ogrenciyoklama-ce487-default-rtdb.firebaseio.com/";
+    const urlParams = new URLSearchParams(window.location.search);
+
+    let activeSessionId = urlParams.get('session') || '';
+    let dbUrl = DEFAULT_DB;
+
+    // GÜVENLİK: Sayfa açıldığı an adres çubuğundaki ?session=849201 parametresini siliyoruz!
+    if (window.history && window.history.replaceState) {
+        try {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    let sessionData = null;
+
+    function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
+        const R = 6371000; // Earth radius in meters
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return Math.round(R * c);
+    }
+
+    function getDeviceLockKey(sessId, weekStr, sessionVersion) {
+        const verStr = sessionVersion || weekStr || 'active';
+        const cleanVer = verStr.toString().replace(/[^a-zA-Z0-9]/g, '_');
+        return 'yoklama_done_' + sessId + '_' + cleanVer;
+    }
+
+    function checkDeviceLock(sessId, weekStr, sessionVersion) {
+        if (!sessId) return false;
+        try {
+            const key = getDeviceLockKey(sessId, weekStr, sessionVersion);
+            const savedNo = localStorage.getItem(key);
+            if (savedNo) {
+                showResult('warning', '🔒 Cihaz Kilidi Aktif', `Bu telefondan bu yoklama oturumu için işlem yapılmıştır.\n\nKayıtlı Öğrenci No: [${savedNo}]`);
+                document.getElementById('formContainer').style.display = 'none';
+                return true;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        return false;
+    }
+
+    async function loadSession(sessId) {
+        if (!sessId) {
+            document.getElementById('sessionGroup').style.display = 'block';
+            return false;
+        }
+
+        try {
+            const res = await fetch(`${dbUrl}sessions/${sessId}.json`);
+            if (!res.ok) {
+                showResult('error', '❌ Sunucu Yanıt Vermedi', `HTTP Hata Kodu: ${res.status}`);
+                return false;
+            }
+            sessionData = await res.json();
+
+            if (!sessionData) {
+                showResult('warning', '⚠️ Oturum Bulunamadı', `[${sessId}] kodlu aktif bir yoklama oturumu bulunamadı.`);
+                return false;
+            }
+
+            if (!sessionData.active) {
+                showResult('warning', '🔴 Yoklama Kapalı', `[${sessionData.courseName || 'Ders'}] için bu yoklama oturumu durdurulmuştur.`);
+                return false;
+            }
+
+            if (checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
+                return false;
+            }
+
+            if (sessionData.courseName) {
+                document.getElementById('courseTitle').innerText = sessionData.courseName;
+            }
+            if (sessionData.week) {
+                document.getElementById('sessionInfo').innerText = `${sessionData.week} Yoklaması`;
+            }
+            activeSessionId = sessId;
+            document.getElementById('sessionGroup').style.display = 'none';
+            return true;
+        } catch (err) {
+            console.error(err);
+            showResult('error', '❌ Bağlantı Hatası', `Veritabanına ulaşılamadı: ${err.message || 'İnternet bağlantınızı kontrol ediniz.'}`);
+            return false;
+        }
+    }
+
+    async function submitAttendance() {
+        let sessId = activeSessionId;
+        if (!sessId) {
+            const sessInput = document.getElementById('sessionIdInput');
+            sessId = sessInput ? sessInput.value.trim() : '';
+        }
+
+        if (sessionData && checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
+            return;
+        }
+
+        const studentInput = document.getElementById('studentNoInput');
+        const studentNo = studentInput ? studentInput.value.trim() : '';
+
+        if (!sessId) {
+            showResult('warning', '⚠️ Uyarı', 'Lütfen tahtadaki Oturum Kodunu giriniz.');
+            return;
+        }
+
+        if (!studentNo) {
+            showResult('warning', '⚠️ Uyarı', 'Lütfen öğrenci numaranızı giriniz.');
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Kontrol Ediliyor...";
+
+        // Oturum verisi yüklenmemişse yükle
+        if (!sessionData || activeSessionId !== sessId) {
+            const ok = await loadSession(sessId);
+            if (!ok) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Yoklamayı Onayla";
+                return;
+            }
+        }
+
+        if (checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Yoklamayı Onayla";
+            return;
+        }
+
+        // 1. Öğrenci listede var mı kontrol et
+        const rawStudentObj = sessionData.students ? sessionData.students[studentNo] : null;
+        if (!rawStudentObj) {
+            showResult('error', '❌ Öğrenci Bulunamadı', `[${studentNo}] numaralı öğrenci bu dersin sınıf listesinde kayıtlı değildir.`);
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Yoklamayı Onayla";
+            return;
+        }
+
+        let studentName = "";
+        let pastAttended = 0;
+        if (typeof rawStudentObj === 'object') {
+            studentName = rawStudentObj.name || studentNo;
+            pastAttended = rawStudentObj.pastAttended || 0;
+        } else {
+            studentName = rawStudentObj;
+        }
+
+        // 2. KONUM ÖLÇÜMÜ (Öğrenciyi engellemez, mesafeyi hesaplayıp veritabanına ve öğretmene iletir)
+        if (sessionData.location && sessionData.location.lat && sessionData.location.lng) {
+            if (navigator.geolocation) {
+                submitBtn.innerText = "📍 Konum Ölçülüyor...";
+                navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                        const userLat = pos.coords.latitude;
+                        const userLng = pos.coords.longitude;
+                        const distMeters = calculateDistanceMeters(userLat, userLng, sessionData.location.lat, sessionData.location.lng);
+                        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn);
+                    },
+                    async (err) => {
+                        console.error(err);
+                        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, null, submitBtn);
+                    },
+                    { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+                );
+                return;
+            }
+        }
+
+        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, null, submitBtn);
+    }
+
+    async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn) {
+        submitBtn.innerText = "Kaydediliyor...";
+
+        try {
+            const checkRes = await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`);
+            const existing = await checkRes.json();
+
+            if (existing) {
+                showResult('warning', '⚠️ Zaten Alındı', `Sayın ${studentName}, ${sessionData.courseName} dersi için yoklamanız zaten kaydedilmiştir.`);
+                try {
+                    const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
+                    localStorage.setItem(lockKey, studentNo);
+                } catch (e) {}
+                document.getElementById('formContainer').style.display = 'none';
+                return;
+            }
+
+            const timestamp = Date.now();
+            const record = {
+                studentNo: studentNo,
+                fullName: studentName,
+                distanceMeters: distMeters,
+                timestamp: timestamp
+            };
+
+            await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
+
+            // Cihazı BU SÜRÜM OTURUM İÇİN KİLİTLE
+            try {
+                const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
+                localStorage.setItem(lockKey, studentNo);
+            } catch (e) {}
+
+            // Devam durumu istatistiklerini hesapla
+            const totalPastWeeks = sessionData.totalPastWeeks || 0;
+            const currentTotalWeeks = totalPastWeeks + 1; // bu hafta dahil
+            const currentAttendedWeeks = pastAttended + 1; // bu hafta dahil
+            const absentWeeks = currentTotalWeeks - currentAttendedWeeks;
+            const ratePercent = Math.round((currentAttendedWeeks / currentTotalWeeks) * 100);
+
+            const statusBadgeColor = ratePercent >= 70 ? "#22543d" : "#742a2a";
+            const statusText = ratePercent >= 70 ? "🟢 Devam Durumunuz Başarılı" : "🔴 Devamsızlık Riski Var";
+
+            const distInfoStr = distMeters !== null ? `<div style="margin-bottom: 4px; color: #4a5568;">📍 <strong>Sınıfa Uzaklığınız:</strong> ${distMeters} Metre</div>` : '';
+
+            const summaryCardHtml = `
+                <div style="margin-top: 12px; padding: 16px; background: rgba(255,255,255,0.95); border-radius: 12px; border: 1px solid #c6f6d5; text-align: left; font-size: 14px; line-height: 1.8;">
+                    <div style="font-weight: bold; font-size: 15px; margin-bottom: 6px; color: #2d3748;">
+                        👤 <strong>Öğrenci:</strong> ${studentName} (${studentNo})
+                    </div>
+                    <div style="margin-bottom: 4px; color: #4a5568;">
+                        📚 <strong>Ders:</strong> ${sessionData.courseName}
+                    </div>
+                    <div style="margin-bottom: 6px; color: #4a5568;">
+                        📅 <strong>Oturum:</strong> ${sessionData.week || ''}
+                    </div>
+                    ${distInfoStr}
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 10px 0;" />
+                    <div style="margin-bottom: 4px; color: #2d3748;">
+                        📊 <strong>Yapılan Toplam Hafta:</strong> ${currentTotalWeeks} Hafta
+                    </div>
+                    <div style="margin-bottom: 4px; color: #22543d;">
+                        ✅ <strong>Katıldığınız Hafta Sayısı:</strong> ${currentAttendedWeeks} Hafta
+                    </div>
+                    <div style="margin-bottom: 4px; color: #c53030;">
+                        ❌ <strong>Devamsızlık Hafta Sayısı:</strong> ${absentWeeks} Hafta
+                    </div>
+                    <div style="margin-bottom: 8px; color: #2d3748;">
+                        📈 <strong>Devam Yüzdeniz:</strong> <strong style="color: ${statusBadgeColor};">%${ratePercent}</strong>
+                    </div>
+                    <div style="font-weight: bold; text-align: center; margin-top: 12px; padding: 10px; background: #ffffff; border-radius: 8px; color: ${statusBadgeColor}; border: 1px solid #e2e8f0; font-size: 14px;">
+                        ${statusText}
+                    </div>
+                </div>
+            `;
+
+            showResult('success', '✅ Yoklama Başarıyla Kaydedildi!', summaryCardHtml);
+            document.getElementById('formContainer').style.display = 'none';
+        } catch (err) {
+            console.error(err);
+            showResult('error', '❌ İşlem Başarısız', 'Yoklama kaydedilirken bir hata oluştu. Lütfen tekrar deneyiniz.');
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Yoklamayı Onayla";
+        }
+    }
+
+    function showResult(type, title, desc) {
+        const box = document.getElementById('resultBox');
+        box.className = `result-box ${type}`;
+        document.getElementById('resultTitle').innerText = title;
+        document.getElementById('resultDesc').innerHTML = desc;
+        box.style.display = 'block';
+    }
+
+    if (activeSessionId) {
+        loadSession(activeSessionId);
+    } else {
+        document.getElementById('sessionGroup').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
