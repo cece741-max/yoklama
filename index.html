@@ -232,7 +232,7 @@
     <p class="subtitle">Devam etmeden önce kısa bilgilendirmeyi okuyun.</p>
 
     <div class="summary-box">
-        Yoklama için öğrenci numaranız ve yoklama zamanınız kaydedilir; izin verirseniz sınıfa uzaklığınız da hesaplanır, konumunuzun kendisi saklanmaz. Veriler yoklama sırasında (2-3 dakika) geçici olarak oturum süresince yurt dışındaki bir bulut sunucusunda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
+        Yoklama için öğrenci numaranız ve yoklama zamanınız kaydedilir; izin verirseniz sınıfa uzaklığınız da hesaplanır, konumunuzun kendisi saklanmaz. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir bulut sunucusunda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
     </div>
 
     <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">
@@ -240,7 +240,7 @@
     </div>
 
     <div class="full-text" id="fullTextContent">
-        Öğrenci numaranız, yoklama zamanınız ve izin vermeniz hâlinde sınıfa olan uzaklığınız dersin devam takibini yapmak amacıyla kullanılmaktadır. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur,oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.
+        Öğrenci numaranız, yoklama zamanınız ve izin vermeniz hâlinde sınıfa olan uzaklığınız dersin devam takibini yapmak amacıyla kullanılmaktadır. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.
     </div>
 
     <div class="checkbox-group">
@@ -250,7 +250,7 @@
         </label>
 
         <label class="checkbox-item">
-            <input type="checkbox" id="locationConsent" />
+            <input type="checkbox" id="locationConsent" checked />
             <span class="checkbox-label" style="display: block;">
                 Konumumun, yalnızca sınıfta olduğumu doğrulamak için kullanılmasına izin veriyorum.
                 <span class="checkbox-subtext" style="display: block;">
@@ -299,7 +299,7 @@
 
     let activeSessionId = urlParams.get('session') || '';
     let dbUrl = DEFAULT_DB;
-    let userLocationPermission = false;
+    let userLocationPermission = true;
 
     // GÜVENLİK: Sayfa açıldığı an adres çubuğundaki ?session=849201 parametresini siliyoruz!
     if (window.history && window.history.replaceState) {
@@ -334,7 +334,8 @@
         const readNotice = document.getElementById('readNoticeConsent').checked;
         if (!readNotice) return;
 
-        userLocationPermission = document.getElementById('locationConsent').checked;
+        const locCheckbox = document.getElementById('locationConsent');
+        userLocationPermission = locCheckbox ? locCheckbox.checked : true;
 
         document.getElementById('consentCard').style.display = 'none';
         document.getElementById('attendanceCard').style.display = 'block';
@@ -417,6 +418,36 @@
         }
     }
 
+    function getStudentLocation() {
+        return new Promise((resolve) => {
+            if (!navigator.geolocation) {
+                resolve(null);
+                return;
+            }
+            // 1. Aşama: Yüksek hassasiyetli GPS ölçümü
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+                },
+                (err) => {
+                    console.warn("Yüksek hassasiyetli konum alınamadı, standart mod deneniyor...", err);
+                    // 2. Aşama: Wi-Fi / Hücresel şebeke destekli hızlı konum ölçümü (Yedek)
+                    navigator.geolocation.getCurrentPosition(
+                        (pos2) => {
+                            resolve({ lat: pos2.coords.latitude, lng: pos2.coords.longitude });
+                        },
+                        (err2) => {
+                            console.error("Konum alma başarısız:", err2);
+                            resolve(null);
+                        },
+                        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+                    );
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
+            );
+        });
+    }
+
     async function submitAttendance() {
         let sessId = activeSessionId;
         if (!sessId) {
@@ -479,29 +510,17 @@
             studentName = rawStudentObj;
         }
 
-        // 2. KONUM ÖLÇÜMÜ (Öğrenci konum rızası verdiyse konum ölç, vermediyse rızasız kaydet)
-        if (userLocationPermission && sessionData.location && sessionData.location.lat && sessionData.location.lng) {
-            if (navigator.geolocation) {
-                submitBtn.innerText = "📍 Konum Ölçülüyor...";
-                navigator.geolocation.getCurrentPosition(
-                    async (pos) => {
-                        const userLat = pos.coords.latitude;
-                        const userLng = pos.coords.longitude;
-                        const distMeters = calculateDistanceMeters(userLat, userLng, sessionData.location.lat, sessionData.location.lng);
-                        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn);
-                    },
-                    async (err) => {
-                        console.error(err);
-                        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, null, submitBtn);
-                    },
-                    { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-                );
-                return;
+        // 2. KONUM ÖLÇÜMÜ (Öğrenci konum rızası verdiyse ve oturumda konum varsa)
+        let distMeters = null;
+        if (userLocationPermission && sessionData && sessionData.location && sessionData.location.lat && sessionData.location.lng) {
+            submitBtn.innerText = "📍 Konum Ölçülüyor...";
+            const userLoc = await getStudentLocation();
+            if (userLoc) {
+                distMeters = calculateDistanceMeters(userLoc.lat, userLoc.lng, sessionData.location.lat, sessionData.location.lng);
             }
         }
 
-        // Konum izni verilmediyse veya konum tanımlı değilse doğrudan kaydet
-        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, null, submitBtn);
+        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn);
     }
 
     async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn) {
