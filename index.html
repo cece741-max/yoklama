@@ -23,7 +23,7 @@
             -ms-user-select: none;
             user-select: none;
         }
-        input {
+        input[type="number"], input[type="text"] {
             -webkit-user-select: text !important;
             -moz-user-select: text !important;
             -ms-user-select: text !important;
@@ -39,11 +39,14 @@
         }
         .card {
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            max-width: 420px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            max-width: 440px;
             width: 100%;
             padding: 28px 24px;
+            text-align: left;
+        }
+        .card.text-center {
             text-align: center;
         }
         .header-icon {
@@ -53,13 +56,83 @@
         h2 {
             color: #1a202c;
             font-size: 22px;
+            font-weight: 700;
             margin-bottom: 6px;
+            line-height: 1.3;
         }
         .subtitle {
             color: #718096;
             font-size: 14px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
+
+        /* KVKK / Aydınlatma Metni Stilleri */
+        .summary-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13.5px;
+            color: #2d3748;
+            line-height: 1.55;
+            margin-bottom: 16px;
+        }
+        .toggle-btn {
+            color: #3182ce;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 12px;
+            user-select: none;
+        }
+        .toggle-btn:hover {
+            color: #2b6cb0;
+        }
+        .full-text {
+            display: none;
+            font-size: 12.5px;
+            color: #718096;
+            line-height: 1.55;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #edf2f7;
+            text-align: justify;
+        }
+        .checkbox-group {
+            border-top: 1px solid #edf2f7;
+            padding-top: 16px;
+            margin-bottom: 16px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #3182ce;
+            flex-shrink: 0;
+        }
+        .checkbox-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2d3748;
+            line-height: 1.4;
+        }
+        .checkbox-subtext {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 4px;
+            line-height: 1.4;
+            font-weight: normal;
+        }
+
         .form-group {
             text-align: left;
             margin-bottom: 16px;
@@ -83,7 +156,7 @@
         input:focus {
             border-color: #3182ce;
         }
-        button {
+        .btn-primary {
             width: 100%;
             padding: 14px;
             background-color: #3182ce;
@@ -93,15 +166,16 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
             margin-top: 8px;
         }
-        button:hover {
+        .btn-primary:hover:not(:disabled) {
             background-color: #2b6cb0;
         }
-        button:disabled {
-            background-color: #cbd5e0;
+        .btn-primary:disabled {
+            background-color: #a0aec0;
             cursor: not-allowed;
+            opacity: 0.85;
         }
         .result-box {
             display: none;
@@ -146,12 +220,53 @@
             margin-top: 24px;
             font-size: 12px;
             color: #a0aec0;
+            text-align: center;
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<div class="card">
+<!-- 1. ADIM: Aydınlatma ve Rıza Ekranı (Girişte İlk Gösterilen Ekran) -->
+<div class="card" id="consentCard">
+    <h2>Yoklamada verileriniz nasıl kullanılır?</h2>
+    <p class="subtitle">Devam etmeden önce kısa bilgilendirmeyi okuyun.</p>
+
+    <div class="summary-box">
+        Yoklama için öğrenci numaranız ve yoklama zamanınız kaydedilir; izin verirseniz sınıfa uzaklığınız da hesaplanır, konumunuzun kendisi saklanmaz. Veriler oturum süresince yurt dışındaki bir bulut sunucusunda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
+    </div>
+
+    <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">
+        ▼ Tam aydınlatma metnini oku
+    </div>
+
+    <div class="full-text" id="fullTextContent">
+        Veri sorumlusu [KURUM ADI] (adres: [ADRES], iletişim: [E-POSTA / KEP]) olarak, öğrenci numaranızı, yoklama zamanınızı ve izin vermeniz hâlinde sınıfa olan uzaklığınızı dersin devam takibini yapmak amacıyla işliyoruz. Bu işleme [HUKUKİ SEBEP] hukuki sebebine dayanır, konum bilgisi ise yalnızca açık rızanızla işlenir ve konumunuzun kendisi saklanmaz. Veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, bu durum yurt dışına aktarım niteliğindedir ([AKTARIM DAYANAĞI]). Oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. 6698 sayılı Kanun'un 11. maddesi kapsamında verilerinize erişme, düzeltme, silme ve itiraz hakkına sahipsiniz, başvurularınızı [E-POSTA / KEP] adresine iletebilirsiniz. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.
+    </div>
+
+    <div class="checkbox-group">
+        <label class="checkbox-item">
+            <input type="checkbox" id="readNoticeConsent" onchange="validateConsentForm()" />
+            <span class="checkbox-label">Aydınlatma metnini okudum.</span>
+        </label>
+
+        <label class="checkbox-item">
+            <input type="checkbox" id="locationConsent" />
+            <span class="checkbox-label" style="display: block;">
+                Konumumun, yalnızca sınıfta olduğumu doğrulamak için kullanılmasına izin veriyorum.
+                <span class="checkbox-subtext" style="display: block;">
+                    İsteğe bağlı. İşaretlemezseniz yoklamaya yine katılabilirsiniz, öğretim elemanı bunu görür.
+                </span>
+            </span>
+        </label>
+    </div>
+
+    <button id="proceedBtn" class="btn-primary" disabled onclick="proceedToAttendance()">Devam et</button>
+
+    <p class="footer-text">Mobil Yoklama Sistemi</p>
+</div>
+
+<!-- 2. ADIM: Öğrenci Yoklama Giriş Ekranı -->
+<div class="card text-center" id="attendanceCard" style="display: none;">
     <div class="header-icon">📚</div>
     <h2 id="courseTitle">Ders Yoklaması</h2>
     <p class="subtitle" id="sessionInfo">Öğrenci Numarası ile Giriş Yapınız</p>
@@ -167,7 +282,7 @@
             <input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" placeholder="" autocomplete="off" />
         </div>
 
-        <button id="submitBtn" onclick="submitAttendance()">Yoklamayı Onayla</button>
+        <button id="submitBtn" class="btn-primary" onclick="submitAttendance()">Yoklamayı Onayla</button>
     </div>
 
     <div id="resultBox" class="result-box">
@@ -184,6 +299,7 @@
 
     let activeSessionId = urlParams.get('session') || '';
     let dbUrl = DEFAULT_DB;
+    let userLocationPermission = false;
 
     // GÜVENLİK: Sayfa açıldığı an adres çubuğundaki ?session=849201 parametresini siliyoruz!
     if (window.history && window.history.replaceState) {
@@ -195,6 +311,34 @@
     }
 
     let sessionData = null;
+
+    function toggleFullText() {
+        const fullText = document.getElementById('fullTextContent');
+        const btn = document.getElementById('toggleFullTextBtn');
+        if (fullText.style.display === 'block') {
+            fullText.style.display = 'none';
+            btn.innerText = '▼ Tam aydınlatma metnini oku';
+        } else {
+            fullText.style.display = 'block';
+            btn.innerText = '▲ Tam aydınlatma metnini gizle';
+        }
+    }
+
+    function validateConsentForm() {
+        const readNotice = document.getElementById('readNoticeConsent').checked;
+        const proceedBtn = document.getElementById('proceedBtn');
+        proceedBtn.disabled = !readNotice;
+    }
+
+    function proceedToAttendance() {
+        const readNotice = document.getElementById('readNoticeConsent').checked;
+        if (!readNotice) return;
+
+        userLocationPermission = document.getElementById('locationConsent').checked;
+
+        document.getElementById('consentCard').style.display = 'none';
+        document.getElementById('attendanceCard').style.display = 'block';
+    }
 
     function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
         const R = 6371000; // Earth radius in meters
@@ -335,8 +479,8 @@
             studentName = rawStudentObj;
         }
 
-        // 2. KONUM ÖLÇÜMÜ (Öğrenciyi engellemez, mesafeyi hesaplayıp veritabanına ve öğretmene iletir)
-        if (sessionData.location && sessionData.location.lat && sessionData.location.lng) {
+        // 2. KONUM ÖLÇÜMÜ (Öğrenci konum rızası verdiyse konum ölç, vermediyse rızasız kaydet)
+        if (userLocationPermission && sessionData.location && sessionData.location.lat && sessionData.location.lng) {
             if (navigator.geolocation) {
                 submitBtn.innerText = "📍 Konum Ölçülüyor...";
                 navigator.geolocation.getCurrentPosition(
@@ -356,6 +500,7 @@
             }
         }
 
+        // Konum izni verilmediyse veya konum tanımlı değilse doğrudan kaydet
         await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, null, submitBtn);
     }
 
@@ -381,7 +526,8 @@
                 studentNo: studentNo,
                 fullName: studentName,
                 distanceMeters: distMeters,
-                timestamp: timestamp
+                timestamp: timestamp,
+                locationAllowed: userLocationPermission
             };
 
             await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
