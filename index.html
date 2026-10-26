@@ -222,6 +222,81 @@
             color: #a0aec0;
             text-align: center;
         }
+
+        /* ===== Yoklama sonrası: sonuç görünümleri ===== */
+        .result-desc { white-space: pre-line; }
+        .result-box.warning, .result-box.error {
+            border-left-width: 4px;
+            border-radius: 14px;
+        }
+        .result-box.rich { background: none; border: none; padding: 0; margin-top: 4px; color: inherit; text-align: center; }
+        .result-box.rich .result-title { display: none; }
+        .result-box.rich .result-desc { font-size: inherit; line-height: inherit; white-space: normal; }
+        .card.is-done .header-icon,
+        .card.is-done #courseTitle,
+        .card.is-done #sessionInfo { display: none; }
+
+        .done-hero { text-align: center; }
+        .done-badge {
+            width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 50%;
+            display: grid; place-items: center;
+            background: linear-gradient(135deg, #48bb78, #2f9e63);
+            box-shadow: 0 10px 24px rgba(47, 158, 99, 0.32), 0 0 0 8px rgba(72, 187, 120, 0.13);
+            animation: pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+        }
+        .done-badge svg { width: 34px; height: 34px; }
+        .done-badge path {
+            stroke-dasharray: 32; stroke-dashoffset: 32;
+            animation: draw 0.45s 0.3s ease forwards;
+        }
+        .done-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #2f9e63; }
+        .done-name { font-size: 22px; font-weight: 800; color: #1a202c; line-height: 1.25; margin-top: 4px; }
+        .done-no { font-size: 13px; color: #718096; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+        .chip-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0 18px; }
+        .chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; border-radius: 999px;
+            background: #ebf4ff; color: #2c5282;
+            font-size: 12.5px; font-weight: 600;
+        }
+        .chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+        .chip.neutral { background: #edf2f7; color: #4a5568; }
+
+        .done-panel {
+            background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+            border: 1px solid #e2e8f0; border-radius: 18px;
+            padding: 20px 14px 14px;
+        }
+        .ring-wrap { position: relative; width: 136px; height: 136px; margin: 0 auto 8px; }
+        .ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .ring-bg { stroke: #e2e8f0; }
+        .ring-fg {
+            stroke: var(--tone); stroke-linecap: round;
+            stroke-dasharray: var(--c); stroke-dashoffset: var(--o);
+            animation: ringFill 1.1s 0.25s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+        }
+        .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .ring-pct { font-size: 32px; font-weight: 800; color: #1a202c; line-height: 1; font-variant-numeric: tabular-nums; }
+        .ring-pct small { font-size: 16px; font-weight: 700; margin-left: 1px; }
+        .ring-cap { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #718096; margin-top: 6px; }
+        .ring-note { font-size: 13px; font-weight: 600; color: var(--tone); margin-bottom: 16px; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .stat { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 4px 10px; }
+        .stat b { display: block; font-size: 22px; font-weight: 800; color: #2d3748; line-height: 1.1; font-variant-numeric: tabular-nums; }
+        .stat span { display: block; margin-top: 4px; font-size: 11px; font-weight: 600; color: #718096; }
+        .stat.ok b { color: #2f9e63; }
+        .stat.no b { color: #e53e3e; }
+        .stat.no.zero b { color: #a0aec0; }
+
+        @keyframes pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        @keyframes ringFill { from { stroke-dashoffset: var(--c); } }
+        @media (prefers-reduced-motion: reduce) {
+            .done-badge, .done-badge path, .ring-fg { animation: none; }
+            .done-badge path { stroke-dashoffset: 0; }
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -565,37 +640,66 @@
             const absentWeeks = currentTotalWeeks - currentAttendedWeeks;
             const ratePercent = Math.round((currentAttendedWeeks / currentTotalWeeks) * 100);
 
-            const distInfoStr = distMeters !== null ? `<div style="margin-bottom: 4px; color: #4a5568;">📍 <strong>Sınıfa Uzaklık:</strong> ${distMeters} Metre</div>` : '';
+            // Renk / yorum eşikleri (isterseniz değiştirin)
+            const tone = ratePercent >= 80 ? { c: '#2f9e63', t: 'Devam durumunuz iyi' }
+                       : ratePercent >= 70 ? { c: '#dd6b20', t: 'Devamınıza dikkat edin' }
+                       :                     { c: '#e53e3e', t: 'Devam oranınız düşük' };
+
+            const RING_C = 2 * Math.PI * 52; // r = 52
+            const ringOffset = RING_C * (1 - ratePercent / 100);
+
+            const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+            const timeStr = new Date(timestamp).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+
+            const ico = {
+                book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+                cal:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+                pin:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+                clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
+            };
+
+            const chips = [
+                sessionData.courseName ? `<span class="chip">${ico.book}${esc(sessionData.courseName)}</span>` : '',
+                sessionData.week       ? `<span class="chip">${ico.cal}${esc(sessionData.week)}</span>` : '',
+                distMeters !== null    ? `<span class="chip">${ico.pin}Sınıfa ${esc(distMeters)} m</span>` : '',
+                `<span class="chip neutral">${ico.clock}${timeStr}</span>`
+            ].join('');
 
             const summaryCardHtml = `
-                <div style="margin-top: 12px; padding: 16px; background: rgba(255,255,255,0.95); border-radius: 12px; border: 1px solid #c6f6d5; text-align: left; font-size: 14px; line-height: 1.8;">
-                    <div style="font-weight: bold; font-size: 15px; margin-bottom: 6px; color: #2d3748;">
-                        👤 <strong>Öğrenci:</strong> ${studentName} (${studentNo})
+                <div class="done-hero">
+                    <div class="done-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
                     </div>
-                    <div style="margin-bottom: 4px; color: #4a5568;">
-                        📚 <strong>Ders:</strong> ${sessionData.courseName}
+                    <div class="done-kicker">Yoklamanız alındı</div>
+                    <div class="done-name">${esc(studentName)}</div>
+                    <div class="done-no">${esc(studentNo)}</div>
+                </div>
+
+                <div class="chip-row">${chips}</div>
+
+                <div class="done-panel" style="--tone:${tone.c}; --c:${RING_C.toFixed(2)}; --o:${ringOffset.toFixed(2)};">
+                    <div class="ring-wrap">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/>
+                            <circle class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/>
+                        </svg>
+                        <div class="ring-center">
+                            <div class="ring-pct"><span id="ratePct">${ratePercent}</span><small>%</small></div>
+                            <div class="ring-cap">Devam</div>
+                        </div>
                     </div>
-                    <div style="margin-bottom: 6px; color: #4a5568;">
-                        📅 <strong>Oturum:</strong> ${sessionData.week || ''}
-                    </div>
-                    ${distInfoStr}
-                    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 10px 0;" />
-                    <div style="margin-bottom: 4px; color: #2d3748;">
-                        📊 <strong>Toplam </strong> ${currentTotalWeeks} Hafta
-                    </div>
-                    <div style="margin-bottom: 4px; color: #22543d;">
-                        ✅ <strong>Katıldığınız Hafta Sayısı:</strong> ${currentAttendedWeeks} Hafta
-                    </div>
-                    <div style="margin-bottom: 4px; color: #c53030;">
-                        ❌ <strong>Devamsızlık Hafta Sayısı:</strong> ${absentWeeks} Hafta
-                    </div>
-                    <div style="margin-bottom: 4px; color: #2d3748;">
-                        📈 <strong>Devam Yüzdeniz:</strong> <strong>%${ratePercent}</strong>
+                    <div class="ring-note">${tone.t}</div>
+                    <div class="stat-grid">
+                        <div class="stat"><b>${currentTotalWeeks}</b><span>Toplam hafta</span></div>
+                        <div class="stat ok"><b>${currentAttendedWeeks}</b><span>Katıldığınız</span></div>
+                        <div class="stat no ${absentWeeks === 0 ? 'zero' : ''}"><b>${absentWeeks}</b><span>Devamsızlık</span></div>
                     </div>
                 </div>
             `;
 
-            showResult('success', '✅ Yoklama Başarıyla Kaydedildi!', summaryCardHtml);
+            showResult('success', '', summaryCardHtml);
+            document.getElementById('attendanceCard').classList.add('is-done');
+            animatePct(ratePercent);
             document.getElementById('formContainer').style.display = 'none';
         } catch (err) {
             console.error(err);
@@ -607,10 +711,22 @@
 
     function showResult(type, title, desc) {
         const box = document.getElementById('resultBox');
-        box.className = `result-box ${type}`;
+        box.className = `result-box ${type}` + (type === 'success' && !title ? ' rich' : '');
         document.getElementById('resultTitle').innerText = title;
         document.getElementById('resultDesc').innerHTML = desc;
         box.style.display = 'block';
+    }
+
+    function animatePct(target) {
+        const el = document.getElementById('ratePct');
+        if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const t0 = performance.now(), dur = 1100, delay = 250;
+        el.textContent = '0';
+        (function tick(now) {
+            const p = Math.min(Math.max((now - t0 - delay) / dur, 0), 1);
+            el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+            if (p < 1) requestAnimationFrame(tick);
+        })(t0);
     }
 
     if (activeSessionId) {
