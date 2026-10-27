@@ -461,7 +461,7 @@
             sessionData = await res.json();
 
             if (!sessionData) {
-                showResult('warning', '⚠️ Henüz yoklama başlamadı hocanız başlattığında tekrar deneyin.`);
+                showResult('warning', '⚠️ Yoklama Başlamadı', 'Henüz yoklama başlamadı. Hocanız başlattığında tekrar deneyin.');
                 return false;
             }
 
