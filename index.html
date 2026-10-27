@@ -304,7 +304,7 @@
 <!-- 1. ADIM: Aydınlatma ve Rıza Ekranı (Girişte İlk Gösterilen Ekran) -->
 <div class="card" id="consentCard">
       <div class="summary-box">
-        Yoklama için öğrenci numaranız, izin verirseniz sınıfa uzaklığınız da hesaplanır, konumunuzun kendisi saklanmaz. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
+        Yoklama için öğrenci numaranız ve konum izninizle sınıfa uzaklığınız hesaplanır, konumunuz asla kaydedilmez. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
     </div>
 
     <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">
@@ -312,7 +312,7 @@
     </div>
 
     <div class="full-text" id="fullTextContent">
-        Öğrenci numaranız, yoklama zamanınız ve izin vermeniz hâlinde sınıfa olan uzaklığınız dersin devam takibini yapmak amacıyla kullanılmaktadır. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.
+        Öğrenci numaranız, isminiz ve sınıfa olan uzaklığınız dersin devam takibini yapmak amacıyla kullanılmaktadır. Konum bilgisi asla kaydedilmez sadece mesafe hesabında kullanılır. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.
     </div>
 
     <div class="checkbox-group">
@@ -461,7 +461,7 @@
             sessionData = await res.json();
 
             if (!sessionData) {
-                showResult('warning', '⚠️ Oturum Bulunamadı', `[${sessId}] kodlu aktif bir yoklama oturumu bulunamadı.`);
+                showResult('warning', '⚠️ Henüz yoklama başlamadı hocanız başlattığında tekrar deneyin.`);
                 return false;
             }
 
