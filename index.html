@@ -2,1510 +2,1045 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <!-- PWA / iPhone Tam Ekran Uygulama Meta Etiketleri -->
+    <!-- Tam Ekran Uygulama / Adres Çubuğu Gizleme Meta Etiketleri -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2748a3">
-    <meta name="application-name" content="Yoklama Panel">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="application-name" content="Ders Yoklama">
 
-    <title>Mobil Yoklama - Öğretmen Paneli</title>
+    <title>Ders Yoklama Sistemi</title>
     <style>
-:root{--bg:#eef1f4;--surface:#fff;--soft:#f6f8fa;--ink:#16212b;--muted:#5d6b78;--line:#dde3e9;--primary:#2748a3;--primary-d:#1d3680;--ok:#1f7a52;--ok-bg:#e8f5ee;--bad:#c0392f;--r:12px}
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-html{-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-size:16px;max-width:600px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 14px calc(104px + env(safe-area-inset-bottom))}
-button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #8aa4ee;outline-offset:2px}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.brand{font-size:20px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
-.brand-mark{width:12px;height:24px;border-radius:3px;background:var(--primary)}
-.top-actions{display:flex;gap:8px}
-.hbtn{min-height:40px;padding:0 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;font-size:14px;font-weight:600}
-.card-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
-.field-label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
-select,input[type=text],input[type=number],textarea{width:100%;min-height:48px;padding:12px 14px;font-size:16px;border:1px solid #c5ced7;border-radius:10px;background:var(--surface);color:var(--ink);margin-bottom:8px}
-textarea{min-height:120px}
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --bg-body: #f8fafc;
+            --radius: 20px;
+        }
 
-.btn-start{width:100%;min-height:56px;background:var(--primary);color:#fff;border:0;border-radius:12px;font-size:18px;font-weight:700;margin-bottom:12px}
-.btn-start:active{background:var(--primary-d)}
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.tile{min-height:48px;background:var(--soft);border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-weight:600;color:var(--ink);padding:6px}
-.btn-sm{min-height:44px;padding:0 14px;font-size:14px;font-weight:600;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink)}
-.btn-save{background:var(--primary);border-color:var(--primary);color:#fff}
-.btn-cancel{background:var(--surface);border-color:#e3b3ae;color:var(--bad)}
-.btn-row{display:flex;gap:8px;margin-bottom:8px}
-.btn-row .btn-sm{flex:1}
-.status-box{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);margin-bottom:12px}
-.status-box::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
-.list-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
-.counter{display:flex;align-items:baseline;gap:6px;white-space:nowrap}
-.counter strong{font-size:28px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.counter span{font-size:14px;color:var(--muted)}
-.bar{flex:1;height:8px;background:#dbe2e8;border-radius:99px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:var(--ok);border-radius:99px;transition:width .3s}
-.filters{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
-.filters input{margin-bottom:0}
-.seg{display:flex;background:#dbe2e8;border-radius:10px;padding:3px}
-.seg button{flex:1;min-height:38px;border:0;background:transparent;border-radius:8px;font-size:14px;font-weight:600;color:var(--muted)}
-.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-.student-list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow-y:auto}
-.student-item{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 14px 8px 12px;border-bottom:1px solid var(--line);border-left:5px solid transparent;cursor:pointer;-webkit-user-select:none;user-select:none}
-.student-item:last-child{border-bottom:0}
-.student-item.present{background:var(--ok-bg);border-left-color:var(--ok)}
-.student-index{width:24px;font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
-.student-info{flex:1;min-width:0;display:flex;flex-direction:column}
-.student-name{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.student-no{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.distance-badge{font-size:12px;font-weight:600;padding:4px 8px;border-radius:99px;white-space:nowrap}
-.dist-green{background:#d3efe0;color:#16603f}.dist-red{background:#fbdcd8;color:#9b2c24}.dist-manual{background:#e1e7f5;color:#27408b}
-.status-badge{min-width:36px;height:32px;padding:0 8px;display:flex;align-items:center;justify-content:center;border-radius:99px;font-weight:700;font-size:14px}
-.badge-green{background:var(--ok);color:#fff}.badge-grey{background:#e4e9ee;color:#7a8794}
-.empty{padding:28px 16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.5}
-.action-bar{display:none;position:fixed;left:0;right:0;bottom:0;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--line);max-width:600px;margin:0 auto;z-index:50}
-.action-bar .btn-sm{min-height:52px;font-size:16px}
-#btnSaveTop{flex:1}#btnCancelTop{flex:0 0 30%}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,18,28,.5);justify-content:center;align-items:flex-end;z-index:1000}
-.modal-body{background:var(--surface);width:100%;max-width:560px!important;max-height:90vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:22px 18px calc(20px + env(safe-area-inset-bottom))}
-.modal-body::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:#cdd5dc;margin:-10px auto 14px}
-.modal-title{font-size:18px;font-weight:700;margin-bottom:12px}
-.modal-body label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:10px 0 6px}
-#modalChart .modal-body{max-width:100vw!important}
-#chartTableContainer th:nth-child(2),#chartTableContainer td:nth-child(2){position:sticky;left:0;background:var(--surface);z-index:1}
-#chartTableContainer thead th:nth-child(2){background:var(--primary)}
-#chartTableContainer thead{background:var(--primary)!important}
-#editSessionStudentList .btn-sm{min-width:44px;min-height:44px;padding:0!important;font-size:20px;margin:0}
-.history-item{padding:12px 4px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:15px}
-body:not(.session-live) .filters,body:not(.session-live) .list-head{display:none}body:not(.session-live) .student-item .status-badge{display:none}body:not(.session-live) #tvStatus{display:none}
-@media print{.topbar,.tiles,.filters,.action-bar{display:none}}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
-.brand{min-width:0;flex:1}.brand>*{flex:none}.brand-course{display:flex;flex-direction:column;min-width:0;flex:1 1 auto;margin-left:4px;padding-left:12px;border-left:1px solid var(--line);line-height:1.2}.brand-course b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-course span{font-size:12px;font-weight:500;color:var(--muted)}.brand-course:empty{display:none}#courseHero{display:none}.top-actions{margin-left:10px}
-.course-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}.course-head .field-label{margin-bottom:0}.edit-link{border:0;background:transparent;color:var(--primary);font-size:14px;font-weight:600;padding:8px 0 8px 12px;min-height:40px}
-#modalAddCourse .modal-body{display:flex;flex-direction:column;height:92vh;height:92dvh;max-height:92vh;padding-top:18px}
-#modalAddCourse .modal-title{margin-bottom:6px}
-#modalAddCourse .cf-field label{margin:6px 0 3px;font-size:12px}
-#modalAddCourse input[type=text],#modalAddCourse input[type=number],#modalAddCourse input[type=date]{min-height:40px;padding:8px 12px;margin-bottom:0;font-size:15px}
-#modalAddCourse .cf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-#modalAddCourse .cf-grow{flex:1;display:flex;flex-direction:column;min-height:160px}
-#modalAddCourse .cf-grow textarea{flex:1;min-height:120px;margin-bottom:0;resize:none}
-#modalAddCourse .cf-actions{margin:10px 0 0;flex:none}
+        input[type="number"], input[type="text"] {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
 
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 16px;
+            background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+        }
 
-.sticky-top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-top:6px}
-#tvStatus.live{width:100%;min-height:44px;background:var(--ok-bg);border-color:var(--ok);color:var(--ok)!important}
-#tvStatus.live::before{background:var(--ok);animation:pulse 1.6s infinite}
-@keyframes pulse{50%{opacity:.25}}
-@media(prefers-reduced-motion:reduce){#tvStatus.live::before{animation:none}}
-.badge-green::before{content:"\2713\00a0"}
-.empty-card h2{font-size:20px;margin-bottom:6px}.empty-card p{color:var(--muted);margin-bottom:14px;line-height:1.45}.empty-card .btn-sm{margin-top:0}
-body.no-course #setupPanel,body.no-course .sticky-top,body.no-course #studentContainer{display:none}
-.toast{position:fixed;left:14px;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));max-width:572px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--ink);color:var(--bg);padding:6px 6px 6px 14px;border-radius:12px;z-index:60;font-size:14px}
-.toast[hidden]{display:none}.toast button{background:none;border:0;color:inherit;font-weight:700;text-decoration:underline;min-height:44px;padding:0 12px}
-.hint{font-size:13px;color:var(--muted);margin-bottom:8px}
-#modalQr .modal-body{max-width:none!important;width:100%;height:100%;max-height:100vh;border-radius:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;background:#fff;color:#16212b}
-#modalQr .modal-body::before{display:none}
-#modalQr #qrcode{margin:0 0 12px!important}
-#modalQr #qrcode canvas,#modalQr #qrcode img{width:min(82vw,56vh)!important;height:auto!important}
-#qrSubtitle,#modalHistory p,#editSessionSummary{color:var(--muted)!important}
-#editSessionStudentList{border-color:var(--line)!important}
-#modalChart .modal-body{--surface:#fff;--ink:#16212b;--muted:#5d6b78;--line:#dde3e9;--soft:#f6f8fa;background:#fff;color:#16212b}
-@media(prefers-color-scheme:dark){:root{--bg:#10161d;--surface:#18212b;--soft:#1f2a36;--ink:#e8edf2;--muted:#9aa8b5;--line:#2a3745;--primary:#5b7fe0;--primary-d:#4968c4;--ok:#3cb27c;--ok-bg:#16322a;--bad:#ef6f64}
-.seg,.bar,.badge-grey{background:#2a3745}.badge-grey{color:#9aa8b5}.dist-green{background:#18402f;color:#8fe0b8}.dist-red{background:#4a2420;color:#ffb3ab}.dist-manual{background:#26335a;color:#b9c7f5}select,input[type=text],input[type=number],textarea{border-color:#3a4857}.btn-cancel{border-color:#6b3a35}.modal-body::before{background:#3a4857}#modalQr .modal-body{--ink:#16212b}}
-.student-item{min-height:46px;padding:4px 12px 4px 10px;gap:10px}
-.student-info{flex-direction:row;align-items:baseline;gap:10px}
-.student-no{order:-1;flex:0 0 auto;min-width:9ch;font-size:14px}
-.student-name{flex:1;min-width:0;font-size:15.5px}
-.student-index{width:22px;flex:0 0 auto}
-.status-badge{height:28px}
-@media(max-width:360px){.student-index{display:none}.student-no{min-width:0}}
-.es-row{border-bottom:1px solid var(--line)}.es-row:last-child{border-bottom:0}.es-row.open{background:var(--soft)}
-.es-main{display:flex;align-items:center;gap:10px;min-height:46px;padding:4px 8px;cursor:pointer}
-.es-no{flex:0 0 auto;min-width:9ch;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.es-name{flex:1;min-width:0;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.es-h{min-width:36px;text-align:center;padding:4px 8px;border-radius:99px;font-weight:700;font-size:14px;background:var(--line);color:var(--muted)}
-.es-h.on{background:var(--ok);color:#fff}
-.es-edit{display:flex;gap:8px;align-items:center;padding:2px 8px 10px}
-.es-edit input{flex:1;min-width:0;margin:0;text-align:center;font-size:22px;font-weight:700}
-.es-edit .btn-sm{flex:0 0 auto;min-width:84px}
-.student-item{min-height:38px;padding:2px 10px 2px 8px;gap:8px;border-left-width:4px}
-.student-name{font-size:15px}.student-no{font-size:13px}
-.status-badge{height:24px;min-width:30px;font-size:13px}
-.distance-badge{padding:2px 7px;font-size:11.5px}
-.es-main{min-height:38px;padding:2px 8px}
-.es-name{font-size:14.5px}.es-h{padding:2px 8px;font-size:13px}
-.status-badge{position:relative;cursor:pointer}.status-badge::after{content:"";position:absolute;inset:-7px -8px}
-.student-list .es-edit{background:var(--soft);padding:6px 10px 10px;border-bottom:1px solid var(--line)}
-#modalQr .modal-body{--surface:#fff;--soft:#f1f4f7;--ink:#16212b;--muted:#5d6b78;--line:#cfd7de;background:#fff;color:#16212b;max-width:420px!important;height:auto;max-height:90vh;border-radius:20px 20px 0 0;justify-content:flex-start;gap:0}
-#modalQr .modal-body::before{display:block}
-#modalQr #qrcode canvas,#modalQr #qrcode img{width:min(62vw,260px)!important;height:auto!important}
-#modalQr .btn-sm{width:100%;background:var(--soft);color:var(--ink);border:1px solid var(--line)}
-#chartTableContainer th:last-child,#chartTableContainer td:last-child{position:sticky;right:0;background:#fff}
-#chartTableContainer thead th:last-child{background:var(--primary)}
-#printArea{display:none}
-@page{size:A4 landscape;margin:10mm}
-@media print{
-html,body{background:#fff!important;padding:0!important;max-width:none!important}
-body>*:not(#printArea){display:none!important}
-#printArea{display:block;color:#000;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-#printArea h1{font-size:16px;margin-bottom:4px}#printArea .pmeta{font-size:11px;color:#444;margin-bottom:8px}
-#printArea thead{display:table-header-group}#printArea tr{page-break-inside:avoid}
-#printArea th,#printArea td{border:1px solid #cfd8dc}
-#printArea td:last-child,#printArea th:last-child{position:static}
-}
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            max-width: 440px;
+            width: 100%;
+            padding: 28px 22px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
 
-/* Yoklama kağıdı (siyah-beyaz) */
-@media print{
-#printArea.signsheet,#printArea.signsheet *{color:#000!important;background:#fff!important;font-family:Arial,Helvetica,sans-serif}
-#printArea.signsheet .sh-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px}
-#printArea.signsheet h1{font-size:17px;margin:0 0 4px}
-#printArea.signsheet .pmeta{font-size:11px;margin:0 0 3px}
-#printArea.signsheet .sh-qr{width:26mm;height:26mm;flex:none;display:block}
-#printArea.signsheet table{box-sizing:border-box;width:100%;page-break-inside:avoid;border-collapse:collapse;table-layout:fixed}
-#printArea.signsheet th,#printArea.signsheet td{border:1px solid #000;font-size:var(--fs,10.5px);padding:0 3px;height:var(--rh,8.2mm);line-height:1;text-align:left;overflow:hidden;white-space:nowrap}
-#printArea.signsheet th{font-weight:700;text-align:center;height:9mm;font-size:9px;line-height:1.1}
-#printArea.signsheet td.c{text-align:center}
-#printArea.signsheet table{border:1px solid #000}
-#printArea.signsheet th:last-child,#printArea.signsheet td:last-child{border-right:1px solid #000!important}
-#printArea.signsheet tbody tr:nth-child(5n) td{border-bottom:1.6px solid #000}
-}
-input[type=date]{width:100%;min-height:48px;padding:12px 14px;font-size:16px;border:1px solid #c5ced7;border-radius:10px;background:var(--surface);color:var(--ink);margin-bottom:8px;color-scheme:light dark}
-#modalConfirm{z-index:1100}
-</style>
-    <!-- QR Code Generator Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+        .card.text-center {
+            text-align: center;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        h2 {
+            color: var(--text-main);
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        /* KVKK / Aydınlatma Metni Stilleri */
+        .summary-box {
+            background-color: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 13.5px;
+            color: #334155;
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .toggle-btn {
+            color: var(--primary);
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 14px;
+            user-select: none;
+            transition: color 0.15s;
+        }
+
+        .toggle-btn:hover {
+            color: var(--primary-hover);
+        }
+
+        .full-text {
+            display: none;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: justify;
+        }
+
+        .checkbox-group {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 16px;
+            margin-bottom: 16px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-top: 1px;
+            cursor: pointer;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+            border-radius: 6px;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+
+        .checkbox-subtext {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            line-height: 1.4;
+            font-weight: normal;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-main);
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            background: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            background: #94a3b8;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 14px;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .result-box.success {
+            background-color: var(--success-bg);
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        .result-box.error {
+            background-color: var(--danger-bg);
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .result-box.warning {
+            background-color: var(--warning-bg);
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .result-title {
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-desc {
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer-text {
+            margin-top: 24px;
+            font-size: 12px;
+            color: #94a3b8;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* ===== Yoklama Sonrası Görünüm Stilleri ===== */
+        .result-box.rich {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-top: 4px;
+            color: inherit;
+            text-align: center;
+        }
+        .result-box.rich .result-title { display: none; }
+        .result-box.rich .result-desc { font-size: inherit; line-height: inherit; white-space: normal; }
+
+        .card.is-done .brand-badge,
+        .card.is-done #courseTitle,
+        .card.is-done #sessionInfo { display: none; }
+
+        .done-hero { text-align: center; }
+        .done-badge {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.35), 0 0 0 8px rgba(16, 185, 129, 0.12);
+            animation: pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+        }
+        .done-badge svg { width: 36px; height: 36px; }
+        .done-badge path {
+            stroke-dasharray: 32;
+            stroke-dashoffset: 32;
+            animation: draw 0.45s 0.3s ease forwards;
+        }
+        .done-kicker {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #059669;
+        }
+        .done-name {
+            font-size: 23px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.25;
+            margin-top: 4px;
+            letter-spacing: -0.02em;
+        }
+        .done-no {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 16px 0 20px;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1e40af;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #dbeafe;
+        }
+        .chip svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .chip.neutral { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+
+        .done-panel {
+            background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 20px 16px 16px;
+            margin-bottom: 20px;
+        }
+
+        .ring-wrap { position: relative; width: 136px; height: 136px; margin: 0 auto 8px; }
+        .ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .ring-bg { stroke: #e2e8f0; }
+        .ring-fg {
+            stroke: var(--tone);
+            stroke-linecap: round;
+            stroke-dasharray: var(--c);
+            stroke-dashoffset: var(--o);
+            animation: ringFill 1.1s 0.25s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+        }
+        .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .ring-pct { font-size: 34px; font-weight: 800; color: var(--text-main); line-height: 1; font-variant-numeric: tabular-nums; }
+        .ring-pct small { font-size: 18px; font-weight: 700; margin-left: 1px; }
+        .ring-cap { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
+        .ring-note { font-size: 13.5px; font-weight: 700; color: var(--tone); margin-bottom: 16px; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .stat { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 4px 10px; }
+        .stat b { display: block; font-size: 22px; font-weight: 800; color: var(--text-main); line-height: 1.1; font-variant-numeric: tabular-nums; }
+        .stat span { display: block; margin-top: 4px; font-size: 11px; font-weight: 600; color: var(--text-muted); }
+        .stat.ok b { color: #059669; }
+        .stat.no b { color: #dc2626; }
+        .stat.no.zero b { color: #94a3b8; }
+
+        /* ===== Haftalık Katılım Geçmişi Tablosu Stilleri ===== */
+        .history-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 18px 16px;
+            text-align: left;
+        }
+        .history-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .history-header svg { width: 18px; height: 18px; color: var(--primary); }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+        .history-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .history-row.present {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+        .history-row.absent {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+        .h-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .h-week {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .h-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+        .h-tag {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: var(--primary-light);
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+        .h-badge {
+            font-size: 12px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .h-badge.present {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        .h-badge.absent {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        @keyframes pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        @keyframes ringFill { from { stroke-dashoffset: var(--c); } }
+
+        @media (prefers-reduced-motion: reduce) {
+            .done-badge, .done-badge path, .ring-fg { animation: none; }
+            .done-badge path { stroke-dashoffset: 0; }
+        }
+    </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-    <header class="topbar">
-        <div class="brand"><span class="brand-mark"></span>Yoklama<span id="brandCourse" class="brand-course"></span></div>
-        <div class="top-actions">
-            <button id="btnSettings" class="hbtn" onclick="openSettingsModal()">Ayarlar</button>
-            <button id="btnShowQr" class="hbtn" onclick="openQrModal()">QR kod</button>
+<!-- 1. ADIM: Aydınlatma ve Rıza Ekranı (Girişte İlk Gösterilen Ekran) -->
+<div class="card" id="consentCard">
+    <div class="brand-badge">📍 Mobil Yoklama Sistemi</div>
+    <h2>KVKK Aydınlatma Metni</h2>
+    <p class="subtitle">Yoklamaya katılmak için lütfen aşağıdaki bilgilendirmeyi onaylayınız.</p>
+
+    <div class="summary-box">
+        Yoklama için öğrenci numaranız ve konum izninizle sınıfa uzaklığınız hesaplanır, konumunuz asla kaydedilmez. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
+    </div>
+
+    <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">
+        ▼ Tam aydınlatma metnini oku
+    </div>
+
+    <div class="full-text" id="fullTextContent">
+        Öğrenci numaranız, isminiz ve sınıfa olan uzaklığınız dersin devam takibini yapmak amacıyla kullanılmaktadır. Konum bilgisi asla kaydedilmez sadece mesafe hesabında kullanılır. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.
+    </div>
+
+    <div class="checkbox-group">
+        <label class="checkbox-item">
+            <input type="checkbox" id="readNoticeConsent" onchange="validateConsentForm()" />
+            <span class="checkbox-label">Aydınlatma metnini okudum ve kabul ediyorum.</span>
+        </label>
+
+        <label class="checkbox-item">
+            <input type="checkbox" id="locationConsent" checked />
+            <span class="checkbox-label" style="display: block;">
+                Konumumun, yalnızca sınıfta olduğumu doğrulamak için kullanılmasına izin veriyorum.
+                <span class="checkbox-subtext" style="display: block;">
+                    İsteğe bağlı. İşaretlemezseniz yoklamaya yine katılabilirsiniz, öğretim elemanı bunu görür.
+                </span>
+            </span>
+        </label>
+    </div>
+
+    <button id="proceedBtn" class="btn-primary" disabled onclick="proceedToAttendance()">
+        <span>Devam Et</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+
+    <p class="footer-text">Mobil Yoklama Sistemi</p>
+</div>
+
+<!-- 2. ADIM: Öğrenci Yoklama Giriş Ekranı -->
+<div class="card text-center" id="attendanceCard" style="display: none;">
+    <div class="brand-badge" id="courseBadge" style="display: none;">Ders Yoklaması</div>
+    <h2 id="courseTitle">Ders Yoklaması</h2>
+    <p class="subtitle" id="sessionInfo">Öğrenci Numarası ile Giriş Yapınız</p>
+
+    <div id="formContainer">
+        <div class="form-group" id="sessionGroup" style="display: none;">
+            <label for="sessionIdInput">Oturum / Şifre Kodu</label>
+            <input type="number" id="sessionIdInput" inputmode="numeric" pattern="[0-9]*" placeholder="Oturum kodunu giriniz" autocomplete="off" />
         </div>
-    </header>
 
-    <section id="emptyCourse" class="card-panel empty-card" hidden>
-        <h2>İlk dersini ekle</h2>
-        <p>Ders adını ve öğrenci listesini gir, yoklamayı hemen başlat.</p>
-        <button class="btn-start" onclick="openAddCourseModal()">Ders ekle</button>
-        <button class="btn-sm" style="width:100%" onclick="triggerImportJson()">Yedekten yükle</button>
-    </section>
-
-    <section id="setupPanel" class="card-panel">
-        <div class="course-head"><label for="courseSelect" class="field-label">Ders</label><button type="button" class="edit-link" onclick="openEditCourseModal()">Dersi düzenle</button></div>
-        <select id="courseSelect" onchange="onCourseSelected()"></select>
-        <button class="btn-start" onclick="startAttendanceSession()">Yoklamayı başlat</button>
-        <div class="tiles">
-            <button class="tile" onclick="showHistoryModal()">Geçmiş</button>
-            <button class="tile" onclick="showChartModal()">Çizelge</button>
-            <button class="tile" onclick="generatePdfReport()">PDF rapor</button>
+        <div class="form-group">
+            <label for="studentNoInput">Öğrenci Numarası</label>
+            <input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" placeholder="Örn: 20241010" autocomplete="off" />
         </div>
-    </section>
 
-    <div class="sticky-top">
-    <div id="tvStatus" class="status-box">Durum: Yoklama kapalı</div>
-
-    <div class="list-head">
-        <div class="counter"><strong id="tvSummary">0 / 0</strong><span>katıldı</span></div>
-        <div class="bar"><i id="progFill"></i></div>
-    </div>
-    <div class="filters">
-        <div class="seg" id="segFilter">
-            <button class="on" data-f="all" onclick="setFilter('all')">Tümü</button>
-            <button data-f="in" onclick="setFilter('in')">Gelen</button>
-            <button data-f="out" onclick="setFilter('out')">Gelmeyen</button>
-        </div>
+        <button id="submitBtn" class="btn-primary" onclick="submitAttendance()">
+            <span>Yoklamayı Onayla</span>
+        </button>
     </div>
 
-    <!-- Student List -->
-    </div>
-    <div id="studentContainer" class="student-list"></div>
-    <div id="toast" class="toast" hidden><span id="toastMsg"></span><button id="toastUndo">Geri al</button></div>
-
-    <div id="actionBar" class="action-bar">
-        <button id="btnCancelTop" class="btn-sm btn-cancel" onclick="cancelCurrentSession()">İptal</button>
-        <button id="btnSaveTop" class="btn-sm btn-save" onclick="saveCurrentSession()">Yoklamayı kaydet</button>
+    <div id="resultBox" class="result-box">
+        <div class="result-title" id="resultTitle"></div>
+        <div class="result-desc" id="resultDesc"></div>
     </div>
 
-    <div id="modalConfirm" class="modal-overlay">
-        <div class="modal-body" style="max-width:420px;">
-            <div class="modal-title">Emin misiniz?</div>
-            <p id="confirmText" style="font-size:15px;color:var(--muted);margin-bottom:16px;line-height:1.45;"></p>
-            <div class="btn-row">
-                <button class="btn-sm" id="confirmNo">Vazgeç</button>
-                <button class="btn-sm btn-cancel" id="confirmYes">Evet</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hidden File Input for Import -->
-    <input type="file" id="fileImportInput" accept=".json" style="display: none;" onchange="handleImportJson(event)" />
-
-    <!-- Modal: Settings -->
-    <div id="modalSettings" class="modal-overlay">
-        <div class="modal-body" style="max-width:420px;">
-            <div class="modal-title">Sistem Ayarları</div>
-            <label>Firebase Database URL</label>
-            <input type="text" id="cfgFirebase" placeholder="https://..." />
-            <label>Web Sayfası URL (Öğrenci Giriş Sayfası)</label>
-            <input type="text" id="cfgWeb" placeholder="https://..." />
-            <label>Dersler</label>
-            <div class="btn-row">
-                <button class="btn-sm" onclick="closeModal('modalSettings');openAddCourseModal()">+ Yeni ders ekle</button>
-            </div>
-            <label>Yedekleme</label>
-            <div class="btn-row">
-                <button class="btn-sm" onclick="exportJson()">Yedek al</button>
-                <button class="btn-sm" onclick="triggerImportJson()">Yedekten yükle</button>
-            </div>
-            <label>Tehlikeli bölge</label>
-            <div class="btn-row">
-                <button class="btn-sm btn-cancel" onclick="deleteAllData()">Tüm verileri sil</button>
-            </div>
-            <div class="btn-row" style="margin-top: 12px;">
-                <button class="btn-sm btn-save" onclick="saveSettings()">Kaydet</button>
-                <button class="btn-sm btn-cancel" onclick="closeModal('modalSettings')">Kapat</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Add / Edit Course -->
-    <div id="modalAddCourse" class="modal-overlay">
-        <div class="modal-body" style="max-width:420px;">
-            <div class="modal-title" id="addCourseTitle">Ders Bilgileri</div>
-            <div class="cf-field"><label>Ders Adı</label>
-            <input type="text" id="inCourseName" placeholder="Örn: İktisada Giriş" /></div>
-            <div class="cf-field"><label>Öğretim Elemanı / Hoca</label>
-            <input type="text" id="inInstructor" placeholder="Örn: Prof. Dr. Ahmet Yılmaz" /></div>
-            <div class="cf-grid">
-                <div class="cf-field"><label>Saat</label>
-                <input type="number" id="inCourseCredit" value="3" /></div>
-                <div class="cf-field"><label>Hafta</label>
-                <input type="number" id="inCourseWeeks" value="15" /></div>
-                <div class="cf-field"><label>Devam %</label>
-                <input type="number" id="inCourseMin" value="70" /></div>
-            </div>
-            <div class="cf-field"><label>Başlangıç tarihi</label>
-            <input type="date" id="inCourseStart" /></div>
-            <div class="cf-field cf-grow"><label>Öğrenci Listesi (Numara Ad Soyad)</label>
-            <textarea id="inClassList" placeholder="20241010  Ahmet Yılmaz&#10;20241011  Mehmet Demir"></textarea></div>
-            <div class="btn-row" id="rowSignSheet" style="display:none;margin-bottom:8px">
-                <button class="btn-sm" onclick="generateSignSheet()">Yoklama kağıdı (PDF)</button>
-            </div>
-            <div class="btn-row cf-actions">
-                <button class="btn-sm btn-save" onclick="saveCourseForm()">Kaydet / Güncelle</button>
-                <button id="btnDeleteCourse" class="btn-sm btn-cancel" style="display:none;" onclick="deleteCurrentCourse()">Dersi Sil</button>
-                <button class="btn-sm btn-settings" onclick="closeModal('modalAddCourse')">İptal</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: QR Display -->
-    <div id="modalQr" class="modal-overlay">
-        <div class="modal-body" style="text-align: center; max-width:420px;">
-            <div class="modal-title" id="qrModalTitle">Kağıt QR Kod</div>
-            <p style="font-size: 13px; color: #555; margin-bottom: 12px;" id="qrSubtitle"></p>
-            <div id="qrcode" style="display: flex; justify-content: center; margin-bottom: 16px;"></div>
-            <button class="btn-sm btn-settings" onclick="closeModal('modalQr')">Kapat</button>
-        </div>
-    </div>
-
-    <!-- Modal: History List -->
-    <div id="modalHistory" class="modal-overlay">
-        <div class="modal-body" style="max-width:420px;">
-            <div class="modal-title" id="historyModalTitle">Geçmiş Yoklamalar</div>
-            <p style="font-size:12px; color:#666; margin-bottom:10px;">Düzenlemek istediğiniz haftanın üzerine tıklayınız:</p>
-            <div id="historyListContainer"></div>
-            <div class="btn-row" style="margin-top: 16px;">
-                <button class="btn-sm btn-settings" onclick="closeModal('modalHistory')">Kapat</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Edit Past Session -->
-    <div id="modalEditSession" class="modal-overlay">
-        <div class="modal-body" style="max-width:440px;">
-            <div class="modal-title" id="editSessionTitle">Geçmiş Yoklamayı Düzenle</div>
-            <label>Oturum / Hafta Başlığı</label>
-            <input type="text" id="inEditSessionDate" placeholder="Örn: 1. Hafta (16/09)" />
-            <label>Tarih</label>
-            <input type="date" id="inEditSessionDateISO" />
-            <div id="editSessionSummary" style="font-size:13px; font-weight:bold; color:#1976d2; margin-bottom:8px;"></div>
-            <div id="editSessionStudentList" style="max-height:50vh; overflow-y:auto; border:1px solid #eee; border-radius:8px; padding:4px;"></div>
-            <div class="btn-row" style="margin-top: 16px;">
-                <button class="btn-sm btn-save" onclick="saveEditedSession()">Kaydet</button>
-                <button class="btn-sm btn-cancel" onclick="deleteEditedSession()">Yoklamayı Sil</button>
-                <button class="btn-sm btn-settings" onclick="closeModal('modalEditSession'); showHistoryModal();">İptal</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Chart / Çizelge -->
-    <div id="modalChart" class="modal-overlay">
-        <div class="modal-body" style="max-width:98vw;">
-            <div class="modal-title" id="chartModalTitle">Devam Çizelgesi</div>
-            <div id="chartSummary" class="hint" style="margin-bottom:6px"></div>
-            <div class="seg" id="chartSeg" style="margin-bottom:8px"><button class="on" data-f="all" onclick="setChartFilter(false)">Tümü</button><button data-f="risk" onclick="setChartFilter(true)">Riskliler</button></div>
-            <p class="hint">Tablo geniş: telefonu yan çevirirsen daha rahat okursun.</p>
-            <div id="chartTableContainer" style="overflow-x:auto; max-height:75vh;"></div>
-            <div class="btn-row" style="margin-top: 16px;">
-                <button class="btn-sm btn-settings" onclick="closeModal('modalChart')">Kapat</button>
-            </div>
-        </div>
-    </div>
-
-<div id="printArea"></div>
+    <p class="footer-text">© Mobil Yoklama Sistemi</p>
+</div>
 
 <script>
     const DEFAULT_DB = "https://ogrenciyoklama-ce487-default-rtdb.firebaseio.com/";
-    const DEFAULT_WEB = "https://delicate-gaufre-8c8218.netlify.app";
 
-    let courseList = [];
-    let activeCourse = null;
-    let isAttendanceActive = false;
-    let currentSessionVersion = "";
-    let webPollingTimer = null;
-
-    let editingSessionIndex = -1;
-    let editingHoursMap = {};
-
-    // Load Courses from LocalStorage
-    function loadCoursesFromStorage() {
+    function sanitizeFirebaseUrl(raw) {
+        if (!raw) return DEFAULT_DB;
         try {
-            const json = localStorage.getItem('CoursePrefs_courses_json');
-            if (json) {
-                courseList = JSON.parse(json);
+            let url = decodeURIComponent(raw).trim();
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
             }
-        } catch (e) { console.error(e); }
-        if (!courseList || !Array.isArray(courseList)) courseList = [];
+            if (!url.endsWith('/')) url += '/';
+            return url;
+        } catch (e) {
+            return DEFAULT_DB;
+        }
     }
 
-    function saveCoursesToStorage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let activeSessionId = urlParams.get('session') || '';
+    let dbUrl = sanitizeFirebaseUrl(urlParams.get('db'));
+
+    let userLocationPermission = true;
+
+    // GÜVENLİK: Sayfa açıldığı an adres çubuğundaki ?session=... parametresini gizliyoruz
+    if (window.history && window.history.replaceState) {
         try {
-            localStorage.setItem('CoursePrefs_courses_json', JSON.stringify(courseList));
-        } catch (e) { console.error(e); }
-    }
-
-    function getFirebaseUrl() {
-        return localStorage.getItem('cfg_firebase') || DEFAULT_DB;
-    }
-
-    function getWebUrl() {
-        return localStorage.getItem('cfg_web') || DEFAULT_WEB;
-    }
-
-    function renderCourseSpinner() {
-        const select = document.getElementById('courseSelect');
-        select.innerHTML = '';
-        if (courseList.length === 0) {
-            select.innerHTML = '<option value="">Ders Bulunmuyor (Yeni Ekle veya Yükle)</option>';
-            activeCourse = null;
-                renderStudentList();
-            return;
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (e) {
+            console.error(e);
         }
-        courseList.forEach((c, idx) => {
-            const opt = document.createElement('option');
-            opt.value = idx;
-            opt.innerText = `${c.name} (${c.credit} Saat) - ${c.instructor || ''}`;
-            select.appendChild(opt);
-        });
-        if (!activeCourse || courseList.indexOf(activeCourse) === -1) {
-            activeCourse = courseList[0];
-        }
-        select.value = courseList.indexOf(activeCourse);
-        renderStudentList();
     }
 
-    function onCourseSelected() {
-        const idx = document.getElementById('courseSelect').value;
-        if (idx !== "" && courseList[idx]) {
-            activeCourse = courseList[idx];
+    let sessionData = null;
+
+    const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+
+    function toggleFullText() {
+        const fullText = document.getElementById('fullTextContent');
+        const btn = document.getElementById('toggleFullTextBtn');
+        if (fullText.style.display === 'block') {
+            fullText.style.display = 'none';
+            btn.innerHTML = '▼ Tam aydınlatma metnini oku';
         } else {
-            activeCourse = null;
+            fullText.style.display = 'block';
+            btn.innerHTML = '▲ Tam aydınlatma metnini gizle';
         }
-        renderStudentList();
     }
 
-
-    const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    let studentFilter = 'all';
-    function setFilter(f) {
-        studentFilter = f;
-        document.querySelectorAll('#segFilter button').forEach(b => b.classList.toggle('on', b.dataset.f === f));
-        renderStudentList();
+    function validateConsentForm() {
+        const readNotice = document.getElementById('readNoticeConsent').checked;
+        const proceedBtn = document.getElementById('proceedBtn');
+        proceedBtn.disabled = !readNotice;
     }
 
-    function renderStudentList() {
-        const container = document.getElementById('studentContainer');
-        const st = container.scrollTop;
-        let liveInput = null;
-        container.innerHTML = '';
-        const students = (activeCourse && activeCourse.students) ? activeCourse.students : [];
-        const total = students.length;
-        const present = students.filter(s => s.isPresent).length;
-        document.getElementById('tvSummary').innerText = `${present} / ${total}`;
-        document.getElementById('progFill').style.width = total ? (present / total * 100) + '%' : '0%';
+    function proceedToAttendance() {
+        const readNotice = document.getElementById('readNoticeConsent').checked;
+        if (!readNotice) return;
 
-        if (!total) {
-            container.innerHTML = '<div class="empty">Henüz öğrenci yok. Ders bilgilerinden sınıf listesini ekleyin.</div>';
-            refreshUI();
-            return;
-        }
+        const locCheckbox = document.getElementById('locationConsent');
+        userLocationPermission = locCheckbox ? locCheckbox.checked : true;
 
-        const q = '';
-        const credit = activeCourse.credit || 3;
-        let shown = 0;
+        document.getElementById('consentCard').style.display = 'none';
+        document.getElementById('attendanceCard').style.display = 'block';
+    }
 
-        students.forEach((s, idx) => {
-            if (studentFilter === 'in' && !s.isPresent) return;
-            if (studentFilter === 'out' && s.isPresent) return;
-            if (q && !(s.fullName + ' ' + s.studentNo).toLowerCase().includes(q)) return;
-            shown++;
+    function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
+        const R = 6371000; // Dünya yarıçapı (metre)
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return Math.round(R * c);
+    }
 
-            let dist = '';
-            if (s.isPresent) {
-                if (s.distanceMeters !== undefined && s.distanceMeters !== null) {
-                    dist = `<span class="distance-badge ${s.distanceMeters <= 70 ? 'dist-green' : 'dist-red'}">${s.distanceMeters} m</span>`;
-                } else {
-                    dist = `<span class="distance-badge dist-manual">Elden</span>`;
-                }
+    function getDeviceLockKey(sessId, weekStr, sessionVersion) {
+        const verStr = sessionVersion || weekStr || 'active';
+        const cleanVer = verStr.toString().replace(/[^a-zA-Z0-9]/g, '_');
+        return 'yoklama_done_' + sessId + '_' + cleanVer;
+    }
+
+    function checkDeviceLock(sessId, weekStr, sessionVersion) {
+        if (!sessId) return false;
+        try {
+            const key = getDeviceLockKey(sessId, weekStr, sessionVersion);
+            const savedNo = localStorage.getItem(key);
+            if (savedNo) {
+                showResult('warning', '🔒 Cihaz Kilidi Aktif', `Bu telefondan bu yoklama oturumu için işlem yapılmıştır.<br/><br/>Kayıtlı Öğrenci No: <strong>[${esc(savedNo)}]</strong>`);
+                document.getElementById('formContainer').style.display = 'none';
+                return true;
             }
-
-            const item = document.createElement('div');
-            item.className = 'student-item' + (s.isPresent ? ' present' : '');
-            item.onclick = () => onStudentTap(s);
-            item.innerHTML = `
-                <span class="student-index">${idx + 1}</span>
-                <div class="student-info">
-                    <span class="student-name">${esc(s.fullName)}</span>
-                    <span class="student-no">${esc(s.studentNo)}</span>
-                </div>
-                ${dist}
-                <span class="status-badge ${s.isPresent ? 'badge-green' : 'badge-grey'}">${s.isPresent ? (s.hours != null ? s.hours : credit) : 0}</span>`;
-            item.querySelector('.status-badge').onclick = ev => { ev.stopPropagation(); openLiveHours(s); };
-            container.appendChild(item);
-            if (liveEditNo === s.studentNo) {
-                const box = document.createElement('div');
-                box.className = 'es-edit';
-                const cur = s.isPresent ? (s.hours != null ? s.hours : credit) : 0;
-                box.innerHTML = `
-                    <input type="text" id="liveHoursInput" inputmode="numeric" pattern="[0-9]*" enterkeyhint="next" autocomplete="off" aria-label="Saat (0-${credit})" value="${liveDraft !== null ? esc(liveDraft) : cur}">
-                    <button class="btn-sm" type="button">Tamam</button>
-                    <button class="btn-sm btn-save" type="button">Sonraki</button>`;
-                const [okB, nextB] = box.querySelectorAll('button');
-                okB.onclick = () => finishLiveHours(false);
-                nextB.onclick = () => finishLiveHours(true);
-                liveInput = box.querySelector('input');
-                liveInput.oninput = () => { liveDraft = liveInput.value; };
-                liveInput.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); finishLiveHours(true); } };
-                container.appendChild(box);
-            }
-        });
-
-        if (!shown) container.innerHTML = '<div class="empty">Eşleşen öğrenci yok.</div>';
-        container.scrollTop = st;
-        if (liveInput) {
-            liveInput.parentNode.scrollIntoView({ block: 'nearest' });
-            liveInput.focus();
-            if (liveDraft === null) liveInput.select(); else liveInput.setSelectionRange(liveInput.value.length, liveInput.value.length);
+        } catch (e) {
+            console.error(e);
         }
-        refreshUI();
+        return false;
     }
 
-    let liveEditNo = null, liveDraft = null;
-    function openLiveHours(s) {
-        if (!isAttendanceActive) { alert("Yoklama aktif değil."); return; }
-        commitLiveHours();
-        liveEditNo = (liveEditNo === s.studentNo) ? null : s.studentNo;
-        liveDraft = null;
-        renderStudentList();
-    }
-    function commitLiveHours() {
-        const inp = document.getElementById('liveHoursInput');
-        if (!inp || liveEditNo === null) return;
-        const s = activeCourse.students.find(x => x.studentNo === liveEditNo);
-        const v = parseInt(inp.value, 10);
-        if (!s || isNaN(v)) return;
-        const h = Math.max(0, Math.min(activeCourse.credit || 3, v));
-        if (h > 0) { if (!s.isPresent) { s.isPresent = true; s.distanceMeters = null; } s.hours = h; }
-        else { s.isPresent = false; s.distanceMeters = null; s.hours = null; }
-    }
-    function visibleStudent(s) {
-        if (studentFilter === 'in' && !s.isPresent) return false;
-        if (studentFilter === 'out' && s.isPresent) return false;
-        const q = '';
-        return !q || (s.fullName + ' ' + s.studentNo).toLowerCase().includes(q);
-    }
-    function finishLiveHours(goNext) {
-        commitLiveHours();
-        const list = activeCourse.students;
-        let next = null;
-        if (goNext) {
-            const i = list.findIndex(s => s.studentNo === liveEditNo);
-            for (let j = i + 1; i >= 0 && j < list.length; j++) { if (visibleStudent(list[j])) { next = list[j].studentNo; break; } }
-        }
-        liveEditNo = next;
-        liveDraft = null;
-        renderStudentList();
-    }
-
-    function toggleStudentManual(student) {
-        if (!isAttendanceActive) {
-            alert("Yoklama aktif değil.");
-            return;
-        }
-        student.isPresent = !student.isPresent;
-        student.hours = null;
-        if (!student.isPresent) student.distanceMeters = null;
-        renderStudentList();
-    }
-
-    // Öğrenci satırına dokunma: QR ile gelen için onay, diğerlerinde "Geri al" bildirimi
-    async function onStudentTap(s) {
-        if (!isAttendanceActive) { toggleStudentManual(s); return; }
-        if (s.isPresent && s.distanceMeters != null) {
-            if (await askConfirm(s.fullName + ' QR ile katılmış. Gelmedi olarak işaretlensin mi?', 'Katılımı kaldır')) toggleStudentManual(s);
-            return;
-        }
-        const was = s.isPresent, d = s.distanceMeters, hh = s.hours;
-        toggleStudentManual(s);
-        showToast(s.fullName + (was ? ' gelmedi' : ' geldi') + ' olarak işaretlendi', () => {
-            s.isPresent = was; s.distanceMeters = d; s.hours = hh; renderStudentList();
-        });
-    }
-
-    let toastTimer;
-    function showToast(msg, undo) {
-        const t = document.getElementById('toast');
-        document.getElementById('toastMsg').textContent = msg;
-        t.hidden = false;
-        document.getElementById('toastUndo').onclick = () => { undo(); t.hidden = true; };
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => { t.hidden = true; }, 4000);
-    }
-
-    // Ekran durumu: her listeleme sonunda çağrılır
-    function refreshUI() {
-        const byId = id => document.getElementById(id);
-        const has = Array.isArray(courseList) && courseList.length > 0;
-        document.body.classList.toggle('no-course', !has);
-        byId('emptyCourse').hidden = has;
-        byId('tvStatus').classList.toggle('live', !!isAttendanceActive);
-        document.body.classList.toggle('session-live', !!isAttendanceActive);
-        byId('btnShowQr').style.display = isAttendanceActive ? '' : 'none';
-        const sts = (activeCourse && activeCourse.students) || [];
-        const week = activeCourse ? (activeCourse.pastSessions ? activeCourse.pastSessions.length : 0) + 1 : 0;
-        const bc = activeCourse ? `<b>${esc(activeCourse.name)}</b><span>${week}. hafta · ${sts.length} öğrenci</span>` : '';
-        if (byId('brandCourse').innerHTML !== bc) byId('brandCourse').innerHTML = bc;
-        const p = sts.filter(x => x.isPresent).length;
-        const c = { all: sts.length, in: p, out: sts.length - p }, L = { all: 'Tümü', in: 'Gelen', out: 'Gelmeyen' };
-        document.querySelectorAll('#segFilter button').forEach(b => {
-            const t = L[b.dataset.f] + ' ' + c[b.dataset.f];
-            if (b.textContent !== t) b.textContent = t;
-        });
-    }
-
-    // Attendance Start / Save / Cancel
-    async function startAttendanceSession() {
-        if (!activeCourse) {
-            alert("Lütfen önce bir ders seçiniz!");
-            return;
-        }
-
-        isAttendanceActive = true;
-        currentSessionVersion = Date.now().toString();
-
-        activeCourse.students.forEach(s => { s.isPresent = false; s.distanceMeters = null; s.hours = null; });
-
-        document.getElementById('setupPanel').style.display = 'none';
-        document.getElementById('btnSettings').style.display = 'none';
-        document.getElementById('btnSaveTop').style.display = 'inline-block';
-        document.getElementById('actionBar').style.display = 'flex';
-        document.getElementById('btnCancelTop').style.display = 'inline-block';
-        document.getElementById('studentContainer').style.maxHeight = '82vh';
-
-        document.getElementById('tvStatus').innerText = `Durum: ${activeCourse.name} Yoklaması Aktif (Sınıf Konumu Alınıyor...)`;
-        document.getElementById('tvStatus').style.color = '#2e7d32';
-
-        renderStudentList();
-
-        // Öğretmen Sınıf Konumunu Al
-        let teacherLocation = null;
-        if (navigator.geolocation) {
-            try {
-                teacherLocation = await new Promise((resolve) => {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-                        (err) => { console.warn("Sınıf konumu alınamadı:", err); resolve(null); },
-                        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-                    );
-                });
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        document.getElementById('tvStatus').innerText = `Durum: ${activeCourse.name} Yoklaması Aktif (Web QR)`;
-
-        // Push to Firebase
-        await pushFirebaseSession(teacherLocation);
-
-        // Start polling
-        startWebPolling();
-    }
-
-    async function pushFirebaseSession(teacherLoc) {
-        if (!activeCourse) return;
-        const db = getFirebaseUrl();
-        const sessId = activeCourse.id;
-
-        const totalPastWeeks = activeCourse.pastSessions ? activeCourse.pastSessions.length : 0;
-        const weekNo = totalPastWeeks + 1;
-
-        const studentsObj = {};
-        activeCourse.students.forEach(s => {
-            let pastAttended = 0;
-            if (activeCourse.pastSessions) {
-                pastAttended = activeCourse.pastSessions.filter(sess =>
-                    (sess.presentStudentNos && sess.presentStudentNos.includes(s.studentNo)) ||
-                    (sess.studentHoursMap && sess.studentHoursMap[s.studentNo] > 0)
-                ).length;
-            }
-            studentsObj[s.studentNo] = { name: s.fullName, pastAttended: pastAttended };
-        });
-
-        const payload = {
-            courseName: activeCourse.name,
-            week: `${weekNo}. Hafta`,
-            totalPastWeeks: totalPastWeeks,
-            sessionVersion: currentSessionVersion,
-            active: true,
-            students: studentsObj
-        };
-
-        if (teacherLoc && teacherLoc.lat && teacherLoc.lng) {
-            payload.location = {
-                lat: teacherLoc.lat,
-                lng: teacherLoc.lng,
-                radiusMeters: 100000 // sınırlama yok: mesafe yalnızca bilgi olarak gösterilir
-            };
+    async function loadSession(sessId) {
+        if (!sessId) {
+            document.getElementById('sessionGroup').style.display = 'block';
+            return false;
         }
 
         try {
-            await fetch(`${db}/sessions/${sessId}.json`, {
+            const res = await fetch(`${dbUrl}sessions/${sessId}.json`);
+            if (!res.ok) {
+                if (res.status === 401 || res.status === 403) {
+                    showResult('error', '❌ Veritabanı İzin Hatası', `Firebase veritabanı okuma izni kapalı (HTTP ${res.status}).<br/><br/>Firebase Konsolu'ndan Realtime Database Kuralları'nı <strong>".read": true, ".write": true</strong> olarak ayarlayınız.`);
+                } else if (res.status === 404) {
+                    showResult('error', '❌ Firebase URL Bulunamadı (HTTP 404)', `Girilen Firebase Veritabanı adresi bulunamadı.<br/><br/><strong>Kullanılan URL:</strong> <code>${esc(dbUrl)}</code><br/><br/>Lütfen Öğretmen Ayarlar modülündeki Firebase Database URL adresini (örn: <code>https://...firebasedatabase.app</code> veya <code>https://...firebaseio.com</code>) kontrol ediniz.`);
+                } else {
+                    showResult('error', '❌ Sunucu Yanıt Vermedi', `Firebase Sunucu Hatası (HTTP ${res.status}). Lütfen Firebase URL adresini ve internet bağlantınızı kontrol ediniz.`);
+                }
+                return false;
+            }
+            sessionData = await res.json();
+
+            if (!sessionData) {
+                showResult('warning', '⚠️ Yoklama Başlamadı', 'Henüz yoklama başlamadı veya durduruldu. Hocanız başlattığında tekrar deneyin.');
+                return false;
+            }
+
+            if (!sessionData.active) {
+                showResult('warning', '🔴 Yoklama Kapalı', `<strong>[${esc(sessionData.courseName || 'Ders')}]</strong> için bu yoklama oturumu durdurulmuştur.`);
+                return false;
+            }
+
+            if (checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
+                return false;
+            }
+
+            if (sessionData.courseName) {
+                document.getElementById('courseTitle').innerText = sessionData.courseName;
+                document.getElementById('courseBadge').innerText = sessionData.courseName;
+                document.getElementById('courseBadge').style.display = 'inline-block';
+            }
+            if (sessionData.week) {
+                document.getElementById('sessionInfo').innerText = `${sessionData.week} Yoklaması`;
+            }
+            activeSessionId = sessId;
+            document.getElementById('sessionGroup').style.display = 'none';
+            return true;
+        } catch (err) {
+            console.error(err);
+            showResult('error', '❌ Bağlantı Hatası', `Veritabanına ulaşılamadı: ${err.message || 'İnternet bağlantınızı kontrol ediniz.'}`);
+            return false;
+        }
+    }
+
+    function getStudentLocation() {
+        return new Promise((resolve) => {
+            if (!navigator.geolocation) {
+                resolve(null);
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+                },
+                (err) => {
+                    console.warn("Yüksek hassasiyetli konum alınamadı, standart mod deneniyor...", err);
+                    navigator.geolocation.getCurrentPosition(
+                        (pos2) => {
+                            resolve({ lat: pos2.coords.latitude, lng: pos2.coords.longitude });
+                        },
+                        (err2) => {
+                            console.error("Konum alma başarısız:", err2);
+                            resolve(null);
+                        },
+                        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+                    );
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
+            );
+        });
+    }
+
+    async function submitAttendance() {
+        let sessId = activeSessionId;
+        if (!sessId) {
+            const sessInput = document.getElementById('sessionIdInput');
+            sessId = sessInput ? sessInput.value.trim() : '';
+        }
+
+        if (sessionData && checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
+            return;
+        }
+
+        const studentInput = document.getElementById('studentNoInput');
+        const studentNo = studentInput ? studentInput.value.trim() : '';
+
+        if (!sessId) {
+            showResult('warning', '⚠️ Uyarı', 'Lütfen tahtadaki Oturum Kodunu giriniz.');
+            return;
+        }
+
+        if (!studentNo) {
+            showResult('warning', '⚠️ Uyarı', 'Lütfen öğrenci numaranızı giriniz.');
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Kontrol Ediliyor...</span>';
+
+        if (!sessionData || activeSessionId !== sessId) {
+            const ok = await loadSession(sessId);
+            if (!ok) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+                return;
+            }
+        }
+
+        if (checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+            return;
+        }
+
+        const rawStudentObj = sessionData.students ? sessionData.students[studentNo] : null;
+        if (!rawStudentObj) {
+            showResult('error', '❌ Öğrenci Bulunamadı', `[<strong>${esc(studentNo)}</strong>] numaralı öğrenci bu dersin sınıf listesinde kayıtlı değildir.`);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+            return;
+        }
+
+        let studentName = "";
+        let pastAttended = 0;
+        if (typeof rawStudentObj === 'object') {
+            studentName = rawStudentObj.name || studentNo;
+            pastAttended = rawStudentObj.pastAttended || 0;
+        } else {
+            studentName = rawStudentObj;
+        }
+
+        let distMeters = null;
+        if (userLocationPermission && sessionData && sessionData.location && sessionData.location.lat && sessionData.location.lng) {
+            submitBtn.innerHTML = '<span>📍 Konum Ölçülüyor...</span>';
+            const userLoc = await getStudentLocation();
+            if (userLoc) {
+                distMeters = calculateDistanceMeters(userLoc.lat, userLoc.lng, sessionData.location.lat, sessionData.location.lng);
+            }
+        }
+
+        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn);
+    }
+
+    async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn) {
+        submitBtn.innerHTML = '<span>Kaydediliyor...</span>';
+
+        try {
+            const checkRes = await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`);
+            const existing = await checkRes.json();
+
+            if (existing) {
+                showResult('warning', '⚠️ Zaten Alındı', `Sayın <strong>${esc(studentName)}</strong>, ${esc(sessionData.courseName)} dersi için yoklamanız zaten kaydedilmiştir.`);
+                try {
+                    const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
+                    localStorage.setItem(lockKey, studentNo);
+                } catch (e) {}
+                document.getElementById('formContainer').style.display = 'none';
+                return;
+            }
+
+            const timestamp = Date.now();
+            const record = {
+                studentNo: studentNo,
+                fullName: studentName,
+                distanceMeters: distMeters,
+                timestamp: timestamp,
+                locationAllowed: userLocationPermission
+            };
+
+            const putRes = await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(record)
             });
-        } catch (e) { console.error(e); }
-    }
 
-    function startWebPolling() {
-        if (webPollingTimer) clearInterval(webPollingTimer);
-        const db = getFirebaseUrl();
-        const sessId = activeCourse.id;
-
-        webPollingTimer = setInterval(async () => {
-            if (!isAttendanceActive || !activeCourse) return;
-            try {
-                const res = await fetch(`${db}/sessions/${sessId}/attendance.json`);
-                const data = await res.json();
-                if (data) {
-                    let updated = false;
-                    Object.keys(data).forEach(sNo => {
-                        const student = activeCourse.students.find(s => s.studentNo === sNo);
-                        if (student) {
-                            const dist = data[sNo].distanceMeters !== undefined ? data[sNo].distanceMeters : null;
-                            if (!student.isPresent || student.distanceMeters !== dist) {
-                                student.isPresent = true;
-                                student.distanceMeters = dist;
-                                updated = true;
-                            }
-                        }
-                    });
-                    if (updated) renderStudentList();
+            if (!putRes.ok) {
+                if (putRes.status === 401 || putRes.status === 403) {
+                    showResult('error', '❌ Kayıt Yapılamadı', `Firebase veritabanı yazma izni kapalı (HTTP ${putRes.status}).<br/><br/>Firebase Konsolu'ndan Realtime Database Kuralları'nı <strong>".write": true</strong> olarak ayarlayınız.`);
+                } else {
+                    showResult('error', '❌ Kayıt Başarısız', `Firebase sunucu hatası (HTTP ${putRes.status}). Lütfen tekrar deneyiniz.`);
                 }
-            } catch (e) { console.error(e); }
-        }, 2000);
-    }
-
-    async function saveCurrentSession() {
-        if (!activeCourse || !isAttendanceActive) return;
-        commitLiveHours();
-
-        const presentNos = activeCourse.students.filter(s => s.isPresent).map(s => s.studentNo);
-        const totalPastWeeks = activeCourse.pastSessions ? activeCourse.pastSessions.length : 0;
-        const weekNo = totalPastWeeks + 1;
-
-        const hoursMap = {};
-        const distMap = {};
-        activeCourse.students.forEach(s => {
-            if (s.isPresent) {
-                hoursMap[s.studentNo] = (s.hours != null ? s.hours : activeCourse.credit);
-                if (s.distanceMeters !== null && s.distanceMeters !== undefined) {
-                    distMap[s.studentNo] = s.distanceMeters;
-                }
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+                return;
             }
-        });
 
-        if (!activeCourse.pastSessions) activeCourse.pastSessions = [];
-        activeCourse.pastSessions.push({
-            id: Date.now().toString(),
-            date: `${weekNo}. Hafta`,
-            dateISO: toISO(new Date()),
-            presentStudentNos: presentNos,
-            studentHoursMap: hoursMap,
-            studentDistancesMap: distMap
-        });
-
-        saveCoursesToStorage();
-        await stopAndWipeFirebase();
-
-        alert("Yoklama başarıyla kaydedildi!");
-    }
-
-    async function cancelCurrentSession() {
-        if (!(await askConfirm("Yoklama kaydedilmeden kapatılacak. Devam edilsin mi?", "Kaydetmeden çık"))) return;
-        await stopAndWipeFirebase();
-    }
-
-    async function stopAndWipeFirebase() {
-        isAttendanceActive = false;
-        if (webPollingTimer) clearInterval(webPollingTimer);
-
-        if (activeCourse) {
-            const db = getFirebaseUrl();
-            const sessId = activeCourse.id;
-            activeCourse.students.forEach(s => { s.isPresent = false; s.distanceMeters = null; s.hours = null; });
             try {
-                await fetch(`${db}/sessions/${sessId}.json`, { method: 'DELETE' });
-            } catch (e) { console.error(e); }
-        }
+                const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
+                localStorage.setItem(lockKey, studentNo);
+            } catch (e) {}
 
-        document.getElementById('setupPanel').style.display = 'block';
-        document.getElementById('btnSettings').style.display = 'inline-block';
-        document.getElementById('btnSaveTop').style.display = 'none';
-        document.getElementById('actionBar').style.display = 'none';
-        document.getElementById('btnCancelTop').style.display = 'none';
-        document.getElementById('studentContainer').style.maxHeight = '55vh';
-        document.getElementById('tvStatus').innerText = "Durum: Yoklama kapalı";
-        document.getElementById('tvStatus').style.color = "#666";
+            const totalPastWeeks = sessionData.totalPastWeeks || 0;
+            const currentTotalWeeks = totalPastWeeks + 1;
+            const currentAttendedWeeks = pastAttended + 1;
+            const absentWeeks = currentTotalWeeks - currentAttendedWeeks;
+            const ratePercent = Math.round((currentAttendedWeeks / currentTotalWeeks) * 100);
 
-        renderStudentList();
-    }
+            const tone = ratePercent >= 80 ? { c: '#059669', t: 'Devam durumunuz iyi' }
+                       : ratePercent >= 70 ? { c: '#d97706', t: 'Devamınıza dikkat edin' }
+                       :                     { c: '#dc2626', t: 'Devam oranınız düşük' };
 
-    // Sayfa içi onay penceresi (tarayıcı confirm() önizlemelerde engellenebiliyor)
-    function askConfirm(text, yesLabel) {
-        return new Promise(resolve => {
-            document.getElementById('confirmText').innerText = text;
-            document.getElementById('confirmYes').innerText = yesLabel || 'Evet';
-            const done = v => { closeModal('modalConfirm'); resolve(v); };
-            document.getElementById('confirmYes').onclick = () => done(true);
-            document.getElementById('confirmNo').onclick = () => done(false);
-            openModal('modalConfirm');
-        });
-    }
+            const RING_C = 2 * Math.PI * 52;
+            const ringOffset = RING_C * (1 - ratePercent / 100);
 
-    // Modal Helpers
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+            const timeStr = new Date(timestamp).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 
-    function openSettingsModal() {
-        document.getElementById('cfgFirebase').value = getFirebaseUrl();
-        document.getElementById('cfgWeb').value = getWebUrl();
-        openModal('modalSettings');
-    }
-
-    function saveSettings() {
-        const fb = document.getElementById('cfgFirebase').value.trim();
-        const web = document.getElementById('cfgWeb').value.trim();
-        if (fb) localStorage.setItem('cfg_firebase', fb);
-        if (web) localStorage.setItem('cfg_web', web);
-        closeModal('modalSettings');
-        alert("Ayarlar kaydedildi!");
-    }
-
-    function openQrModal() {
-        if (!activeCourse) {
-            alert("Lütfen önce bir ders seçiniz!");
-            return;
-        }
-        const web = getWebUrl();
-        const db = getFirebaseUrl();
-        const fullUrl = `${web}?session=${activeCourse.id}&db=${db}`;
-
-        document.getElementById('qrModalTitle').innerText = `${activeCourse.name} Kağıt QR Kodu`;
-        document.getElementById('qrSubtitle').innerText = `${activeCourse.name} dersine ait sabit kağıt QR kodudur. Çıktısını alıp kullanabilirsiniz.`;
-
-        const qrContainer = document.getElementById('qrcode');
-        qrContainer.innerHTML = '';
-        new QRCode(qrContainer, { text: fullUrl, width: 264, height: 264 });
-
-        openModal('modalQr');
-    }
-
-    function openAddCourseModal() {
-        document.getElementById('addCourseTitle').innerText = "Yeni Ders Ekle";
-        document.getElementById('inCourseName').value = "";
-        document.getElementById('inCourseCredit').value = "3";
-        document.getElementById('inCourseWeeks').value = "15";
-        document.getElementById('inCourseMin').value = "70";
-        document.getElementById('inCourseStart').value = "";
-        document.getElementById('inInstructor').value = "";
-        document.getElementById('inClassList').value = "";
-        document.getElementById('btnDeleteCourse').style.display = 'none';
-        document.getElementById('rowSignSheet').style.display = 'none';
-        openModal('modalAddCourse');
-    }
-
-    function openEditCourseModal() {
-        if (!activeCourse) return;
-        document.getElementById('addCourseTitle').innerText = `${activeCourse.name} - Düzenle`;
-        document.getElementById('inCourseName').value = activeCourse.name || "";
-        document.getElementById('inCourseCredit').value = activeCourse.credit || "3";
-        document.getElementById('inCourseWeeks').value = activeCourse.totalWeeks || "15";
-        document.getElementById('inCourseMin').value = activeCourse.minAttendance || "70";
-        const sdt = parseCourseDate(activeCourse.startDate);
-        document.getElementById('inCourseStart').value = sdt ? toISO(sdt) : "";
-        document.getElementById('inInstructor').value = activeCourse.instructor || "";
-
-        let classText = activeCourse.classListText || "";
-        if (!classText && activeCourse.students) {
-            classText = activeCourse.students.map(s => `${s.studentNo}\t${s.fullName}`).join("\n");
-        }
-        document.getElementById('inClassList').value = classText;
-        document.getElementById('btnDeleteCourse').style.display = 'inline-block';
-        document.getElementById('rowSignSheet').style.display = 'flex';
-        openModal('modalAddCourse');
-    }
-
-    function saveCourseForm() {
-        const name = document.getElementById('inCourseName').value.trim();
-        const credit = parseInt(document.getElementById('inCourseCredit').value.trim()) || 3;
-        const instructor = document.getElementById('inInstructor').value.trim();
-        const totalWeeks = Math.max(1, Math.min(30, parseInt(document.getElementById('inCourseWeeks').value) || 15));
-        const minAttendance = Math.max(1, Math.min(100, parseInt(document.getElementById('inCourseMin').value) || 70));
-        const startVal = document.getElementById('inCourseStart').value;
-        const classListText = document.getElementById('inClassList').value.trim();
-
-        if (!name) { alert("Ders adı boş olamaz!"); return; }
-
-        if (!activeCourse || document.getElementById('addCourseTitle').innerText.includes("Yeni")) {
-            const newCourse = {
-                id: Date.now().toString(),
-                name: name,
-                credit: credit,
-                totalWeeks: totalWeeks,
-                minAttendance: minAttendance,
-                startDate: startVal,
-                instructor: instructor,
-                classListText: classListText,
-                students: [],
-                pastSessions: []
+            const ico = {
+                book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+                cal:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+                pin:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+                clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
             };
-            parseClassListTextIntoCourse(newCourse, classListText);
-            courseList.push(newCourse);
-            activeCourse = newCourse;
-        } else {
-            activeCourse.name = name;
-            activeCourse.credit = credit;
-            activeCourse.totalWeeks = totalWeeks;
-            activeCourse.minAttendance = minAttendance;
-            if (startVal || !activeCourse.startDate || parseCourseDate(activeCourse.startDate)) activeCourse.startDate = startVal;
-            activeCourse.instructor = instructor;
-            activeCourse.classListText = classListText;
-            if (classListText) {
-                const old = {};
-                (activeCourse.students || []).forEach(s => { old[s.studentNo] = s; });
-                activeCourse.students = [];
-                parseClassListTextIntoCourse(activeCourse, classListText);
-                const past = activeCourse.pastSessions ? activeCourse.pastSessions.length : 0;
-                activeCourse.students.forEach(s => { const o = old[s.studentNo]; s.joinWeek = o ? (o.joinWeek || 0) : past; });
-            }
-        }
 
-        saveCoursesToStorage();
-        renderCourseSpinner();
-        closeModal('modalAddCourse');
-    }
+            const chips = [
+                sessionData.courseName ? `<span class="chip">${ico.book}${esc(sessionData.courseName)}</span>` : '',
+                sessionData.week       ? `<span class="chip">${ico.cal}${esc(sessionData.week)}</span>` : '',
+                distMeters !== null    ? `<span class="chip">${ico.pin}Sınıfa ${esc(distMeters)} m</span>` : '',
+                `<span class="chip neutral">${ico.clock}${timeStr}</span>`
+            ].join('');
 
-    function parseClassListTextIntoCourse(courseObj, text) {
-        if (!text) return;
-        const lines = text.split("\n");
-        lines.forEach(line => {
-            const parts = line.trim().split(/[\t,;]+|\s{2,}/);
-            if (parts.length >= 2) {
-                const sNo = parts[0].trim();
-                const sName = parts.slice(1).join(" ").trim();
-                if (sNo && sName) {
-                    courseObj.students.push({ studentNo: sNo, fullName: sName, isPresent: false });
-                }
-            }
-        });
-    }
-
-    async function deleteAllData() {
-        if (isAttendanceActive) {
-            alert("Yoklama sürerken veriler silinemez. Önce yoklamayı bitirin.");
-            return;
-        }
-        if (!(await askConfirm("Tüm dersler, öğrenci listeleri, yoklama kayıtları ve Firebase/web adresi ayarları silinecek. Bu işlem geri alınamaz. Önce yedek almanız önerilir.", "Tümünü sil"))) return;
-        if (!(await askConfirm("Emin misiniz? Silinen veriler geri getirilemez.", "Evet, sil"))) return;
-
-        courseList = [];
-        activeCourse = null;
-        try {
-            localStorage.removeItem('CoursePrefs_courses_json');
-            localStorage.removeItem('cfg_firebase');
-            localStorage.removeItem('cfg_web');
-        } catch (e) { console.error(e); }
-
-        renderCourseSpinner();
-        closeModal('modalSettings');
-        alert("Tüm veriler silindi.");
-    }
-
-    async function deleteCurrentCourse() {
-        if (!activeCourse) return;
-        if (!(await askConfirm(`${activeCourse.name} dersi ve tüm yoklama kayıtları silinecek.`, "Dersi sil"))) return;
-
-        const idx = courseList.indexOf(activeCourse);
-        if (idx > -1) courseList.splice(idx, 1);
-        activeCourse = courseList.length > 0 ? courseList[0] : null;
-
-        saveCoursesToStorage();
-        renderCourseSpinner();
-        closeModal('modalAddCourse');
-    }
-
-    function parseCourseDate(str) {
-        if (!str) return null;
-        str = String(str).trim();
-        let y, mo, d, m = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-        if (m) { y = +m[1]; mo = +m[2]; d = +m[3]; }
-        else {
-            m = str.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})/);
-            if (!m) return null;
-            d = +m[1]; mo = +m[2]; y = +m[3]; if (y < 100) y += 2000;
-        }
-        const dt = new Date(y, mo - 1, d, 12);
-        return (dt.getFullYear() === y && dt.getMonth() === mo - 1 && dt.getDate() === d) ? dt : null;
-    }
-    function toISO(dt) { return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`; }
-    function startBasedDate(c, idx) {
-        const st = parseCourseDate(c.startDate);
-        return st ? new Date(st.getFullYear(), st.getMonth(), st.getDate() + 7 * idx, 12) : null;
-    }
-    function sessionDate(c, idx) {
-        for (let i = idx; i >= 0; i--) {
-            const sess = c.pastSessions && c.pastSessions[i];
-            const own = sess && parseCourseDate(sess.dateISO);
-            if (own) return new Date(own.getFullYear(), own.getMonth(), own.getDate() + 7 * (idx - i), 12);
-        }
-        return startBasedDate(c, idx);
-    }
-    const fmtLong = d => d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
-    const fmtShort = d => String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0');
-
-    function showHistoryModal() {
-        if (!activeCourse || !activeCourse.pastSessions || activeCourse.pastSessions.length === 0) {
-            alert("Bu derse ait geçmiş yoklama kaydı bulunmuyor.");
-            return;
-        }
-        document.getElementById('historyModalTitle').innerText = `${activeCourse.name} - Geçmiş Yoklamalar`;
-        const container = document.getElementById('historyListContainer');
-        container.innerHTML = '';
-
-        activeCourse.pastSessions.forEach((sess, idx) => {
-            let presentCount = 0;
-            if (sess.studentHoursMap) {
-                presentCount = Object.values(sess.studentHoursMap).filter(h => h > 0).length;
-            } else if (sess.presentStudentNos) {
-                presentCount = sess.presentStudentNos.length;
+            // Haftalık Geçmiş Tablosunu Oluştur
+            let historyRowsHtml = '';
+            let rawHistory = [];
+            if (rawStudentObj && typeof rawStudentObj === 'object' && Array.isArray(rawStudentObj.history)) {
+                // Sadece yapılan haftalar (tatil / yapılmadı olanlar atlanır)
+                rawHistory = rawStudentObj.history.filter(h => !h.isHoliday);
             }
 
-            const hd = sessionDate(activeCourse, idx);
-            const hx = hd ? fmtLong(hd) : ((sess.date && !/^\d+\.\s*Hafta$/.test(sess.date)) ? sess.date : '');
-            const item = document.createElement('div');
-            item.className = 'history-item';
-            item.style.cursor = 'pointer';
-            item.onclick = () => openEditSessionModal(idx);
-            item.innerHTML = `
-                <div>
-                    <strong>${idx + 1}. Hafta${hx ? ' · ' + esc(hx) : ''}</strong>
-                    <div style="font-size:12px; color:#666;">Katılan: ${presentCount} / ${activeCourse.students.length} Öğrenci</div>
-                </div>
-                <button class="btn-sm btn-blue" onclick="event.stopPropagation(); openEditSessionModal(${idx});">Düzenle</button>
-            `;
-            container.appendChild(item);
-        });
+            const allHistoryItems = [...rawHistory];
+            const currentWeekTitle = sessionData.week || `${currentTotalWeeks}. Hafta`;
+            const timeDateStr = new Date(timestamp).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
 
-        openModal('modalHistory');
-    }
-
-    function openEditSessionModal(sessionIndex) {
-        if (!activeCourse || !activeCourse.pastSessions || !activeCourse.pastSessions[sessionIndex]) return;
-        editingSessionIndex = sessionIndex;
-        const sess = activeCourse.pastSessions[sessionIndex];
-        const maxCredit = activeCourse.credit || 3;
-
-        document.getElementById('editSessionTitle').innerText = `${activeCourse.name} (${sessionIndex + 1}. Hafta)`;
-        document.getElementById('inEditSessionDate').value = sess.date || `${sessionIndex + 1}. Hafta`;
-        const sd = sessionDate(activeCourse, sessionIndex);
-        document.getElementById('inEditSessionDateISO').value = sd ? toISO(sd) : '';
-
-        editingHoursMap = {};
-        editingOpenNo = null;
-        activeCourse.students.forEach(s => {
-            if (sess.studentHoursMap && sess.studentHoursMap[s.studentNo] !== undefined) {
-                editingHoursMap[s.studentNo] = sess.studentHoursMap[s.studentNo];
-            } else if (sess.presentStudentNos && sess.presentStudentNos.includes(s.studentNo)) {
-                editingHoursMap[s.studentNo] = maxCredit;
-            } else {
-                editingHoursMap[s.studentNo] = 0;
-            }
-        });
-
-        renderEditSessionStudents();
-        closeModal('modalHistory');
-        openModal('modalEditSession');
-    }
-
-    let editingOpenNo = null;
-    function commitEditInput() {
-        const inp = document.getElementById('editHoursInput');
-        if (!inp || editingOpenNo === null) return;
-        const max = activeCourse.credit || 3;
-        const v = parseInt(inp.value, 10);
-        if (!isNaN(v)) editingHoursMap[editingOpenNo] = Math.max(0, Math.min(max, v));
-    }
-    function toggleEditRow(no) { commitEditInput(); editingOpenNo = (editingOpenNo === no) ? null : no; renderEditSessionStudents(); }
-    function finishEditRow(goNext) {
-        commitEditInput();
-        const list = activeCourse.students;
-        const i = list.findIndex(s => s.studentNo === editingOpenNo);
-        editingOpenNo = (goNext && i >= 0 && i + 1 < list.length) ? list[i + 1].studentNo : null;
-        renderEditSessionStudents();
-    }
-
-    function renderEditSessionStudents() {
-        const container = document.getElementById('editSessionStudentList');
-        const summary = document.getElementById('editSessionSummary');
-        const st = container.scrollTop;
-        container.innerHTML = '';
-
-        const maxCredit = activeCourse.credit || 3;
-        let presentCount = 0;
-        let openItem = null, openInput = null;
-
-        activeCourse.students.forEach((s, idx) => {
-            const h = editingHoursMap[s.studentNo] || 0;
-            if (h > 0) presentCount++;
-            const open = editingOpenNo === s.studentNo;
-
-            const item = document.createElement('div');
-            item.className = 'es-row' + (open ? ' open' : '');
-            item.innerHTML = `
-                <div class="es-main">
-                    <span class="es-no">${esc(s.studentNo)}</span>
-                    <span class="es-name">${esc(s.fullName)}</span>
-                    <span class="es-h ${h > 0 ? 'on' : ''}">${h}</span>
-                </div>`;
-            item.querySelector('.es-main').onclick = () => toggleEditRow(s.studentNo);
-            if (open) {
-                const box = document.createElement('div');
-                box.className = 'es-edit';
-                box.innerHTML = `
-                    <input type="text" id="editHoursInput" inputmode="numeric" pattern="[0-9]*" enterkeyhint="next" autocomplete="off" aria-label="Saat (0-${maxCredit})" value="${h}">
-                    <button class="btn-sm" type="button">Tamam</button>
-                    <button class="btn-sm btn-save" type="button">Sonraki</button>`;
-                const [okB, nextB] = box.querySelectorAll('button');
-                okB.onclick = () => finishEditRow(false);
-                nextB.onclick = () => finishEditRow(true);
-                openInput = box.querySelector('input');
-                openInput.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); finishEditRow(true); } };
-                item.appendChild(box);
-                openItem = item;
-            }
-            container.appendChild(item);
-        });
-
-        container.scrollTop = st;
-        summary.innerText = `Toplam Öğrenci: ${activeCourse.students.length} | Katılan: ${presentCount}`;
-        if (openInput) { openItem.scrollIntoView({ block: 'nearest' }); openInput.focus(); openInput.select(); }
-    }
-
-
-    function saveEditedSession() {
-        commitEditInput();
-        if (editingSessionIndex < 0 || !activeCourse || !activeCourse.pastSessions[editingSessionIndex]) return;
-        const sess = activeCourse.pastSessions[editingSessionIndex];
-
-        sess.date = document.getElementById('inEditSessionDate').value.trim() || sess.date;
-        const dv = document.getElementById('inEditSessionDateISO').value;
-        if (dv) {
-            const base = startBasedDate(activeCourse, editingSessionIndex);
-            if (sess.dateISO || !base || dv !== toISO(base)) sess.dateISO = dv;
-        } else { delete sess.dateISO; }
-        sess.studentHoursMap = editingHoursMap;
-
-        sess.presentStudentNos = [];
-        Object.keys(editingHoursMap).forEach(sNo => {
-            if (editingHoursMap[sNo] > 0) {
-                sess.presentStudentNos.push(sNo);
-            }
-        });
-
-        saveCoursesToStorage();
-        closeModal('modalEditSession');
-        showHistoryModal();
-        alert("Yoklama kaydı başarıyla güncellendi!");
-    }
-
-    async function deleteEditedSession() {
-        if (editingSessionIndex < 0 || !activeCourse || !activeCourse.pastSessions[editingSessionIndex]) return;
-        if (!(await askConfirm("Bu haftanın yoklama kaydı silinecek.", "Kaydı sil"))) return;
-
-        activeCourse.pastSessions.splice(editingSessionIndex, 1);
-        saveCoursesToStorage();
-        closeModal('modalEditSession');
-        showHistoryModal();
-        alert("Yoklama kaydı silindi.");
-    }
-
-    let chartRiskOnly = false;
-    function chartData() {
-        const c = activeCourse, credit = c.credit || 3;
-        const totalWeeks = c.totalWeeks || 15, minPct = c.minAttendance || 70;
-        const played = c.pastSessions ? c.pastSessions.length : 0;
-        const allowed = Math.floor(totalWeeks * credit * (100 - minPct) / 100 + 1e-9);
-        const rows = c.students.map((s, idx) => {
-            const join = Math.min(s.joinWeek || 0, played);
-            let att = 0; const cells = [];
-            for (let w = 0; w < played; w++) {
-                if (w < join) { cells.push(null); continue; }
-                const sess = c.pastSessions[w]; let h = 0;
-                if (sess && sess.studentHoursMap && sess.studentHoursMap[s.studentNo] !== undefined) h = sess.studentHoursMap[s.studentNo];
-                else if (sess && sess.presentStudentNos && sess.presentStudentNos.includes(s.studentNo)) h = credit;
-                att += h; cells.push(h);
-            }
-            const possible = (played - join) * credit;
-            const rem = allowed - Math.max(0, possible - att);
-            const state = rem < 0 ? 'over' : (rem <= allowed * 0.25 ? 'risk' : 'ok');
-            return { s, idx, cells, att, possible, pct: possible ? Math.round(att / possible * 100) : null, rem, state };
-        });
-        return { c, credit, totalWeeks, minPct, played, allowed, rows, final: played >= totalWeeks };
-    }
-
-    function chartTableHtml(d, rows, print) {
-        const P = print ? '2px 4px' : '6px', PW = print ? '2px 3px' : '4px';
-        const COL = { ok: '#2e7d32', risk: '#e65100', over: '#c62828' };
-        const nextCol = !d.final && d.played < d.totalWeeks;
-        let h = `<table style="width:100%;border-collapse:collapse;font-size:${print ? 11 : 12}px;text-align:center;"><thead style="background:#1976d2;color:#fff;"><tr><th style="padding:${P};">#</th><th style="padding:${P};text-align:left;">Öğrenci No / Adı</th>`;
-        for (let w = 1; w <= d.played; w++) { const dt = sessionDate(d.c, w - 1); h += `<th style="padding:${PW};">H${w}${dt ? `<br><small style="font-weight:400;opacity:.85;">${fmtShort(dt)}</small>` : ''}</th>`; }
-        if (nextCol) { const dt = sessionDate(d.c, d.played); h += `<th style="padding:${PW};opacity:.55;">H${d.played + 1}${dt ? `<br><small style="font-weight:400;">${fmtShort(dt)}</small>` : ''}</th>`; }
-        h += `<th style="padding:${P};">Katılım</th><th style="padding:${P};">%</th><th style="padding:${P};">Kalan hak</th><th style="padding:${P};">Durum</th></tr></thead><tbody>`;
-        if (!rows.length) h += `<tr><td colspan="${d.played + 6}" style="padding:16px;color:#5d6b78;">Gösterilecek öğrenci yok.</td></tr>`;
-        rows.forEach((r, i) => {
-            let cells = '';
-            r.cells.forEach(v => {
-                cells += v === null ? `<td style="color:#9e9e9e;">–</td>`
-                    : v > 0 ? `<td style="background:#c8e6c9;color:#2e7d32;font-weight:bold;">${v}</td>`
-                    : `<td style="background:#ffcdd2;color:#c62828;font-weight:bold;">0</td>`;
-            });
-            if (nextCol) cells += `<td style="color:#bdbdbd;">-</td>`;
-            const label = d.final ? (r.state === 'over' ? 'Sağlamadı' : 'Sağladı') : { ok: 'Güvende', risk: 'Risk', over: 'Sınır aşıldı' }[r.state];
-            const col = COL[d.final && r.state !== 'over' ? 'ok' : r.state];
-            h += `<tr style="background:${i % 2 ? '#f9f9f9' : '#fff'};border-bottom:1px solid #eee;">
-                <td style="padding:${P};">${r.idx + 1}</td>
-                <td style="padding:${P};text-align:left;${print ? 'white-space:nowrap;' : ''}">${print ? `<small style="color:#666;">${esc(r.s.studentNo)}</small> <strong>${esc(r.s.fullName)}</strong>` : `<strong>${esc(r.s.fullName)}</strong><br/><small style="color:#666;">${esc(r.s.studentNo)}</small>`}</td>
-                ${cells}
-                <td style="padding:${P};font-weight:bold;">${r.att}/${r.possible}</td>
-                <td style="padding:${P};font-weight:bold;">${r.pct === null ? '-' : '%' + r.pct}</td>
-                <td style="padding:${P};font-weight:bold;color:${COL[r.state]};">${r.rem >= 0 ? r.rem : (-r.rem) + ' aştı'}</td>
-                <td style="padding:${P};font-weight:bold;color:${col};">${label}</td></tr>`;
-        });
-        return h + `</tbody></table>`;
-    }
-
-    function chartSummaryText(d) {
-        const over = d.rows.filter(r => r.state === 'over').length, risk = d.rows.filter(r => r.state === 'risk').length;
-        return d.played ? `${d.played}/${d.totalWeeks}. hafta · devam sınırı %${d.minPct} (en fazla ${d.allowed} saat devamsızlık) · ${risk} risk · ${over} sınır aşıldı` : 'Henüz kaydedilmiş yoklama yok.';
-    }
-
-    function renderChart() {
-        const d = chartData();
-        const risky = d.rows.filter(r => r.state !== 'ok');
-        document.getElementById('chartModalTitle').innerText = `${d.c.name} - Devam Çizelgesi`;
-        document.getElementById('chartSummary').innerText = chartSummaryText(d);
-        document.querySelectorAll('#chartSeg button').forEach(b => {
-            const risk = b.dataset.f === 'risk';
-            b.classList.toggle('on', risk === chartRiskOnly);
-            b.textContent = risk ? `Riskliler ${risky.length}` : `Tümü ${d.rows.length}`;
-        });
-        document.getElementById('chartTableContainer').innerHTML = chartTableHtml(d, chartRiskOnly ? risky : d.rows, false);
-    }
-    function setChartFilter(riskOnly) { chartRiskOnly = riskOnly; renderChart(); }
-
-    function showChartModal() {
-        if (!activeCourse) { alert("Lütfen önce bir ders seçiniz!"); return; }
-        chartRiskOnly = false;
-        renderChart();
-        openModal('modalChart');
-    }
-
-    // Import / Export JSON
-    function triggerImportJson() {
-        const input = document.getElementById('fileImportInput');
-        input.value = '';
-        input.click();
-    }
-
-    function handleImportJson(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                let data = JSON.parse(e.target.result);
-
-                if (typeof data === 'string') {
-                    try { data = JSON.parse(data); } catch (err) {}
-                }
-
-                let rawCourses = [];
-
-                if (Array.isArray(data)) {
-                    rawCourses = data;
-                } else if (data && data.terms && Array.isArray(data.terms)) {
-                    data.terms.forEach(term => {
-                        if (term.courses && Array.isArray(term.courses)) {
-                            rawCourses.push(...term.courses);
-                        }
-                    });
-                } else if (data && data.courses && Array.isArray(data.courses)) {
-                    rawCourses = data.courses;
-                } else if (data && data.courseList && Array.isArray(data.courseList)) {
-                    rawCourses = data.courseList;
-                } else if (data && typeof data === 'object' && (data.name || data.courseName || data.id)) {
-                    rawCourses = [data];
-                }
-
-                if (!rawCourses || rawCourses.length === 0) {
-                    alert("Yedek dosyasında yüklenecek ders bulunamadı!");
-                    return;
-                }
-
-                const importedList = [];
-
-                rawCourses.forEach(c => {
-                    const courseObj = {
-                        id: c.id || (Date.now().toString() + "_" + Math.floor(Math.random() * 1000)),
-                        name: (c.name || c.courseName || "Ders").trim(),
-                        credit: parseInt(c.credit || c.credits) || 3,
-                        totalWeeks: parseInt(c.totalWeeks) || 15,
-                        minAttendance: parseInt(c.minAttendance) || 70,
-                        instructor: (c.instructor || c.instructorName || "").trim(),
-                        faculty: (c.faculty || "").trim(),
-                        department: (c.department || "").trim(),
-                        schedule: (c.schedule || "").trim(),
-                        startDate: (c.startDate || "").trim(),
-                        classListText: c.classListText || "",
-                        students: [],
-                        pastSessions: []
-                    };
-
-                    const rawStudents = c.students || [];
-                    rawStudents.forEach(s => {
-                        courseObj.students.push({
-                            studentNo: (s.studentNo || s.studentNumber || "").toString().trim(),
-                            fullName: (s.fullName || s.name || "").toString().trim(),
-                            btAddress: s.btAddress || "",
-                            joinWeek: parseInt(s.joinWeek) || 0,
-                            isPresent: false,
-                            distanceMeters: null
-                        });
-                    });
-
-                    if (c.pastSessions && Array.isArray(c.pastSessions)) {
-                        courseObj.pastSessions = c.pastSessions;
-                    } else {
-                        let maxWeekIndex = -1;
-                        rawStudents.forEach(s => {
-                            if (s.attendanceWeeks && Array.isArray(s.attendanceWeeks)) {
-                                s.attendanceWeeks.forEach((val, idx) => {
-                                    if (val > 0 && idx > maxWeekIndex) {
-                                        maxWeekIndex = idx;
-                                    }
-                                });
-                            }
-                        });
-
-                        if (maxWeekIndex >= 0) {
-                            for (let w = 0; w <= maxWeekIndex; w++) {
-                                const presentNos = [];
-                                const hoursMap = {};
-
-                                rawStudents.forEach(s => {
-                                    const sNo = (s.studentNo || s.studentNumber || "").toString().trim();
-                                    if (s.attendanceWeeks && s.attendanceWeeks[w] > 0) {
-                                        presentNos.push(sNo);
-                                        hoursMap[sNo] = s.attendanceWeeks[w];
-                                    }
-                                });
-
-                                courseObj.pastSessions.push({
-                                    id: Date.now().toString() + "_" + w,
-                                    date: `${w + 1}. Hafta`,
-                                    presentStudentNos: presentNos,
-                                    studentHoursMap: hoursMap,
-                                    studentDistancesMap: {}
-                                });
-                            }
-                        }
-                    }
-
-                    importedList.push(courseObj);
+            if (!allHistoryItems.some(h => h.week === currentWeekTitle)) {
+                allHistoryItems.push({
+                    week: currentWeekTitle,
+                    date: timeDateStr,
+                    status: 'Var',
+                    attended: true,
+                    isCurrent: true
                 });
-
-                courseList = importedList;
-                activeCourse = courseList[0];
-
-                const bk = (data && data.settings) || {};
-                const okUrl = u => typeof u === 'string' && /^https:\/\//.test(u.trim());
-                let settingsRestored = false;
-                if (okUrl(bk.firebaseUrl)) { localStorage.setItem('cfg_firebase', bk.firebaseUrl.trim()); settingsRestored = true; }
-                if (okUrl(bk.webUrl)) { localStorage.setItem('cfg_web', bk.webUrl.trim()); settingsRestored = true; }
-                const inFb = document.getElementById('cfgFirebase'), inWeb = document.getElementById('cfgWeb');
-                if (inFb) inFb.value = getFirebaseUrl();
-                if (inWeb) inWeb.value = getWebUrl();
-
-                saveCoursesToStorage();
-                renderCourseSpinner();
-
-                alert(`Yedek dosyası başarıyla yüklendi! (${courseList.length} ders ve tüm geçmiş yoklamalar aktarıldı${settingsRestored ? "; Firebase ve web adresleri de geri yüklendi" : "; yedekte web adresi bilgisi olmadığı için mevcut adres korundu"})`);
-            } catch (err) {
-                console.error(err);
-                alert("Yedek dosyası okunurken hata oluştu: " + err.message);
             }
-        };
-        reader.readAsText(file);
-    }
 
-    function exportJson() {
-        if (courseList.length === 0) {
-            alert("Yedeklenecek ders bulunmuyor!");
-            return;
+            if (allHistoryItems.length > 0) {
+                const itemsHtml = allHistoryItems.map(item => {
+                    const isAttended = item.attended || item.status === 'Var';
+                    const badgeClass = isAttended ? 'h-badge present' : 'h-badge absent';
+                    const badgeText = isAttended ? '✓ Var' : '✕ Yok';
+                    const rowClass = isAttended ? 'history-row present' : 'history-row absent';
+                    const currentTag = item.isCurrent ? '<span class="h-tag">Bugün</span>' : '';
+                    return `
+                        <div class="${rowClass}">
+                            <div class="h-info">
+                                <span class="h-week">${esc(item.week)} ${currentTag}</span>
+                                ${item.date ? `<span class="h-date">${esc(item.date)}</span>` : ''}
+                            </div>
+                            <span class="${badgeClass}">${badgeText}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                historyRowsHtml = `
+                    <div class="history-panel">
+                        <div class="history-header">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                            <span>Haftalık Katılım Detayı</span>
+                        </div>
+                        <div class="history-list">
+                            ${itemsHtml}
+                        </div>
+                    </div>
+                `;
+            }
+
+            const summaryCardHtml = `
+                <div class="done-hero">
+                    <div class="done-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                    </div>
+                    <div class="done-kicker">Yoklamanız Alındı</div>
+                    <div class="done-name">${esc(studentName)}</div>
+                    <div class="done-no">${esc(studentNo)}</div>
+                </div>
+
+                <div class="chip-row">${chips}</div>
+
+                <div class="done-panel" style="--tone:${tone.c}; --c:${RING_C.toFixed(2)}; --o:${ringOffset.toFixed(2)};">
+                    <div class="ring-wrap">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/>
+                            <circle class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/>
+                        </svg>
+                        <div class="ring-center">
+                            <div class="ring-pct"><span id="ratePct">${ratePercent}</span><small>%</small></div>
+                            <div class="ring-cap">Devam</div>
+                        </div>
+                    </div>
+                    <div class="ring-note">${tone.t}</div>
+                    <div class="stat-grid">
+                        <div class="stat"><b>${currentTotalWeeks}</b><span>Toplam hafta</span></div>
+                        <div class="stat ok"><b>${currentAttendedWeeks}</b><span>Katıldığınız</span></div>
+                        <div class="stat no ${absentWeeks === 0 ? 'zero' : ''}"><b>${absentWeeks}</b><span>Devamsızlık</span></div>
+                    </div>
+                </div>
+
+                ${historyRowsHtml}
+            `;
+
+            showResult('success', '', summaryCardHtml);
+            document.getElementById('attendanceCard').classList.add('is-done');
+            animatePct(ratePercent);
+            document.getElementById('formContainer').style.display = 'none';
+        } catch (err) {
+            console.error(err);
+            showResult('error', '❌ İşlem Başarısız', 'Yoklama kaydedilirken bir hata oluştu. Lütfen tekrar deneyiniz.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
         }
-        const now = new Date();
-        const dd = String(now.getDate()).padStart(2, '0');
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const yyyy = now.getFullYear();
-        const dateStr = `${dd}${mm}${yyyy}`;
-        const fileName = `yoklama_${dateStr}.json`;
-
-        const jsonText = JSON.stringify({ version: 2, settings: { firebaseUrl: getFirebaseUrl(), webUrl: getWebUrl() }, courses: courseList }, null, 2);
-        (async () => {
-            try {
-                const dl = (window.claude && window.claude.use) ? await window.claude.use("downloads") : null;
-                if (dl) { await dl.save({ filename: fileName, data: jsonText }); return; }
-            } catch (e) { if (e && e.code === 'declined') return; console.error(e); }
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonText);
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", fileName);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-        })();
     }
 
-    function fitPrint() {
-        const d = chartData();
-        let st = document.getElementById('pageStyle');
-        if (!st) { st = document.createElement('style'); st.id = 'pageStyle'; document.head.appendChild(st); }
-        st.textContent = `@page{size:A4 ${d.played > 8 ? 'landscape' : 'portrait'};margin:18mm 8mm 8mm 18mm}`;
-        document.getElementById('printArea').style.cssText = '';
+    function showResult(type, title, desc) {
+        const box = document.getElementById('resultBox');
+        box.className = `result-box ${type}` + (type === 'success' && !title ? ' rich' : '');
+        document.getElementById('resultTitle').innerText = title;
+        document.getElementById('resultDesc').innerHTML = desc;
+        box.style.display = 'block';
     }
 
-    function generatePdfReport() {
-        if (!activeCourse) { alert("Lütfen önce bir ders seçiniz!"); return; }
-        const d = chartData();
-        document.getElementById('printArea').className = '';
-        document.getElementById('printArea').innerHTML =
-            `<h1>${esc(d.c.name)} - Devam Çizelgesi</h1>` +
-            `<div class="pmeta">${d.c.instructor ? esc(d.c.instructor) + ' · ' : ''}${new Date().toLocaleDateString('tr-TR')} · ${esc(chartSummaryText(d))}</div>` +
-            chartTableHtml(d, d.rows, true);
-        fitPrint();
-        window.print();
+    function animatePct(target) {
+        const el = document.getElementById('ratePct');
+        if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const t0 = performance.now(), dur = 1100, delay = 250;
+        el.textContent = '0';
+        (function tick(now) {
+            const p = Math.min(Math.max((now - t0 - delay) / dur, 0), 1);
+            el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+            if (p < 1) requestAnimationFrame(tick);
+        })(t0);
     }
 
-    function generateSignSheet() {
-        if (!activeCourse) { alert("Lütfen önce bir ders seçiniz!"); return; }
-        const c = activeCourse;
-        const credit = Math.max(1, parseInt(c.credit) || 3);
-        const weekCols = 3;
-        const oneWeek = credit === 3; // 3 kredi: tek haftalık (her saat için imza); diğerleri: 3 haftalık (her hafta tek imza)
-        const students = c.students || [];
-        const fullUrl = `${getWebUrl()}?session=${c.id}&db=${getFirebaseUrl()}`;
-
-        // QR -> resim (siyah-beyaz)
-        const tmp = document.createElement('div');
-        tmp.style.cssText = 'position:fixed;left:-9999px;top:0';
-        document.body.appendChild(tmp);
-        new QRCode(tmp, { text: fullUrl, width: 300, height: 300, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
-        const cv = tmp.querySelector('canvas');
-        const img = tmp.querySelector('img');
-        const qrSrc = cv ? cv.toDataURL('image/png') : (img ? img.src : '');
-        tmp.remove();
-
-        const rowsNeeded = Math.max(students.length, 1);
-        const landscape = false;
-        const usableH = (landscape ? 170 : 250) - 40;          // mm: kenar boşlukları ve üst bilgi düşüldü
-        const rh = Math.min(8.2, usableH / rowsNeeded * 0.97);  // satır yüksekliği (mm)
-        const fs = Math.max(5.5, Math.min(10.5, rh * 3.78 * 0.55)); // yazı boyutu (px)
-        const usableW = landscape ? 273 : 186;                 // mm
-        const noMm = 9, numMm = 24;
-        const sigMm = Math.min(24, (usableW - noMm - numMm - 55) / weekCols); // imza sütunu (en fazla 24 mm)
-        const nameMm = Math.min(60, usableW - noMm - numMm - sigMm * weekCols);
-        const tableMm = noMm + numMm + nameMm + sigMm * weekCols;
-        let cols = `<col style="width:${noMm}mm"><col style="width:${numMm}mm"><col>`;
-        let head = `<th>Sıra</th><th>Öğrenci No</th><th>Ad Soyad</th>`;
-        for (let i = 1; i <= weekCols; i++) { cols += `<col style="width:${sigMm.toFixed(1)}mm">`; head += `<th style="font-size:8px">..../..../${new Date().getFullYear()}</th>`; }
-        let body = '';
-        for (let i = 0; i < rowsNeeded; i++) {
-            const s = students[i];
-            body += `<tr><td class="c">${i + 1}</td><td class="c">${s ? esc(s.studentNo) : ''}</td><td>${s ? esc(s.fullName) : ''}</td>` + '<td></td>'.repeat(weekCols) + '</tr>';
-        }
-
-        const pa = document.getElementById('printArea');
-        pa.className = 'signsheet';
-        pa.innerHTML =
-            `<div style="box-sizing:content-box;width:${tableMm.toFixed(1)}mm;padding:0 2mm;margin:0 auto;height:${landscape ? 170 : 255}mm;overflow:hidden"><div style="width:${tableMm.toFixed(1)}mm"><div class="sh-head"><div>` +
-            `<h1>${esc(c.name)} - Yoklama Listesi</h1>` +
-            `<div class="pmeta">${c.instructor ? 'Öğretim Elemanı: ' + esc(c.instructor) : ''}</div>` +
-            `<div class="pmeta">Ders Kredisi: ${credit} saat &nbsp;·&nbsp; ${oneWeek ? 'Tek haftalık liste (her saat için imza)' : '3 haftalık liste (her hafta için tek imza)'}</div>` +
-            `</div>${qrSrc ? `<div style="width:26mm;height:26mm;flex:none;overflow:hidden"><img class="sh-qr" src="${qrSrc}" alt="QR" width="98" height="98" style="width:26mm;height:26mm;max-width:26mm;max-height:26mm;display:block"></div>` : ''}</div>` +
-            `<table style="width:100%;--rh:${rh.toFixed(2)}mm;--fs:${fs.toFixed(1)}px"><colgroup>${cols}</colgroup><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div></div>`;
-
-        let st = document.getElementById('pageStyle');
-        if (!st) { st = document.createElement('style'); st.id = 'pageStyle'; document.head.appendChild(st); }
-        st.textContent = `@page{size:A4 ${landscape ? 'landscape' : 'portrait'};margin:12mm}`;
-        pa.style.cssText = '';
-        window.onafterprint = () => { pa.className = ''; window.onafterprint = null; };
-        setTimeout(() => window.print(), 50);
+    if (activeSessionId) {
+        loadSession(activeSessionId);
+    } else {
+        document.getElementById('sessionGroup').style.display = 'block';
     }
-
-    ['modalQr', 'modalHistory', 'modalChart', 'modalSettings'].forEach(id => {
-        const o = document.getElementById(id);
-        o.addEventListener('click', e => { if (e.target === o) closeModal(id); });
-    });
-
-    // Init
-    loadCoursesFromStorage();
-    renderCourseSpinner();
 </script>
 
 </body>
