@@ -24,7 +24,7 @@
             user-select: none;
         }
         input[type="number"], input[type="text"] {
-            -webkit-user-select: text !important;///////
+            -webkit-user-select: text !important;
             -moz-user-select: text !important;
             -ms-user-select: text !important;
             user-select: text !important;
@@ -591,10 +591,10 @@
             }
         }
 
-        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn);
+        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn);
     }
 
-    async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn) {
+    async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn) {
         submitBtn.innerText = "Kaydediliyor...";
 
         try {
@@ -664,6 +664,33 @@
                 `<span class="chip neutral">${ico.clock}${timeStr}</span>`
             ].join('');
 
+            // Haftalık Katılım Geçmişi Tablosunu Oluştur
+            let historyRowsHtml = '';
+            if (rawStudentObj && typeof rawStudentObj === 'object' && Array.isArray(rawStudentObj.history)) {
+                const filteredHistory = rawStudentObj.history.filter(h => h && !h.isHoliday);
+                if (filteredHistory.length > 0) {
+                    const items = filteredHistory.map(h => {
+                        const isPresent = h.attended || h.status === 'Var';
+                        return `
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; margin-bottom:6px; background:${isPresent ? '#f0fff4' : '#fff5f5'}; border:1px solid ${isPresent ? '#c6f6d5' : '#fed7d7'}; border-radius:10px; font-size:13px;">
+                                <div>
+                                    <strong>${esc(h.week || '')}</strong>
+                                    ${h.date ? `<span style="font-size:11px; color:#718096; margin-left:6px;">(${esc(h.date)})</span>` : ''}
+                                </div>
+                                <span style="font-weight:bold; color:${isPresent ? '#22543d' : '#742a2a'};">${isPresent ? '✓ Var' : '✕ Yok'}</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    historyRowsHtml = `
+                        <div style="margin-top:16px; text-align:left; background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:16px;">
+                            <div style="font-weight:bold; font-size:14px; color:#1a202c; margin-bottom:10px;">Haftalık Katılım Detayı</div>
+                            ${items}
+                        </div>
+                    `;
+                }
+            }
+
             const summaryCardHtml = `
                 <div class="done-hero">
                     <div class="done-badge">
@@ -694,6 +721,8 @@
                         <div class="stat no ${absentWeeks === 0 ? 'zero' : ''}"><b>${absentWeeks}</b><span>Devamsızlık</span></div>
                     </div>
                 </div>
+
+                ${historyRowsHtml}
             `;
 
             showResult('success', '', summaryCardHtml);
