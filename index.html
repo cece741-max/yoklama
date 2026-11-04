@@ -6,31 +6,13 @@
 
     <!-- Tam Ekran Uygulama / Adres Çubuğu Gizleme Meta Etiketleri -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#3182ce">
     <meta name="application-name" content="Ders Yoklama">
 
     <title>Ders Yoklama Sistemi</title>
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --primary-light: #eff6ff;
-            --success: #10b981;
-            --success-bg: #ecfdf5;
-            --warning: #f59e0b;
-            --warning-bg: #fffbeb;
-            --danger: #ef4444;
-            --danger-bg: #fef2f2;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --card-bg: #ffffff;
-            --bg-body: #f8fafc;
-            --radius: 20px;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -41,122 +23,87 @@
             -ms-user-select: none;
             user-select: none;
         }
-
         input[type="number"], input[type="text"] {
-            -webkit-user-select: text !important;
+            -webkit-user-select: text !important;///////
             -moz-user-select: text !important;
             -ms-user-select: text !important;
             user-select: text !important;
         }
-
         body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            min-height: 100dvh;
             padding: 16px;
-            background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
-            background-size: 16px 16px;
         }
-
         .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
             max-width: 440px;
             width: 100%;
-            padding: 28px 22px;
+            padding: 28px 24px;
             text-align: left;
-            transition: all 0.3s ease;
         }
-
         .card.text-center {
             text-align: center;
         }
-
-        .brand-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 999px;
-            font-size: 12.5px;
-            font-weight: 700;
+        .header-icon {
+            font-size: 48px;
             margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
         }
-
         h2 {
-            color: var(--text-main);
+            color: #1a202c;
             font-size: 22px;
-            font-weight: 800;
+            font-weight: 700;
             margin-bottom: 6px;
             line-height: 1.3;
-            letter-spacing: -0.02em;
         }
-
         .subtitle {
-            color: var(--text-muted);
+            color: #718096;
             font-size: 14px;
-            margin-bottom: 22px;
-            line-height: 1.4;
+            margin-bottom: 20px;
         }
 
         /* KVKK / Aydınlatma Metni Stilleri */
         .summary-box {
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 16px;
             font-size: 13.5px;
-            color: #334155;
+            color: #2d3748;
             line-height: 1.55;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
-
         .toggle-btn {
-            color: var(--primary);
-            font-size: 13.5px;
+            color: #3182ce;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            margin-bottom: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
             user-select: none;
-            transition: color 0.15s;
         }
-
         .toggle-btn:hover {
-            color: var(--primary-hover);
+            color: #2b6cb0;
         }
-
         .full-text {
             display: none;
             font-size: 12.5px;
-            color: var(--text-muted);
+            color: #718096;
             line-height: 1.55;
             margin-bottom: 16px;
-            padding: 12px 14px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #edf2f7;
             text-align: justify;
         }
-
         .checkbox-group {
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid #edf2f7;
             padding-top: 16px;
             margin-bottom: 16px;
         }
-
         .checkbox-item {
             display: flex;
             align-items: flex-start;
@@ -164,27 +111,23 @@
             margin-bottom: 16px;
             cursor: pointer;
         }
-
         .checkbox-item input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
-            margin-top: 1px;
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
             cursor: pointer;
-            accent-color: var(--primary);
+            accent-color: #3182ce;
             flex-shrink: 0;
-            border-radius: 6px;
         }
-
         .checkbox-label {
             font-size: 14px;
-            font-weight: 600;
-            color: #1e293b;
+            font-weight: 500;
+            color: #2d3748;
             line-height: 1.4;
         }
-
         .checkbox-subtext {
             font-size: 12px;
-            color: var(--text-muted);
+            color: #718096;
             margin-top: 4px;
             line-height: 1.4;
             font-weight: normal;
@@ -192,323 +135,164 @@
 
         .form-group {
             text-align: left;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
-
         label {
             display: block;
             font-size: 13px;
-            font-weight: 700;
-            color: #334155;
-            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 6px;
         }
-
         input[type="number"], input[type="text"] {
             width: 100%;
             padding: 14px 16px;
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--text-main);
-            background: #f8fafc;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
             outline: none;
-            transition: all 0.2s ease;
+            transition: border-color 0.2s;
         }
-
         input:focus {
-            background: #ffffff;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+            border-color: #3182ce;
         }
-
         .btn-primary {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            padding: 14px;
+            background-color: #3182ce;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
             margin-top: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
-
-        .btn-primary:active:not(:disabled) {
-            transform: scale(0.98);
+        .btn-primary:hover:not(:disabled) {
+            background-color: #2b6cb0;
         }
-
         .btn-primary:disabled {
-            background: #94a3b8;
-            box-shadow: none;
+            background-color: #a0aec0;
             cursor: not-allowed;
             opacity: 0.85;
         }
-
         .result-box {
             display: none;
             margin-top: 20px;
             padding: 18px;
-            border-radius: 14px;
+            border-radius: 12px;
             text-align: left;
             animation: fadeIn 0.3s ease;
         }
-
         .result-box.success {
-            background-color: var(--success-bg);
-            border: 1px solid #a7f3d0;
-            color: #065f46;
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            color: #22543d;
         }
-
         .result-box.error {
-            background-color: var(--danger-bg);
-            border: 1px solid #fecaca;
-            color: #991b1b;
+            background-color: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #742a2a;
         }
-
         .result-box.warning {
-            background-color: var(--warning-bg);
-            border: 1px solid #fde68a;
-            color: #92400e;
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            color: #744210;
         }
-
         .result-title {
-            font-weight: 800;
+            font-weight: bold;
             font-size: 16px;
             margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
         .result-desc {
             font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-line;
+            line-height: 1.4;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .footer-text {
             margin-top: 24px;
             font-size: 12px;
-            color: #94a3b8;
+            color: #a0aec0;
             text-align: center;
-            font-weight: 500;
         }
 
-        /* ===== Yoklama Sonrası Görünüm Stilleri ===== */
-        .result-box.rich {
-            background: none;
-            border: none;
-            padding: 0;
-            margin-top: 4px;
-            color: inherit;
-            text-align: center;
+        /* ===== Yoklama sonrası: sonuç görünümleri ===== */
+        .result-desc { white-space: pre-line; }
+        .result-box.warning, .result-box.error {
+            border-left-width: 4px;
+            border-radius: 14px;
         }
+        .result-box.rich { background: none; border: none; padding: 0; margin-top: 4px; color: inherit; text-align: center; }
         .result-box.rich .result-title { display: none; }
         .result-box.rich .result-desc { font-size: inherit; line-height: inherit; white-space: normal; }
-
-        .card.is-done .brand-badge,
+        .card.is-done .header-icon,
         .card.is-done #courseTitle,
         .card.is-done #sessionInfo { display: none; }
 
         .done-hero { text-align: center; }
         .done-badge {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 16px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            background: linear-gradient(135deg, #10b981, #059669);
-            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.35), 0 0 0 8px rgba(16, 185, 129, 0.12);
+            width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 50%;
+            display: grid; place-items: center;
+            background: linear-gradient(135deg, #48bb78, #2f9e63);
+            box-shadow: 0 10px 24px rgba(47, 158, 99, 0.32), 0 0 0 8px rgba(72, 187, 120, 0.13);
             animation: pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both;
         }
-        .done-badge svg { width: 36px; height: 36px; }
+        .done-badge svg { width: 34px; height: 34px; }
         .done-badge path {
-            stroke-dasharray: 32;
-            stroke-dashoffset: 32;
+            stroke-dasharray: 32; stroke-dashoffset: 32;
             animation: draw 0.45s 0.3s ease forwards;
         }
-        .done-kicker {
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #059669;
-        }
-        .done-name {
-            font-size: 23px;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.25;
-            margin-top: 4px;
-            letter-spacing: -0.02em;
-        }
-        .done-no {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-weight: 600;
-            font-variant-numeric: tabular-nums;
-        }
+        .done-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #2f9e63; }
+        .done-name { font-size: 22px; font-weight: 800; color: #1a202c; line-height: 1.25; margin-top: 4px; }
+        .done-no { font-size: 13px; color: #718096; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
-        .chip-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin: 16px 0 20px;
-        }
+        .chip-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0 18px; }
         .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 7px 14px;
-            border-radius: 999px;
-            background: #eff6ff;
-            color: #1e40af;
-            font-size: 13px;
-            font-weight: 600;
-            border: 1px solid #dbeafe;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; border-radius: 999px;
+            background: #ebf4ff; color: #2c5282;
+            font-size: 12.5px; font-weight: 600;
         }
-        .chip svg { width: 15px; height: 15px; flex-shrink: 0; }
-        .chip.neutral { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+        .chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+        .chip.neutral { background: #edf2f7; color: #4a5568; }
 
         .done-panel {
             background: linear-gradient(180deg, #f8fafc, #f1f5f9);
-            border: 1px solid #e2e8f0;
-            border-radius: 18px;
-            padding: 20px 16px 16px;
-            margin-bottom: 20px;
+            border: 1px solid #e2e8f0; border-radius: 18px;
+            padding: 20px 14px 14px;
         }
-
         .ring-wrap { position: relative; width: 136px; height: 136px; margin: 0 auto 8px; }
         .ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
         .ring-bg { stroke: #e2e8f0; }
         .ring-fg {
-            stroke: var(--tone);
-            stroke-linecap: round;
-            stroke-dasharray: var(--c);
-            stroke-dashoffset: var(--o);
+            stroke: var(--tone); stroke-linecap: round;
+            stroke-dasharray: var(--c); stroke-dashoffset: var(--o);
             animation: ringFill 1.1s 0.25s cubic-bezier(0.3, 0.7, 0.2, 1) both;
         }
         .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .ring-pct { font-size: 34px; font-weight: 800; color: var(--text-main); line-height: 1; font-variant-numeric: tabular-nums; }
-        .ring-pct small { font-size: 18px; font-weight: 700; margin-left: 1px; }
-        .ring-cap { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
-        .ring-note { font-size: 13.5px; font-weight: 700; color: var(--tone); margin-bottom: 16px; }
+        .ring-pct { font-size: 32px; font-weight: 800; color: #1a202c; line-height: 1; font-variant-numeric: tabular-nums; }
+        .ring-pct small { font-size: 16px; font-weight: 700; margin-left: 1px; }
+        .ring-cap { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #718096; margin-top: 6px; }
+        .ring-note { font-size: 13px; font-weight: 600; color: var(--tone); margin-bottom: 16px; }
 
         .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .stat { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 4px 10px; }
-        .stat b { display: block; font-size: 22px; font-weight: 800; color: var(--text-main); line-height: 1.1; font-variant-numeric: tabular-nums; }
-        .stat span { display: block; margin-top: 4px; font-size: 11px; font-weight: 600; color: var(--text-muted); }
-        .stat.ok b { color: #059669; }
-        .stat.no b { color: #dc2626; }
-        .stat.no.zero b { color: #94a3b8; }
-
-        /* ===== Haftalık Katılım Geçmişi Tablosu Stilleri ===== */
-        .history-panel {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 18px;
-            padding: 18px 16px;
-            text-align: left;
-        }
-        .history-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .history-header svg { width: 18px; height: 18px; color: var(--primary); }
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 260px;
-            overflow-y: auto;
-            padding-right: 2px;
-        }
-        .history-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            border-radius: 12px;
-            font-size: 13.5px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-        }
-        .history-row.present {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
-        }
-        .history-row.absent {
-            background: #fef2f2;
-            border-color: #fecaca;
-        }
-        .h-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .h-week {
-            font-weight: 700;
-            color: var(--text-main);
-        }
-        .h-date {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-variant-numeric: tabular-nums;
-        }
-        .h-tag {
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 6px;
-            background: var(--primary-light);
-            color: var(--primary);
-            text-transform: uppercase;
-        }
-        .h-badge {
-            font-size: 12px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .h-badge.present {
-            background: #dcfce7;
-            color: #15803d;
-        }
-        .h-badge.absent {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
+        .stat { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 4px 10px; }
+        .stat b { display: block; font-size: 22px; font-weight: 800; color: #2d3748; line-height: 1.1; font-variant-numeric: tabular-nums; }
+        .stat span { display: block; margin-top: 4px; font-size: 11px; font-weight: 600; color: #718096; }
+        .stat.ok b { color: #2f9e63; }
+        .stat.no b { color: #e53e3e; }
+        .stat.no.zero b { color: #a0aec0; }
 
         @keyframes pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes draw { to { stroke-dashoffset: 0; } }
         @keyframes ringFill { from { stroke-dashoffset: var(--c); } }
-
         @media (prefers-reduced-motion: reduce) {
             .done-badge, .done-badge path, .ring-fg { animation: none; }
             .done-badge path { stroke-dashoffset: 0; }
@@ -519,11 +303,7 @@
 
 <!-- 1. ADIM: Aydınlatma ve Rıza Ekranı (Girişte İlk Gösterilen Ekran) -->
 <div class="card" id="consentCard">
-    <div class="brand-badge">📍 Mobil Yoklama Sistemi</div>
-    <h2>KVKK Aydınlatma Metni</h2>
-    <p class="subtitle">Yoklamaya katılmak için lütfen aşağıdaki bilgilendirmeyi onaylayınız.</p>
-
-    <div class="summary-box">
+      <div class="summary-box">
         Yoklama için öğrenci numaranız ve konum izninizle sınıfa uzaklığınız hesaplanır, konumunuz asla kaydedilmez. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
     </div>
 
@@ -538,7 +318,7 @@
     <div class="checkbox-group">
         <label class="checkbox-item">
             <input type="checkbox" id="readNoticeConsent" onchange="validateConsentForm()" />
-            <span class="checkbox-label">Aydınlatma metnini okudum ve kabul ediyorum.</span>
+            <span class="checkbox-label">Aydınlatma metnini okudum.</span>
         </label>
 
         <label class="checkbox-item">
@@ -552,34 +332,28 @@
         </label>
     </div>
 
-    <button id="proceedBtn" class="btn-primary" disabled onclick="proceedToAttendance()">
-        <span>Devam Et</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </button>
+    <button id="proceedBtn" class="btn-primary" disabled onclick="proceedToAttendance()">Devam et</button>
 
     <p class="footer-text">Mobil Yoklama Sistemi</p>
 </div>
 
 <!-- 2. ADIM: Öğrenci Yoklama Giriş Ekranı -->
 <div class="card text-center" id="attendanceCard" style="display: none;">
-    <div class="brand-badge" id="courseBadge" style="display: none;">Ders Yoklaması</div>
     <h2 id="courseTitle">Ders Yoklaması</h2>
     <p class="subtitle" id="sessionInfo">Öğrenci Numarası ile Giriş Yapınız</p>
 
     <div id="formContainer">
         <div class="form-group" id="sessionGroup" style="display: none;">
             <label for="sessionIdInput">Oturum / Şifre Kodu</label>
-            <input type="number" id="sessionIdInput" inputmode="numeric" pattern="[0-9]*" placeholder="Oturum kodunu giriniz" autocomplete="off" />
+            <input type="number" id="sessionIdInput" inputmode="numeric" pattern="[0-9]*" placeholder="" autocomplete="off" />
         </div>
 
         <div class="form-group">
             <label for="studentNoInput">Öğrenci Numarası</label>
-            <input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" placeholder="Örn: 20241010" autocomplete="off" />
+            <input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" placeholder="" autocomplete="off" />
         </div>
 
-        <button id="submitBtn" class="btn-primary" onclick="submitAttendance()">
-            <span>Yoklamayı Onayla</span>
-        </button>
+        <button id="submitBtn" class="btn-primary" onclick="submitAttendance()">Yoklamayı Onayla</button>
     </div>
 
     <div id="resultBox" class="result-box">
@@ -592,28 +366,13 @@
 
 <script>
     const DEFAULT_DB = "https://ogrenciyoklama-ce487-default-rtdb.firebaseio.com/";
-
-    function sanitizeFirebaseUrl(raw) {
-        if (!raw) return DEFAULT_DB;
-        try {
-            let url = decodeURIComponent(raw).trim();
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
-            if (!url.endsWith('/')) url += '/';
-            return url;
-        } catch (e) {
-            return DEFAULT_DB;
-        }
-    }
-
     const urlParams = new URLSearchParams(window.location.search);
-    let activeSessionId = urlParams.get('session') || '';
-    let dbUrl = sanitizeFirebaseUrl(urlParams.get('db'));
 
+    let activeSessionId = urlParams.get('session') || '';
+    let dbUrl = DEFAULT_DB;
     let userLocationPermission = true;
 
-    // GÜVENLİK: Sayfa açıldığı an adres çubuğundaki ?session=... parametresini gizliyoruz
+    // GÜVENLİK: Sayfa açıldığı an adres çubuğundaki ?session=849201 parametresini siliyoruz!
     if (window.history && window.history.replaceState) {
         try {
             window.history.replaceState({}, document.title, window.location.pathname);
@@ -624,17 +383,15 @@
 
     let sessionData = null;
 
-    const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-
     function toggleFullText() {
         const fullText = document.getElementById('fullTextContent');
         const btn = document.getElementById('toggleFullTextBtn');
         if (fullText.style.display === 'block') {
             fullText.style.display = 'none';
-            btn.innerHTML = '▼ Tam aydınlatma metnini oku';
+            btn.innerText = '▼ Tam aydınlatma metnini oku';
         } else {
             fullText.style.display = 'block';
-            btn.innerHTML = '▲ Tam aydınlatma metnini gizle';
+            btn.innerText = '▲ Tam aydınlatma metnini gizle';
         }
     }
 
@@ -656,7 +413,7 @@
     }
 
     function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
-        const R = 6371000; // Dünya yarıçapı (metre)
+        const R = 6371000; // Earth radius in meters
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
         const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -678,7 +435,7 @@
             const key = getDeviceLockKey(sessId, weekStr, sessionVersion);
             const savedNo = localStorage.getItem(key);
             if (savedNo) {
-                showResult('warning', '🔒 Cihaz Kilidi Aktif', `Bu telefondan bu yoklama oturumu için işlem yapılmıştır.<br/><br/>Kayıtlı Öğrenci No: <strong>[${esc(savedNo)}]</strong>`);
+                showResult('warning', '🔒 Cihaz Kilidi Aktif', `Bu telefondan bu yoklama oturumu için işlem yapılmıştır.\n\nKayıtlı Öğrenci No: [${savedNo}]`);
                 document.getElementById('formContainer').style.display = 'none';
                 return true;
             }
@@ -697,24 +454,18 @@
         try {
             const res = await fetch(`${dbUrl}sessions/${sessId}.json`);
             if (!res.ok) {
-                if (res.status === 401 || res.status === 403) {
-                    showResult('error', '❌ Veritabanı İzin Hatası', `Firebase veritabanı okuma izni kapalı (HTTP ${res.status}).<br/><br/>Firebase Konsolu'ndan Realtime Database Kuralları'nı <strong>".read": true, ".write": true</strong> olarak ayarlayınız.`);
-                } else if (res.status === 404) {
-                    showResult('error', '❌ Firebase URL Bulunamadı (HTTP 404)', `Girilen Firebase Veritabanı adresi bulunamadı.<br/><br/><strong>Kullanılan URL:</strong> <code>${esc(dbUrl)}</code><br/><br/>Lütfen Öğretmen Ayarlar modülündeki Firebase Database URL adresini (örn: <code>https://...firebasedatabase.app</code> veya <code>https://...firebaseio.com</code>) kontrol ediniz.`);
-                } else {
-                    showResult('error', '❌ Sunucu Yanıt Vermedi', `Firebase Sunucu Hatası (HTTP ${res.status}). Lütfen Firebase URL adresini ve internet bağlantınızı kontrol ediniz.`);
-                }
+                showResult('error', '❌ Sunucu Yanıt Vermedi', `HTTP Hata Kodu: ${res.status}`);
                 return false;
             }
             sessionData = await res.json();
 
             if (!sessionData) {
-                showResult('warning', '⚠️ Yoklama Başlamadı', 'Henüz yoklama başlamadı veya durduruldu. Hocanız başlattığında tekrar deneyin.');
+                showResult('warning', '⚠️ Yoklama Başlamadı', 'Henüz yoklama başlamadı. Hocanız başlattığında tekrar deneyin.');
                 return false;
             }
 
             if (!sessionData.active) {
-                showResult('warning', '🔴 Yoklama Kapalı', `<strong>[${esc(sessionData.courseName || 'Ders')}]</strong> için bu yoklama oturumu durdurulmuştur.`);
+                showResult('warning', '🔴 Yoklama Kapalı', `[${sessionData.courseName || 'Ders'}] için bu yoklama oturumu durdurulmuştur.`);
                 return false;
             }
 
@@ -724,8 +475,6 @@
 
             if (sessionData.courseName) {
                 document.getElementById('courseTitle').innerText = sessionData.courseName;
-                document.getElementById('courseBadge').innerText = sessionData.courseName;
-                document.getElementById('courseBadge').style.display = 'inline-block';
             }
             if (sessionData.week) {
                 document.getElementById('sessionInfo').innerText = `${sessionData.week} Yoklaması`;
@@ -746,12 +495,14 @@
                 resolve(null);
                 return;
             }
+            // 1. Aşama: Yüksek hassasiyetli GPS ölçümü
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
                     resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
                 },
                 (err) => {
                     console.warn("Yüksek hassasiyetli konum alınamadı, standart mod deneniyor...", err);
+                    // 2. Aşama: Wi-Fi / Hücresel şebeke destekli hızlı konum ölçümü (Yedek)
                     navigator.geolocation.getCurrentPosition(
                         (pos2) => {
                             resolve({ lat: pos2.coords.latitude, lng: pos2.coords.longitude });
@@ -766,41 +517,6 @@
                 { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
             );
         });
-    }
-
-    function findStudentInSession(students, targetNo) {
-        if (!students || targetNo == null) return null;
-        const cleanTarget = targetNo.toString().trim();
-        if (!cleanTarget) return null;
-
-        if (typeof students === 'object' && !Array.isArray(students)) {
-            if (students[cleanTarget]) return students[cleanTarget];
-            if (students['s_' + cleanTarget]) return students['s_' + cleanTarget];
-            for (let k in students) {
-                if (k.toString().trim() === cleanTarget) return students[k];
-                if (students[k] && typeof students[k] === 'object') {
-                    const sNo = (students[k].studentNo || students[k].no || students[k].id || '').toString().trim();
-                    if (sNo === cleanTarget) return students[k];
-                }
-            }
-        }
-
-        if (Array.isArray(students)) {
-            for (let i = 0; i < students.length; i++) {
-                const item = students[i];
-                if (!item) continue;
-                if (typeof item === 'object') {
-                    const sNo = (item.studentNo || item.no || item.id || '').toString().trim();
-                    if (sNo === cleanTarget) return item;
-                } else if (item.toString().trim() === cleanTarget) {
-                    return item;
-                }
-            }
-            const numIndex = parseInt(cleanTarget, 10);
-            if (!isNaN(numIndex) && students[numIndex]) return students[numIndex];
-        }
-
-        return null;
     }
 
     async function submitAttendance() {
@@ -829,28 +545,30 @@
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span>Kontrol Ediliyor...</span>';
+        submitBtn.innerText = "Kontrol Ediliyor...";
 
+        // Oturum verisi yüklenmemişse yükle
         if (!sessionData || activeSessionId !== sessId) {
             const ok = await loadSession(sessId);
             if (!ok) {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+                submitBtn.innerText = "Yoklamayı Onayla";
                 return;
             }
         }
 
         if (checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+            submitBtn.innerText = "Yoklamayı Onayla";
             return;
         }
 
-        const rawStudentObj = findStudentInSession(sessionData.students, studentNo);
+        // 1. Öğrenci listede var mı kontrol et
+        const rawStudentObj = sessionData.students ? sessionData.students[studentNo] : null;
         if (!rawStudentObj) {
-            showResult('error', '❌ Öğrenci Bulunamadı', `[<strong>${esc(studentNo)}</strong>] numaralı öğrenci bu dersin sınıf listesinde kayıtlı değildir.`);
+            showResult('error', '❌ Öğrenci Bulunamadı', `[${studentNo}] numaralı öğrenci bu dersin sınıf listesinde kayıtlı değildir.`);
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+            submitBtn.innerText = "Yoklamayı Onayla";
             return;
         }
 
@@ -863,27 +581,28 @@
             studentName = rawStudentObj;
         }
 
+        // 2. KONUM ÖLÇÜMÜ (Öğrenci konum rızası verdiyse ve oturumda konum varsa)
         let distMeters = null;
         if (userLocationPermission && sessionData && sessionData.location && sessionData.location.lat && sessionData.location.lng) {
-            submitBtn.innerHTML = '<span>📍 Konum Ölçülüyor...</span>';
+            submitBtn.innerText = "📍 Konum Ölçülüyor...";
             const userLoc = await getStudentLocation();
             if (userLoc) {
                 distMeters = calculateDistanceMeters(userLoc.lat, userLoc.lng, sessionData.location.lat, sessionData.location.lng);
             }
         }
 
-        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn);
+        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn);
     }
 
-    async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn) {
-        submitBtn.innerHTML = '<span>Kaydediliyor...</span>';
+    async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, submitBtn) {
+        submitBtn.innerText = "Kaydediliyor...";
 
         try {
             const checkRes = await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`);
             const existing = await checkRes.json();
 
             if (existing) {
-                showResult('warning', '⚠️ Zaten Alındı', `Sayın <strong>${esc(studentName)}</strong>, ${esc(sessionData.courseName)} dersi için yoklamanız zaten kaydedilmiştir.`);
+                showResult('warning', '⚠️ Zaten Alındı', `Sayın ${studentName}, ${sessionData.courseName} dersi için yoklamanız zaten kaydedilmiştir.`);
                 try {
                     const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
                     localStorage.setItem(lockKey, studentNo);
@@ -901,41 +620,34 @@
                 locationAllowed: userLocationPermission
             };
 
-            const putRes = await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
+            await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(record)
             });
 
-            if (!putRes.ok) {
-                if (putRes.status === 401 || putRes.status === 403) {
-                    showResult('error', '❌ Kayıt Yapılamadı', `Firebase veritabanı yazma izni kapalı (HTTP ${putRes.status}).<br/><br/>Firebase Konsolu'ndan Realtime Database Kuralları'nı <strong>".write": true</strong> olarak ayarlayınız.`);
-                } else {
-                    showResult('error', '❌ Kayıt Başarısız', `Firebase sunucu hatası (HTTP ${putRes.status}). Lütfen tekrar deneyiniz.`);
-                }
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
-                return;
-            }
-
+            // Cihazı BU SÜRÜM OTURUM İÇİN KİLİTLE
             try {
                 const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
                 localStorage.setItem(lockKey, studentNo);
             } catch (e) {}
 
+            // Devam durumu istatistiklerini hesapla
             const totalPastWeeks = sessionData.totalPastWeeks || 0;
-            const currentTotalWeeks = totalPastWeeks + 1;
-            const currentAttendedWeeks = pastAttended + 1;
+            const currentTotalWeeks = totalPastWeeks + 1; // bu hafta dahil
+            const currentAttendedWeeks = pastAttended + 1; // bu hafta dahil
             const absentWeeks = currentTotalWeeks - currentAttendedWeeks;
             const ratePercent = Math.round((currentAttendedWeeks / currentTotalWeeks) * 100);
 
-            const tone = ratePercent >= 80 ? { c: '#059669', t: 'Devam durumunuz iyi' }
-                       : ratePercent >= 70 ? { c: '#d97706', t: 'Devamınıza dikkat edin' }
-                       :                     { c: '#dc2626', t: 'Devam oranınız düşük' };
+            // Renk / yorum eşikleri (isterseniz değiştirin)
+            const tone = ratePercent >= 80 ? { c: '#2f9e63', t: 'Devam durumunuz iyi' }
+                       : ratePercent >= 70 ? { c: '#dd6b20', t: 'Devamınıza dikkat edin' }
+                       :                     { c: '#e53e3e', t: 'Devam oranınız düşük' };
 
-            const RING_C = 2 * Math.PI * 52;
+            const RING_C = 2 * Math.PI * 52; // r = 52
             const ringOffset = RING_C * (1 - ratePercent / 100);
 
+            const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
             const timeStr = new Date(timestamp).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 
             const ico = {
@@ -952,65 +664,12 @@
                 `<span class="chip neutral">${ico.clock}${timeStr}</span>`
             ].join('');
 
-            // Haftalık Geçmiş Tablosunu Oluştur
-            let historyRowsHtml = '';
-            let rawHistory = [];
-            if (rawStudentObj && typeof rawStudentObj === 'object' && Array.isArray(rawStudentObj.history)) {
-                // Sadece yapılan haftalar (tatil / yapılmadı olanlar atlanır)
-                rawHistory = rawStudentObj.history.filter(h => !h.isHoliday);
-            }
-
-            const allHistoryItems = [...rawHistory];
-            const currentWeekTitle = sessionData.week || `${currentTotalWeeks}. Hafta`;
-            const timeDateStr = new Date(timestamp).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
-
-            if (!allHistoryItems.some(h => h.week === currentWeekTitle)) {
-                allHistoryItems.push({
-                    week: currentWeekTitle,
-                    date: timeDateStr,
-                    status: 'Var',
-                    attended: true,
-                    isCurrent: true
-                });
-            }
-
-            if (allHistoryItems.length > 0) {
-                const itemsHtml = allHistoryItems.map(item => {
-                    const isAttended = item.attended || item.status === 'Var';
-                    const badgeClass = isAttended ? 'h-badge present' : 'h-badge absent';
-                    const badgeText = isAttended ? '✓ Var' : '✕ Yok';
-                    const rowClass = isAttended ? 'history-row present' : 'history-row absent';
-                    const currentTag = item.isCurrent ? '<span class="h-tag">Bugün</span>' : '';
-                    return `
-                        <div class="${rowClass}">
-                            <div class="h-info">
-                                <span class="h-week">${esc(item.week)} ${currentTag}</span>
-                                ${item.date ? `<span class="h-date">${esc(item.date)}</span>` : ''}
-                            </div>
-                            <span class="${badgeClass}">${badgeText}</span>
-                        </div>
-                    `;
-                }).join('');
-
-                historyRowsHtml = `
-                    <div class="history-panel">
-                        <div class="history-header">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                            <span>Haftalık Katılım Detayı</span>
-                        </div>
-                        <div class="history-list">
-                            ${itemsHtml}
-                        </div>
-                    </div>
-                `;
-            }
-
             const summaryCardHtml = `
                 <div class="done-hero">
                     <div class="done-badge">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
                     </div>
-                    <div class="done-kicker">Yoklamanız Alındı</div>
+                    <div class="done-kicker">Yoklamanız alındı</div>
                     <div class="done-name">${esc(studentName)}</div>
                     <div class="done-no">${esc(studentNo)}</div>
                 </div>
@@ -1035,8 +694,6 @@
                         <div class="stat no ${absentWeeks === 0 ? 'zero' : ''}"><b>${absentWeeks}</b><span>Devamsızlık</span></div>
                     </div>
                 </div>
-
-                ${historyRowsHtml}
             `;
 
             showResult('success', '', summaryCardHtml);
@@ -1047,7 +704,7 @@
             console.error(err);
             showResult('error', '❌ İşlem Başarısız', 'Yoklama kaydedilirken bir hata oluştu. Lütfen tekrar deneyiniz.');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+            submitBtn.innerText = "Yoklamayı Onayla";
         }
     }
 
