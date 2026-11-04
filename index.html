@@ -664,6 +664,36 @@
                 `<span class="chip neutral">${ico.clock}${timeStr}</span>`
             ].join('');
 
+            function formatTrDate(dateInput) {
+                if (!dateInput) return "";
+                let d = null;
+                if (dateInput instanceof Date) {
+                    d = dateInput;
+                } else if (typeof dateInput === 'string') {
+                    const str = dateInput.trim();
+                    const dotParts = str.split('.');
+                    if (dotParts.length >= 2) {
+                        const day = parseInt(dotParts[0], 10);
+                        const month = parseInt(dotParts[1], 10) - 1;
+                        const year = dotParts[2] ? parseInt(dotParts[2], 10) : new Date().getFullYear();
+                        if (!isNaN(day) && !isNaN(month)) d = new Date(year, month, day);
+                    } else {
+                        const isoParts = str.split('-');
+                        if (isoParts.length === 3) {
+                            const year = parseInt(isoParts[0], 10);
+                            const month = parseInt(isoParts[1], 10) - 1;
+                            const day = parseInt(isoParts[2], 10);
+                            if (!isNaN(day) && !isNaN(month) && !isNaN(year)) d = new Date(year, month, day);
+                        }
+                    }
+                }
+                if (d && !isNaN(d.getTime())) {
+                    const monthsTR = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
+                    return `${d.getDate()} ${monthsTR[d.getMonth()]}`;
+                }
+                return dateInput;
+            }
+
             // Haftalık Katılım Geçmişi Tablosunu Oluştur
             let historyRowsHtml = '';
             if (rawStudentObj && typeof rawStudentObj === 'object' && Array.isArray(rawStudentObj.history)) {
@@ -671,11 +701,12 @@
                 if (filteredHistory.length > 0) {
                     const items = filteredHistory.map(h => {
                         const isPresent = h.attended || h.status === 'Var';
+                        const displayDate = h.date ? formatTrDate(h.date) : '';
                         return `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; margin-bottom:6px; background:${isPresent ? '#f0fff4' : '#fff5f5'}; border:1px solid ${isPresent ? '#c6f6d5' : '#fed7d7'}; border-radius:10px; font-size:13px;">
                                 <div>
                                     <strong>${esc(h.week || '')}</strong>
-                                    ${h.date ? `<span style="font-size:11px; color:#718096; margin-left:6px;">(${esc(h.date)})</span>` : ''}
+                                    ${displayDate ? `<span style="font-size:11px; color:#718096; margin-left:6px;">(${esc(displayDate)})</span>` : ''}
                                 </div>
                                 <span style="font-weight:bold; color:${isPresent ? '#22543d' : '#742a2a'};">${isPresent ? '✓ Var' : '✕ Yok'}</span>
                             </div>
