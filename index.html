@@ -592,11 +592,24 @@
 
 <script>
     const DEFAULT_DB = "https://ogrenciyoklama-ce487-default-rtdb.firebaseio.com/";
-    const urlParams = new URLSearchParams(window.location.search);
 
+    function sanitizeFirebaseUrl(raw) {
+        if (!raw) return DEFAULT_DB;
+        try {
+            let url = decodeURIComponent(raw).trim();
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            if (!url.endsWith('/')) url += '/';
+            return url;
+        } catch (e) {
+            return DEFAULT_DB;
+        }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
     let activeSessionId = urlParams.get('session') || '';
-    let dbUrl = urlParams.get('db') || DEFAULT_DB;
-    if (!dbUrl.endsWith('/')) dbUrl += '/';
+    let dbUrl = sanitizeFirebaseUrl(urlParams.get('db'));
 
     let userLocationPermission = true;
 
@@ -686,6 +699,8 @@
             if (!res.ok) {
                 if (res.status === 401 || res.status === 403) {
                     showResult('error', '❌ Veritabanı İzin Hatası', `Firebase veritabanı okuma izni kapalı (HTTP ${res.status}).<br/><br/>Firebase Konsolu'ndan Realtime Database Kuralları'nı <strong>".read": true, ".write": true</strong> olarak ayarlayınız.`);
+                } else if (res.status === 404) {
+                    showResult('error', '❌ Firebase URL Bulunamadı (HTTP 404)', `Girilen Firebase Veritabanı adresi bulunamadı.<br/><br/><strong>Kullanılan URL:</strong> <code>${esc(dbUrl)}</code><br/><br/>Lütfen Öğretmen Ayarlar modülündeki Firebase Database URL adresini (örn: <code>https://...firebasedatabase.app</code> veya <code>https://...firebaseio.com</code>) kontrol ediniz.`);
                 } else {
                     showResult('error', '❌ Sunucu Yanıt Vermedi', `Firebase Sunucu Hatası (HTTP ${res.status}). Lütfen Firebase URL adresini ve internet bağlantınızı kontrol ediniz.`);
                 }
