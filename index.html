@@ -1,799 +1,258 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    <!-- Tam Ekran Uygulama / Adres Çubuğu Gizleme Meta Etiketleri -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#3182ce">
-    <meta name="application-name" content="Ders Yoklama">
-
-    <title>Ders Yoklama Sistemi</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        input[type="number"], input[type="text"] {
-            -webkit-user-select: text !important;
-            -moz-user-select: text !important;
-            -ms-user-select: text !important;
-            user-select: text !important;
-        }
-        body {
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 16px;
-        }
-        .card {
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            max-width: 440px;
-            width: 100%;
-            padding: 28px 24px;
-            text-align: left;
-        }
-        .card.text-center {
-            text-align: center;
-        }
-        .header-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-        h2 {
-            color: #1a202c;
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            line-height: 1.3;
-        }
-        .subtitle {
-            color: #718096;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        /* KVKK / Aydınlatma Metni Stilleri */
-        .summary-box {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 13.5px;
-            color: #2d3748;
-            line-height: 1.55;
-            margin-bottom: 16px;
-        }
-        .toggle-btn {
-            color: #3182ce;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-block;
-            margin-bottom: 12px;
-            user-select: none;
-        }
-        .toggle-btn:hover {
-            color: #2b6cb0;
-        }
-        .full-text {
-            display: none;
-            font-size: 12.5px;
-            color: #718096;
-            line-height: 1.55;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #edf2f7;
-            text-align: justify;
-        }
-        .checkbox-group {
-            border-top: 1px solid #edf2f7;
-            padding-top: 16px;
-            margin-bottom: 16px;
-        }
-        .checkbox-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 16px;
-            cursor: pointer;
-        }
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
-            cursor: pointer;
-            accent-color: #3182ce;
-            flex-shrink: 0;
-        }
-        .checkbox-label {
-            font-size: 14px;
-            font-weight: 500;
-            color: #2d3748;
-            line-height: 1.4;
-        }
-        .checkbox-subtext {
-            font-size: 12px;
-            color: #718096;
-            margin-top: 4px;
-            line-height: 1.4;
-            font-weight: normal;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 16px;
-        }
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 6px;
-        }
-        input[type="number"], input[type="text"] {
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        input:focus {
-            border-color: #3182ce;
-        }
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 8px;
-        }
-        .btn-primary:hover:not(:disabled) {
-            background-color: #2b6cb0;
-        }
-        .btn-primary:disabled {
-            background-color: #a0aec0;
-            cursor: not-allowed;
-            opacity: 0.85;
-        }
-        .result-box {
-            display: none;
-            margin-top: 20px;
-            padding: 18px;
-            border-radius: 12px;
-            text-align: left;
-            animation: fadeIn 0.3s ease;
-        }
-        .result-box.success {
-            background-color: #f0fff4;
-            border: 1px solid #c6f6d5;
-            color: #22543d;
-        }
-        .result-box.error {
-            background-color: #fff5f5;
-            border: 1px solid #fed7d7;
-            color: #742a2a;
-        }
-        .result-box.warning {
-            background-color: #fffaf0;
-            border: 1px solid #feebc8;
-            color: #744210;
-        }
-        .result-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .result-desc {
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .footer-text {
-            margin-top: 24px;
-            font-size: 12px;
-            color: #a0aec0;
-            text-align: center;
-        }
-
-        /* ===== Yoklama sonrası: sonuç görünümleri ===== */
-        .result-desc { white-space: pre-line; }
-        .result-box.warning, .result-box.error {
-            border-left-width: 4px;
-            border-radius: 14px;
-        }
-        .result-box.rich { background: none; border: none; padding: 0; margin-top: 4px; color: inherit; text-align: center; }
-        .result-box.rich .result-title { display: none; }
-        .result-box.rich .result-desc { font-size: inherit; line-height: inherit; white-space: normal; }
-        .card.is-done .header-icon,
-        .card.is-done #courseTitle,
-        .card.is-done #sessionInfo { display: none; }
-
-        .done-hero { text-align: center; }
-        .done-badge {
-            width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 50%;
-            display: grid; place-items: center;
-            background: linear-gradient(135deg, #48bb78, #2f9e63);
-            box-shadow: 0 10px 24px rgba(47, 158, 99, 0.32), 0 0 0 8px rgba(72, 187, 120, 0.13);
-            animation: pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both;
-        }
-        .done-badge svg { width: 34px; height: 34px; }
-        .done-badge path {
-            stroke-dasharray: 32; stroke-dashoffset: 32;
-            animation: draw 0.45s 0.3s ease forwards;
-        }
-        .done-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #2f9e63; }
-        .done-name { font-size: 22px; font-weight: 800; color: #1a202c; line-height: 1.25; margin-top: 4px; }
-        .done-no { font-size: 13px; color: #718096; margin-top: 2px; font-variant-numeric: tabular-nums; }
-
-        .chip-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0 18px; }
-        .chip {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 12px; border-radius: 999px;
-            background: #ebf4ff; color: #2c5282;
-            font-size: 12.5px; font-weight: 600;
-        }
-        .chip svg { width: 14px; height: 14px; flex-shrink: 0; }
-        .chip.neutral { background: #edf2f7; color: #4a5568; }
-
-        .done-panel {
-            background: linear-gradient(180deg, #f8fafc, #f1f5f9);
-            border: 1px solid #e2e8f0; border-radius: 18px;
-            padding: 20px 14px 14px;
-        }
-        .ring-wrap { position: relative; width: 136px; height: 136px; margin: 0 auto 8px; }
-        .ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-        .ring-bg { stroke: #e2e8f0; }
-        .ring-fg {
-            stroke: var(--tone); stroke-linecap: round;
-            stroke-dasharray: var(--c); stroke-dashoffset: var(--o);
-            animation: ringFill 1.1s 0.25s cubic-bezier(0.3, 0.7, 0.2, 1) both;
-        }
-        .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .ring-pct { font-size: 32px; font-weight: 800; color: #1a202c; line-height: 1; font-variant-numeric: tabular-nums; }
-        .ring-pct small { font-size: 16px; font-weight: 700; margin-left: 1px; }
-        .ring-cap { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #718096; margin-top: 6px; }
-        .ring-note { font-size: 13px; font-weight: 600; color: var(--tone); margin-bottom: 16px; }
-
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .stat { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 4px 10px; }
-        .stat b { display: block; font-size: 22px; font-weight: 800; color: #2d3748; line-height: 1.1; font-variant-numeric: tabular-nums; }
-        .stat span { display: block; margin-top: 4px; font-size: 11px; font-weight: 600; color: #718096; }
-        .stat.ok b { color: #2f9e63; }
-        .stat.no b { color: #e53e3e; }
-        .stat.no.zero b { color: #a0aec0; }
-
-        @keyframes pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes draw { to { stroke-dashoffset: 0; } }
-        @keyframes ringFill { from { stroke-dashoffset: var(--c); } }
-        @media (prefers-reduced-motion: reduce) {
-            .done-badge, .done-badge path, .ring-fg { animation: none; }
-            .done-badge path { stroke-dashoffset: 0; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#3182ce">
+<title>Ders Yoklama Sistemi</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-user-select:none;user-select:none}
+input[type=number],input[type=text]{-webkit-user-select:text!important;user-select:text!important}
+body{background:#f0f2f5;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:16px}
+.card{background:#fff;border-radius:20px;box-shadow:0 8px 30px rgba(0,0,0,.08);max-width:440px;width:100%;padding:28px 24px;text-align:left}
+.card.text-center{text-align:center}
+h2{color:#1a202c;font-size:22px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.subtitle{color:#718096;font-size:14px;margin-bottom:20px}
+.summary-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;font-size:13.5px;color:#2d3748;line-height:1.55;margin-bottom:16px}
+.toggle-btn{color:#3182ce;font-size:14px;font-weight:600;cursor:pointer;display:inline-block;margin-bottom:12px}
+.full-text{display:none;font-size:12.5px;color:#718096;line-height:1.55;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #edf2f7;text-align:justify}
+.checkbox-group{border-top:1px solid #edf2f7;padding-top:16px;margin-bottom:16px}
+.checkbox-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;cursor:pointer}
+.checkbox-item input{width:20px;height:20px;margin-top:2px;accent-color:#3182ce;flex-shrink:0}
+.checkbox-label{font-size:14px;font-weight:500;color:#2d3748;line-height:1.4}
+.checkbox-subtext{font-size:12px;color:#718096;margin-top:4px;line-height:1.4;font-weight:400;display:block}
+.form-group{text-align:left;margin-bottom:16px}
+label{display:block;font-size:13px;font-weight:600;color:#4a5568;margin-bottom:6px}
+input[type=number],input[type=text]{width:100%;padding:14px 16px;font-size:16px;border:2px solid #e2e8f0;border-radius:10px;outline:none;transition:border-color .2s}
+input:focus{border-color:#3182ce}
+.btn-primary{width:100%;padding:14px;background:#3182ce;color:#fff;border:0;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px}
+.btn-primary:disabled{background:#a0aec0;cursor:not-allowed;opacity:.85}
+.result-box{display:none;margin-top:20px;padding:18px;border-radius:12px;text-align:left;animation:fadeIn .3s ease}
+.result-box.success{background:#f0fff4;border:1px solid #c6f6d5;color:#22543d}
+.result-box.error{background:#fff5f5;border:1px solid #fed7d7;color:#742a2a}
+.result-box.warning{background:#fffaf0;border:1px solid #feebc8;color:#744210}
+.result-title{font-weight:700;font-size:16px;margin-bottom:6px}
+.result-desc{font-size:14px;line-height:1.4;white-space:pre-line}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.footer-text{margin-top:24px;font-size:12px;color:#a0aec0;text-align:center}
+.result-box.warning,.result-box.error{border-left-width:4px;border-radius:14px}
+.result-box.rich{background:none;border:none;padding:0;margin-top:4px;color:inherit;text-align:center}
+.result-box.rich .result-title{display:none}
+.result-box.rich .result-desc{font-size:inherit;line-height:inherit;white-space:normal}
+.card.is-done #courseTitle,.card.is-done #sessionInfo{display:none}
+.done-hero{text-align:center}
+.done-badge{width:68px;height:68px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#48bb78,#2f9e63);box-shadow:0 10px 24px rgba(47,158,99,.32),0 0 0 8px rgba(72,187,120,.13);animation:pop .55s cubic-bezier(.2,1.4,.4,1) both}
+.done-badge svg{width:34px;height:34px}
+.done-badge path{stroke-dasharray:32;stroke-dashoffset:32;animation:draw .45s .3s ease forwards}
+.done-kicker{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#2f9e63}
+.done-name{font-size:22px;font-weight:800;color:#1a202c;line-height:1.25;margin-top:4px}
+.done-no{font-size:13px;color:#718096;margin-top:2px}
+.chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:16px 0 18px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#ebf4ff;color:#2c5282;font-size:12.5px;font-weight:600}
+.chip svg{width:14px;height:14px;flex-shrink:0}.chip.neutral{background:#edf2f7;color:#4a5568}
+.done-panel{background:linear-gradient(180deg,#f8fafc,#f1f5f9);border:1px solid #e2e8f0;border-radius:18px;padding:20px 14px 14px}
+.ring-wrap{position:relative;width:136px;height:136px;margin:0 auto 8px}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-bg{stroke:#e2e8f0}
+.ring-fg{stroke:var(--tone);stroke-linecap:round;stroke-dasharray:var(--c);stroke-dashoffset:var(--o);animation:ringFill 1.1s .25s cubic-bezier(.3,.7,.2,1) both}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-size:32px;font-weight:800;color:#1a202c;line-height:1}.ring-pct small{font-size:16px;font-weight:700}
+.ring-cap{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#718096;margin-top:6px}
+.ring-note{font-size:13px;font-weight:600;color:var(--tone);margin-bottom:16px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 4px 10px}
+.stat b{display:block;font-size:22px;font-weight:800;color:#2d3748;line-height:1.1}
+.stat span{display:block;margin-top:4px;font-size:11px;font-weight:600;color:#718096}
+.stat.ok b{color:#2f9e63}.stat.no b{color:#e53e3e}.stat.no.zero b{color:#a0aec0}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes ringFill{from{stroke-dashoffset:var(--c)}}
+@media(prefers-reduced-motion:reduce){.done-badge,.done-badge path,.ring-fg{animation:none}.done-badge path{stroke-dashoffset:0}}
+</style>
 </head>
 <body oncontextmenu="return false;">
 
-<!-- 1. ADIM: Aydınlatma ve Rıza Ekranı (Girişte İlk Gösterilen Ekran) -->
 <div class="card" id="consentCard">
-      <div class="summary-box">
-        Yoklama için öğrenci numaranız ve konum izninizle sınıfa uzaklığınız hesaplanır, konumunuz asla kaydedilmez. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.
-    </div>
-
-    <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">
-        ▼ Tam aydınlatma metnini oku
-    </div>
-
-    <div class="full-text" id="fullTextContent">
-        Öğrenci numaranız, isminiz ve sınıfa olan uzaklığınız dersin devam takibini yapmak amacıyla kullanılmaktadır. Konum bilgisi asla kaydedilmez sadece mesafe hesabında kullanılır. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.
-    </div>
-
-    <div class="checkbox-group">
-        <label class="checkbox-item">
-            <input type="checkbox" id="readNoticeConsent" onchange="validateConsentForm()" />
-            <span class="checkbox-label">Aydınlatma metnini okudum.</span>
-        </label>
-
-        <label class="checkbox-item">
-            <input type="checkbox" id="locationConsent" checked />
-            <span class="checkbox-label" style="display: block;">
-                Konumumun, yalnızca sınıfta olduğumu doğrulamak için kullanılmasına izin veriyorum.
-                <span class="checkbox-subtext" style="display: block;">
-                    İsteğe bağlı. İşaretlemezseniz yoklamaya yine katılabilirsiniz, öğretim elemanı bunu görür.
-                </span>
-            </span>
-        </label>
-    </div>
-
-    <button id="proceedBtn" class="btn-primary" disabled onclick="proceedToAttendance()">Devam et</button>
-
-    <p class="footer-text">Mobil Yoklama Sistemi</p>
+ <div class="summary-box">Yoklama için öğrenci numaranız ve konum izninizle sınıfa uzaklığınız hesaplanır, konumunuz asla kaydedilmez. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.</div>
+ <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">▼ Tam aydınlatma metnini oku</div>
+ <div class="full-text" id="fullTextContent">Öğrenci numaranız, isminiz ve sınıfa olan uzaklığınız dersin devam takibini yapmak amacıyla kullanılmaktadır. Konum bilgisi asla kaydedilmez sadece mesafe hesabında kullanılır. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.</div>
+ <div class="checkbox-group">
+  <label class="checkbox-item"><input type="checkbox" id="readNoticeConsent" onchange="validateConsentForm()"><span class="checkbox-label">Aydınlatma metnini okudum.</span></label>
+  <label class="checkbox-item"><input type="checkbox" id="locationConsent" checked><span class="checkbox-label" style="display:block">Konumumun, yalnızca sınıfta olduğumu doğrulamak için kullanılmasına izin veriyorum.<span class="checkbox-subtext">İsteğe bağlı. İşaretlemezseniz yoklamaya yine katılabilirsiniz, öğretim elemanı bunu görür.</span></span></label>
+ </div>
+ <button id="proceedBtn" class="btn-primary" disabled onclick="proceedToAttendance()">Devam et</button>
+ <p class="footer-text">Mobil Yoklama Sistemi</p>
 </div>
 
-<!-- 2. ADIM: Öğrenci Yoklama Giriş Ekranı -->
-<div class="card text-center" id="attendanceCard" style="display: none;">
-    <h2 id="courseTitle">Ders Yoklaması</h2>
-    <p class="subtitle" id="sessionInfo">Öğrenci Numarası ile Giriş Yapınız</p>
-
-    <div id="formContainer">
-        <div class="form-group" id="sessionGroup" style="display: none;">
-            <label for="sessionIdInput">Oturum / Şifre Kodu</label>
-            <input type="number" id="sessionIdInput" inputmode="numeric" pattern="[0-9]*" placeholder="" autocomplete="off" />
-        </div>
-
-        <div class="form-group">
-            <label for="studentNoInput">Öğrenci Numarası</label>
-            <input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" placeholder="" autocomplete="off" />
-        </div>
-
-        <button id="submitBtn" class="btn-primary" onclick="submitAttendance()">Yoklamayı Onayla</button>
-    </div>
-
-    <div id="resultBox" class="result-box">
-        <div class="result-title" id="resultTitle"></div>
-        <div class="result-desc" id="resultDesc"></div>
-    </div>
-
-    <p class="footer-text">© Mobil Yoklama Sistemi</p>
+<div class="card text-center" id="attendanceCard" style="display:none">
+ <h2 id="courseTitle">Ders Yoklaması</h2>
+ <p class="subtitle" id="sessionInfo">Öğrenci Numarası ile Giriş Yapınız</p>
+ <div id="formContainer">
+  <div class="form-group" id="sessionGroup" style="display:none"><label for="sessionIdInput">Oturum / Şifre Kodu</label><input type="number" id="sessionIdInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
+  <div class="form-group"><label for="studentNoInput">Öğrenci Numarası</label><input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
+  <button id="submitBtn" class="btn-primary" onclick="submitAttendance()">Yoklamayı Onayla</button>
+ </div>
+ <div id="resultBox" class="result-box"><div class="result-title" id="resultTitle"></div><div class="result-desc" id="resultDesc"></div></div>
+ <p class="footer-text">© Mobil Yoklama Sistemi</p>
 </div>
 
 <script>
-    const DEFAULT_DB = "https://ogrenciyoklama-ce487-default-rtdb.firebaseio.com/";
-    const urlParams = new URLSearchParams(window.location.search);
+const DEFAULT_DB="https://ogrenciyoklama-ce487-default-rtdb.firebaseio.com/";
+const urlParams=new URLSearchParams(window.location.search);
+let activeSessionId=urlParams.get('session')||'',dbUrl=DEFAULT_DB,userLocationPermission=true,sessionData=null;
+try{window.history.replaceState({},document.title,window.location.pathname)}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
-    let activeSessionId = urlParams.get('session') || '';
-    let dbUrl = DEFAULT_DB;
-    let userLocationPermission = true;
+function toggleFullText(){const f=$('fullTextContent'),b=$('toggleFullTextBtn'),o=f.style.display==='block';f.style.display=o?'none':'block';b.innerText=o?'▼ Tam aydınlatma metnini oku':'▲ Tam aydınlatma metnini gizle'}
+function validateConsentForm(){$('proceedBtn').disabled=!$('readNoticeConsent').checked}
+function proceedToAttendance(){
+ if(!$('readNoticeConsent').checked)return;
+ userLocationPermission=$('locationConsent').checked;
+ $('consentCard').style.display='none';$('attendanceCard').style.display='block'}
 
-    // GÜVENLİK: Sayfa açıldığı an adres çubuğundaki ?session=849201 parametresini siliyoruz!
-    if (window.history && window.history.replaceState) {
-        try {
-            window.history.replaceState({}, document.title, window.location.pathname);
-        } catch (e) {
-            console.error(e);
-        }
-    }
+function calculateDistanceMeters(lat1,lon1,lat2,lon2){
+ const R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
+ const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+ return Math.round(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)))}
 
-    let sessionData = null;
+function getDeviceLockKey(sessId,weekStr,ver){return 'yoklama_done_'+sessId+'_'+String(ver||weekStr||'active').replace(/[^a-zA-Z0-9]/g,'_')}
+function checkDeviceLock(sessId,weekStr,ver){
+ if(!sessId)return false;
+ try{const no=localStorage.getItem(getDeviceLockKey(sessId,weekStr,ver));
+  if(no){showResult('warning','🔒 Cihaz Kilidi Aktif',`Bu telefondan bu yoklama oturumu için işlem yapılmıştır.\n\nKayıtlı Öğrenci No: [${esc(no)}]`);$('formContainer').style.display='none';return true}}catch(e){}
+ return false}
 
-    function toggleFullText() {
-        const fullText = document.getElementById('fullTextContent');
-        const btn = document.getElementById('toggleFullTextBtn');
-        if (fullText.style.display === 'block') {
-            fullText.style.display = 'none';
-            btn.innerText = '▼ Tam aydınlatma metnini oku';
-        } else {
-            fullText.style.display = 'block';
-            btn.innerText = '▲ Tam aydınlatma metnini gizle';
-        }
-    }
+async function loadSession(sessId){
+ if(!sessId){$('sessionGroup').style.display='block';return false}
+ try{
+  const res=await fetch(`${dbUrl}sessions/${sessId}/public.json`);
+  if(!res.ok){showResult('error','❌ Sunucu Yanıt Vermedi',`HTTP Hata Kodu: ${res.status}`);return false}
+  sessionData=await res.json();
+  if(!sessionData){showResult('warning','⚠️ Yoklama Başlamadı','Henüz yoklama başlamadı. Hocanız başlattığında tekrar deneyin.');return false}
+  if(!sessionData.active){showResult('warning','🔴 Yoklama Kapalı',`[${esc(sessionData.courseName||'Ders')}] için bu yoklama oturumu durdurulmuştur.`);return false}
+  if(checkDeviceLock(sessId,sessionData.week,sessionData.sessionVersion))return false;
+  if(sessionData.courseName)$('courseTitle').innerText=sessionData.courseName;
+  if(sessionData.week)$('sessionInfo').innerText=`${sessionData.week} Yoklaması`;
+  activeSessionId=sessId;$('sessionGroup').style.display='none';return true;
+ }catch(err){console.error(err);showResult('error','❌ Bağlantı Hatası',`Veritabanına ulaşılamadı: ${esc(err.message||'İnternet bağlantınızı kontrol ediniz.')}`);return false}}
 
-    function validateConsentForm() {
-        const readNotice = document.getElementById('readNoticeConsent').checked;
-        const proceedBtn = document.getElementById('proceedBtn');
-        proceedBtn.disabled = !readNotice;
-    }
+function getStudentLocation(){
+ return new Promise(resolve=>{
+  if(!navigator.geolocation)return resolve(null);
+  navigator.geolocation.getCurrentPosition(
+   p=>resolve({lat:p.coords.latitude,lng:p.coords.longitude}),
+   ()=>navigator.geolocation.getCurrentPosition(p=>resolve({lat:p.coords.latitude,lng:p.coords.longitude}),()=>resolve(null),{enableHighAccuracy:false,timeout:8000,maximumAge:60000}),
+   {enableHighAccuracy:true,timeout:8000,maximumAge:30000})})}
 
-    function proceedToAttendance() {
-        const readNotice = document.getElementById('readNoticeConsent').checked;
-        if (!readNotice) return;
+function resetBtn(b){b.disabled=false;b.innerText='Yoklamayı Onayla'}
 
-        const locCheckbox = document.getElementById('locationConsent');
-        userLocationPermission = locCheckbox ? locCheckbox.checked : true;
+async function submitAttendance(){
+ let sessId=activeSessionId;
+ if(!sessId){const i=$('sessionIdInput');sessId=i?i.value.trim():''}
+ if(sessionData&&checkDeviceLock(sessId,sessionData.week,sessionData.sessionVersion))return;
+ const studentNo=($('studentNoInput').value||'').trim();
+ if(!sessId)return showResult('warning','⚠️ Uyarı','Lütfen tahtadaki Oturum Kodunu giriniz.');
+ if(!studentNo)return showResult('warning','⚠️ Uyarı','Lütfen öğrenci numaranızı giriniz.');
+ const btn=$('submitBtn');btn.disabled=true;btn.innerText='Kontrol Ediliyor...';
 
-        document.getElementById('consentCard').style.display = 'none';
-        document.getElementById('attendanceCard').style.display = 'block';
-    }
+ if(!sessionData||activeSessionId!==sessId){if(!(await loadSession(sessId)))return resetBtn(btn)}
+ if(checkDeviceLock(sessId,sessionData.week,sessionData.sessionVersion))return resetBtn(btn);
 
-    function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
-        const R = 6371000; // Earth radius in meters
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLon/2) * Math.sin(dLon/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return Math.round(R * c);
-    }
+ // Yalnızca kendi numaranızın kaydı okunur (tüm sınıf listesi indirilmez)
+ let raw=null;
+ try{
+  const r=await fetch(`${dbUrl}sessions/${sessId}/students/${encodeURIComponent(studentNo)}.json`);
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  raw=await r.json();
+ }catch(err){showResult('error','❌ Bağlantı Hatası',`Öğrenci bilgisi alınamadı: ${esc(err.message)}`);return resetBtn(btn)}
+ if(!raw){showResult('error','❌ Öğrenci Bulunamadı',`[${esc(studentNo)}] numaralı öğrenci bu dersin sınıf listesinde kayıtlı değildir.`);return resetBtn(btn)}
 
-    function getDeviceLockKey(sessId, weekStr, sessionVersion) {
-        const verStr = sessionVersion || weekStr || 'active';
-        const cleanVer = verStr.toString().replace(/[^a-zA-Z0-9]/g, '_');
-        return 'yoklama_done_' + sessId + '_' + cleanVer;
-    }
+ const studentName=raw.name||studentNo,pastAttended=raw.pastAttended||0;
 
-    function checkDeviceLock(sessId, weekStr, sessionVersion) {
-        if (!sessId) return false;
-        try {
-            const key = getDeviceLockKey(sessId, weekStr, sessionVersion);
-            const savedNo = localStorage.getItem(key);
-            if (savedNo) {
-                showResult('warning', '🔒 Cihaz Kilidi Aktif', `Bu telefondan bu yoklama oturumu için işlem yapılmıştır.\n\nKayıtlı Öğrenci No: [${savedNo}]`);
-                document.getElementById('formContainer').style.display = 'none';
-                return true;
-            }
-        } catch (e) {
-            console.error(e);
-        }
-        return false;
-    }
+ let dist=null;
+ if(userLocationPermission&&sessionData.location&&sessionData.location.lat&&sessionData.location.lng){
+  btn.innerText='📍 Konum Ölçülüyor...';
+  const u=await getStudentLocation();
+  if(u)dist=calculateDistanceMeters(u.lat,u.lng,sessionData.location.lat,sessionData.location.lng)}
+ await executeAttendanceSave(sessId,studentNo,studentName,pastAttended,dist,raw,btn)}
 
-    async function loadSession(sessId) {
-        if (!sessId) {
-            document.getElementById('sessionGroup').style.display = 'block';
-            return false;
-        }
+async function executeAttendanceSave(sessId,studentNo,studentName,pastAttended,distMeters,raw,btn){
+ btn.innerText='Kaydediliyor...';
+ const lockIt=()=>{try{localStorage.setItem(getDeviceLockKey(sessId,sessionData.week,sessionData.sessionVersion),studentNo)}catch(e){}};
+ try{
+  const path=`${dbUrl}sessions/${sessId}/attendance/${encodeURIComponent(studentNo)}.json`;
+  const existing=await (await fetch(path)).json();
+  if(existing){
+   showResult('warning','⚠️ Zaten Alındı',`Sayın ${esc(studentName)}, ${esc(sessionData.courseName)} dersi için yoklamanız zaten kaydedilmiştir.`);
+   lockIt();$('formContainer').style.display='none';return}
 
-        try {
-            const res = await fetch(`${dbUrl}sessions/${sessId}.json`);
-            if (!res.ok) {
-                showResult('error', '❌ Sunucu Yanıt Vermedi', `HTTP Hata Kodu: ${res.status}`);
-                return false;
-            }
-            sessionData = await res.json();
+  const timestamp=Date.now();
+  const put=await fetch(path,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({studentNo,distanceMeters:distMeters,timestamp,locationAllowed:userLocationPermission})});
+  if(!put.ok)throw new Error('HTTP '+put.status);
+  lockIt();
 
-            if (!sessionData) {
-                showResult('warning', '⚠️ Yoklama Başlamadı', 'Henüz yoklama başlamadı. Hocanız başlattığında tekrar deneyin.');
-                return false;
-            }
+  const total=(sessionData.totalPastWeeks||0)+1,att=pastAttended+1,absent=total-att,rate=Math.round(att/total*100);
+  const tone=rate>=80?{c:'#2f9e63',t:'Devam durumunuz iyi'}:rate>=70?{c:'#dd6b20',t:'Devamınıza dikkat edin'}:{c:'#e53e3e',t:'Devam oranınız düşük'};
+  const RING=2*Math.PI*52,off=RING*(1-rate/100);
+  const timeStr=new Date(timestamp).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+  const S='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+  const ico={book:S+'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+   cal:S+'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+   pin:S+'<path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+   clock:S+'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'};
+  const chips=[sessionData.courseName?`<span class="chip">${ico.book}${esc(sessionData.courseName)}</span>`:'',
+   sessionData.week?`<span class="chip">${ico.cal}${esc(sessionData.week)}</span>`:'',
+   distMeters!==null?`<span class="chip">${ico.pin}Sınıfa ${esc(distMeters)} m</span>`:'',
+   `<span class="chip neutral">${ico.clock}${timeStr}</span>`].join('');
 
-            if (!sessionData.active) {
-                showResult('warning', '🔴 Yoklama Kapalı', `[${sessionData.courseName || 'Ders'}] için bu yoklama oturumu durdurulmuştur.`);
-                return false;
-            }
+  const MONTHS=["OCAK","ŞUBAT","MART","NİSAN","MAYIS","HAZİRAN","TEMMUZ","AĞUSTOS","EYLÜL","EKİM","KASIM","ARALIK"];
+  function fmtDate(x){
+   if(!x)return '';let d=null;const s=String(x).trim(),dp=s.split('.'),ip=s.split('-');
+   if(dp.length>=2){const day=parseInt(dp[0],10),mo=parseInt(dp[1],10)-1,yr=dp[2]?parseInt(dp[2],10):new Date().getFullYear();if(!isNaN(day)&&!isNaN(mo))d=new Date(yr,mo,day)}
+   else if(ip.length===3){const yr=parseInt(ip[0],10),mo=parseInt(ip[1],10)-1,day=parseInt(ip[2],10);if(!isNaN(day)&&!isNaN(mo)&&!isNaN(yr))d=new Date(yr,mo,day)}
+   return d&&!isNaN(d.getTime())?`${d.getDate()} ${MONTHS[d.getMonth()]}`:s}
 
-            if (checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
-                return false;
-            }
+  let hist='';
+  if(Array.isArray(raw.history)){
+   const list=raw.history.filter(h=>h&&!h.isHoliday);
+   if(list.length){
+    hist=`<div style="margin-top:16px;text-align:left;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px"><div style="font-weight:700;font-size:14px;color:#1a202c;margin-bottom:10px">Haftalık Katılım Detayı</div>`+
+    list.map(h=>{const p=h.attended||h.status==='Var',d=h.date?fmtDate(h.date):'';
+     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:6px;background:${p?'#f0fff4':'#fff5f5'};border:1px solid ${p?'#c6f6d5':'#fed7d7'};border-radius:10px;font-size:13px"><div><strong>${esc(h.week||'')}</strong>${d?`<span style="font-size:11px;color:#718096;margin-left:6px">(${esc(d)})</span>`:''}</div><span style="font-weight:700;color:${p?'#22543d':'#742a2a'}">${p?'✓ Var':'✕ Yok'}</span></div>`}).join('')+`</div>`}}
 
-            if (sessionData.courseName) {
-                document.getElementById('courseTitle').innerText = sessionData.courseName;
-            }
-            if (sessionData.week) {
-                document.getElementById('sessionInfo').innerText = `${sessionData.week} Yoklaması`;
-            }
-            activeSessionId = sessId;
-            document.getElementById('sessionGroup').style.display = 'none';
-            return true;
-        } catch (err) {
-            console.error(err);
-            showResult('error', '❌ Bağlantı Hatası', `Veritabanına ulaşılamadı: ${err.message || 'İnternet bağlantınızı kontrol ediniz.'}`);
-            return false;
-        }
-    }
+  const html=`<div class="done-hero"><div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+   <div class="done-kicker">Yoklamanız alındı</div><div class="done-name">${esc(studentName)}</div><div class="done-no">${esc(studentNo)}</div></div>
+   <div class="chip-row">${chips}</div>
+   <div class="done-panel" style="--tone:${tone.c};--c:${RING.toFixed(2)};--o:${off.toFixed(2)}">
+    <div class="ring-wrap"><svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/><circle class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/></svg>
+     <div class="ring-center"><div class="ring-pct"><span id="ratePct">${rate}</span><small>%</small></div><div class="ring-cap">Devam</div></div></div>
+    <div class="ring-note">${tone.t}</div>
+    <div class="stat-grid"><div class="stat"><b>${total}</b><span>Toplam hafta</span></div><div class="stat ok"><b>${att}</b><span>Katıldığınız</span></div><div class="stat no ${absent===0?'zero':''}"><b>${absent}</b><span>Devamsızlık</span></div></div>
+   </div>${hist}`;
+  showResult('success','',html);
+  $('attendanceCard').classList.add('is-done');
+  animatePct(rate);
+  $('formContainer').style.display='none';
+ }catch(err){
+  console.error(err);
+  showResult('error','❌ İşlem Başarısız','Yoklama kaydedilirken bir hata oluştu. Lütfen tekrar deneyiniz.');
+  resetBtn(btn)}}
 
-    function getStudentLocation() {
-        return new Promise((resolve) => {
-            if (!navigator.geolocation) {
-                resolve(null);
-                return;
-            }
-            // 1. Aşama: Yüksek hassasiyetli GPS ölçümü
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-                },
-                (err) => {
-                    console.warn("Yüksek hassasiyetli konum alınamadı, standart mod deneniyor...", err);
-                    // 2. Aşama: Wi-Fi / Hücresel şebeke destekli hızlı konum ölçümü (Yedek)
-                    navigator.geolocation.getCurrentPosition(
-                        (pos2) => {
-                            resolve({ lat: pos2.coords.latitude, lng: pos2.coords.longitude });
-                        },
-                        (err2) => {
-                            console.error("Konum alma başarısız:", err2);
-                            resolve(null);
-                        },
-                        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
-                    );
-                },
-                { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
-            );
-        });
-    }
+function showResult(type,title,desc){
+ const box=$('resultBox');
+ box.className=`result-box ${type}`+(type==='success'&&!title?' rich':'');
+ $('resultTitle').innerText=title;$('resultDesc').innerHTML=desc;box.style.display='block'}
 
-    async function submitAttendance() {
-        let sessId = activeSessionId;
-        if (!sessId) {
-            const sessInput = document.getElementById('sessionIdInput');
-            sessId = sessInput ? sessInput.value.trim() : '';
-        }
+function animatePct(target){
+ const el=$('ratePct');
+ if(!el||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const t0=performance.now(),dur=1100,delay=250;el.textContent='0';
+ (function tick(now){const p=Math.min(Math.max((now-t0-delay)/dur,0),1);el.textContent=Math.round(target*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(tick)})(t0)}
 
-        if (sessionData && checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
-            return;
-        }
-
-        const studentInput = document.getElementById('studentNoInput');
-        const studentNo = studentInput ? studentInput.value.trim() : '';
-
-        if (!sessId) {
-            showResult('warning', '⚠️ Uyarı', 'Lütfen tahtadaki Oturum Kodunu giriniz.');
-            return;
-        }
-
-        if (!studentNo) {
-            showResult('warning', '⚠️ Uyarı', 'Lütfen öğrenci numaranızı giriniz.');
-            return;
-        }
-
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Kontrol Ediliyor...";
-
-        // Oturum verisi yüklenmemişse yükle
-        if (!sessionData || activeSessionId !== sessId) {
-            const ok = await loadSession(sessId);
-            if (!ok) {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Yoklamayı Onayla";
-                return;
-            }
-        }
-
-        if (checkDeviceLock(sessId, sessionData.week, sessionData.sessionVersion)) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Yoklamayı Onayla";
-            return;
-        }
-
-        // 1. Öğrenci listede var mı kontrol et
-        const rawStudentObj = sessionData.students ? sessionData.students[studentNo] : null;
-        if (!rawStudentObj) {
-            showResult('error', '❌ Öğrenci Bulunamadı', `[${studentNo}] numaralı öğrenci bu dersin sınıf listesinde kayıtlı değildir.`);
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Yoklamayı Onayla";
-            return;
-        }
-
-        let studentName = "";
-        let pastAttended = 0;
-        if (typeof rawStudentObj === 'object') {
-            studentName = rawStudentObj.name || studentNo;
-            pastAttended = rawStudentObj.pastAttended || 0;
-        } else {
-            studentName = rawStudentObj;
-        }
-
-        // 2. KONUM ÖLÇÜMÜ (Öğrenci konum rızası verdiyse ve oturumda konum varsa)
-        let distMeters = null;
-        if (userLocationPermission && sessionData && sessionData.location && sessionData.location.lat && sessionData.location.lng) {
-            submitBtn.innerText = "📍 Konum Ölçülüyor...";
-            const userLoc = await getStudentLocation();
-            if (userLoc) {
-                distMeters = calculateDistanceMeters(userLoc.lat, userLoc.lng, sessionData.location.lat, sessionData.location.lng);
-            }
-        }
-
-        await executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn);
-    }
-
-    async function executeAttendanceSave(sessId, studentNo, studentName, pastAttended, distMeters, rawStudentObj, submitBtn) {
-        submitBtn.innerText = "Kaydediliyor...";
-
-        try {
-            const checkRes = await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`);
-            const existing = await checkRes.json();
-
-            if (existing) {
-                showResult('warning', '⚠️ Zaten Alındı', `Sayın ${studentName}, ${sessionData.courseName} dersi için yoklamanız zaten kaydedilmiştir.`);
-                try {
-                    const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
-                    localStorage.setItem(lockKey, studentNo);
-                } catch (e) {}
-                document.getElementById('formContainer').style.display = 'none';
-                return;
-            }
-
-            const timestamp = Date.now();
-            const record = {
-                studentNo: studentNo,
-                fullName: studentName,
-                distanceMeters: distMeters,
-                timestamp: timestamp,
-                locationAllowed: userLocationPermission
-            };
-
-            await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(record)
-            });
-
-            // Cihazı BU SÜRÜM OTURUM İÇİN KİLİTLE
-            try {
-                const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
-                localStorage.setItem(lockKey, studentNo);
-            } catch (e) {}
-
-            // Devam durumu istatistiklerini hesapla
-            const totalPastWeeks = sessionData.totalPastWeeks || 0;
-            const currentTotalWeeks = totalPastWeeks + 1; // bu hafta dahil
-            const currentAttendedWeeks = pastAttended + 1; // bu hafta dahil
-            const absentWeeks = currentTotalWeeks - currentAttendedWeeks;
-            const ratePercent = Math.round((currentAttendedWeeks / currentTotalWeeks) * 100);
-
-            // Renk / yorum eşikleri (isterseniz değiştirin)
-            const tone = ratePercent >= 80 ? { c: '#2f9e63', t: 'Devam durumunuz iyi' }
-                       : ratePercent >= 70 ? { c: '#dd6b20', t: 'Devamınıza dikkat edin' }
-                       :                     { c: '#e53e3e', t: 'Devam oranınız düşük' };
-
-            const RING_C = 2 * Math.PI * 52; // r = 52
-            const ringOffset = RING_C * (1 - ratePercent / 100);
-
-            const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-            const timeStr = new Date(timestamp).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-
-            const ico = {
-                book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
-                cal:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
-                pin:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-                clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
-            };
-
-            const chips = [
-                sessionData.courseName ? `<span class="chip">${ico.book}${esc(sessionData.courseName)}</span>` : '',
-                sessionData.week       ? `<span class="chip">${ico.cal}${esc(sessionData.week)}</span>` : '',
-                distMeters !== null    ? `<span class="chip">${ico.pin}Sınıfa ${esc(distMeters)} m</span>` : '',
-                `<span class="chip neutral">${ico.clock}${timeStr}</span>`
-            ].join('');
-
-            function formatTrDate(dateInput) {
-                if (!dateInput) return "";
-                let d = null;
-                if (dateInput instanceof Date) {
-                    d = dateInput;
-                } else if (typeof dateInput === 'string') {
-                    const str = dateInput.trim();
-                    const dotParts = str.split('.');
-                    if (dotParts.length >= 2) {
-                        const day = parseInt(dotParts[0], 10);
-                        const month = parseInt(dotParts[1], 10) - 1;
-                        const year = dotParts[2] ? parseInt(dotParts[2], 10) : new Date().getFullYear();
-                        if (!isNaN(day) && !isNaN(month)) d = new Date(year, month, day);
-                    } else {
-                        const isoParts = str.split('-');
-                        if (isoParts.length === 3) {
-                            const year = parseInt(isoParts[0], 10);
-                            const month = parseInt(isoParts[1], 10) - 1;
-                            const day = parseInt(isoParts[2], 10);
-                            if (!isNaN(day) && !isNaN(month) && !isNaN(year)) d = new Date(year, month, day);
-                        }
-                    }
-                }
-                if (d && !isNaN(d.getTime())) {
-                    const monthsTR = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
-                    return `${d.getDate()} ${monthsTR[d.getMonth()]}`;
-                }
-                return dateInput;
-            }
-
-            // Haftalık Katılım Geçmişi Tablosunu Oluştur
-            let historyRowsHtml = '';
-            if (rawStudentObj && typeof rawStudentObj === 'object' && Array.isArray(rawStudentObj.history)) {
-                const filteredHistory = rawStudentObj.history.filter(h => h && !h.isHoliday);
-                if (filteredHistory.length > 0) {
-                    const items = filteredHistory.map(h => {
-                        const isPresent = h.attended || h.status === 'Var';
-                        const displayDate = h.date ? formatTrDate(h.date) : '';
-                        return `
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; margin-bottom:6px; background:${isPresent ? '#f0fff4' : '#fff5f5'}; border:1px solid ${isPresent ? '#c6f6d5' : '#fed7d7'}; border-radius:10px; font-size:13px;">
-                                <div>
-                                    <strong>${esc(h.week || '')}</strong>
-                                    ${displayDate ? `<span style="font-size:11px; color:#718096; margin-left:6px;">(${esc(displayDate)})</span>` : ''}
-                                </div>
-                                <span style="font-weight:bold; color:${isPresent ? '#22543d' : '#742a2a'};">${isPresent ? '✓ Var' : '✕ Yok'}</span>
-                            </div>
-                        `;
-                    }).join('');
-
-                    historyRowsHtml = `
-                        <div style="margin-top:16px; text-align:left; background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:16px;">
-                            <div style="font-weight:bold; font-size:14px; color:#1a202c; margin-bottom:10px;">Haftalık Katılım Detayı</div>
-                            ${items}
-                        </div>
-                    `;
-                }
-            }
-
-            const summaryCardHtml = `
-                <div class="done-hero">
-                    <div class="done-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-                    </div>
-                    <div class="done-kicker">Yoklamanız alındı</div>
-                    <div class="done-name">${esc(studentName)}</div>
-                    <div class="done-no">${esc(studentNo)}</div>
-                </div>
-
-                <div class="chip-row">${chips}</div>
-
-                <div class="done-panel" style="--tone:${tone.c}; --c:${RING_C.toFixed(2)}; --o:${ringOffset.toFixed(2)};">
-                    <div class="ring-wrap">
-                        <svg viewBox="0 0 120 120">
-                            <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/>
-                            <circle class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="8"/>
-                        </svg>
-                        <div class="ring-center">
-                            <div class="ring-pct"><span id="ratePct">${ratePercent}</span><small>%</small></div>
-                            <div class="ring-cap">Devam</div>
-                        </div>
-                    </div>
-                    <div class="ring-note">${tone.t}</div>
-                    <div class="stat-grid">
-                        <div class="stat"><b>${currentTotalWeeks}</b><span>Toplam hafta</span></div>
-                        <div class="stat ok"><b>${currentAttendedWeeks}</b><span>Katıldığınız</span></div>
-                        <div class="stat no ${absentWeeks === 0 ? 'zero' : ''}"><b>${absentWeeks}</b><span>Devamsızlık</span></div>
-                    </div>
-                </div>
-
-                ${historyRowsHtml}
-            `;
-
-            showResult('success', '', summaryCardHtml);
-            document.getElementById('attendanceCard').classList.add('is-done');
-            animatePct(ratePercent);
-            document.getElementById('formContainer').style.display = 'none';
-        } catch (err) {
-            console.error(err);
-            showResult('error', '❌ İşlem Başarısız', 'Yoklama kaydedilirken bir hata oluştu. Lütfen tekrar deneyiniz.');
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Yoklamayı Onayla";
-        }
-    }
-
-    function showResult(type, title, desc) {
-        const box = document.getElementById('resultBox');
-        box.className = `result-box ${type}` + (type === 'success' && !title ? ' rich' : '');
-        document.getElementById('resultTitle').innerText = title;
-        document.getElementById('resultDesc').innerHTML = desc;
-        box.style.display = 'block';
-    }
-
-    function animatePct(target) {
-        const el = document.getElementById('ratePct');
-        if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const t0 = performance.now(), dur = 1100, delay = 250;
-        el.textContent = '0';
-        (function tick(now) {
-            const p = Math.min(Math.max((now - t0 - delay) / dur, 0), 1);
-            el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-            if (p < 1) requestAnimationFrame(tick);
-        })(t0);
-    }
-
-    if (activeSessionId) {
-        loadSession(activeSessionId);
-    } else {
-        document.getElementById('sessionGroup').style.display = 'block';
-    }
+if(activeSessionId)loadSession(activeSessionId);else $('sessionGroup').style.display='block';
 </script>
-
 </body>
 </html>
