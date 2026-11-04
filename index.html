@@ -768,6 +768,41 @@
         });
     }
 
+    function findStudentInSession(students, targetNo) {
+        if (!students || targetNo == null) return null;
+        const cleanTarget = targetNo.toString().trim();
+        if (!cleanTarget) return null;
+
+        if (typeof students === 'object' && !Array.isArray(students)) {
+            if (students[cleanTarget]) return students[cleanTarget];
+            if (students['s_' + cleanTarget]) return students['s_' + cleanTarget];
+            for (let k in students) {
+                if (k.toString().trim() === cleanTarget) return students[k];
+                if (students[k] && typeof students[k] === 'object') {
+                    const sNo = (students[k].studentNo || students[k].no || students[k].id || '').toString().trim();
+                    if (sNo === cleanTarget) return students[k];
+                }
+            }
+        }
+
+        if (Array.isArray(students)) {
+            for (let i = 0; i < students.length; i++) {
+                const item = students[i];
+                if (!item) continue;
+                if (typeof item === 'object') {
+                    const sNo = (item.studentNo || item.no || item.id || '').toString().trim();
+                    if (sNo === cleanTarget) return item;
+                } else if (item.toString().trim() === cleanTarget) {
+                    return item;
+                }
+            }
+            const numIndex = parseInt(cleanTarget, 10);
+            if (!isNaN(numIndex) && students[numIndex]) return students[numIndex];
+        }
+
+        return null;
+    }
+
     async function submitAttendance() {
         let sessId = activeSessionId;
         if (!sessId) {
@@ -811,7 +846,7 @@
             return;
         }
 
-        const rawStudentObj = sessionData.students ? sessionData.students[studentNo] : null;
+        const rawStudentObj = findStudentInSession(sessionData.students, studentNo);
         if (!rawStudentObj) {
             showResult('error', '❌ Öğrenci Bulunamadı', `[<strong>${esc(studentNo)}</strong>] numaralı öğrenci bu dersin sınıf listesinde kayıtlı değildir.`);
             submitBtn.disabled = false;
