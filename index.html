@@ -684,13 +684,17 @@
         try {
             const res = await fetch(`${dbUrl}sessions/${sessId}.json`);
             if (!res.ok) {
-                showResult('error', '❌ Sunucu Yanıt Vermedi', `HTTP Hata Kodu: ${res.status}`);
+                if (res.status === 401 || res.status === 403) {
+                    showResult('error', '❌ Veritabanı İzin Hatası', `Firebase veritabanı okuma izni kapalı (HTTP ${res.status}).<br/><br/>Firebase Konsolu'ndan Realtime Database Kuralları'nı <strong>".read": true, ".write": true</strong> olarak ayarlayınız.`);
+                } else {
+                    showResult('error', '❌ Sunucu Yanıt Vermedi', `Firebase Sunucu Hatası (HTTP ${res.status}). Lütfen Firebase URL adresini ve internet bağlantınızı kontrol ediniz.`);
+                }
                 return false;
             }
             sessionData = await res.json();
 
             if (!sessionData) {
-                showResult('warning', '⚠️ Yoklama Başlamadı', 'Henüz yoklama başlamadı. Hocanız başlattığında tekrar deneyin.');
+                showResult('warning', '⚠️ Yoklama Başlamadı', 'Henüz yoklama başlamadı veya durduruldu. Hocanız başlattığında tekrar deneyin.');
                 return false;
             }
 
@@ -847,11 +851,22 @@
                 locationAllowed: userLocationPermission
             };
 
-            await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
+            const putRes = await fetch(`${dbUrl}sessions/${sessId}/attendance/${studentNo}.json`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(record)
             });
+
+            if (!putRes.ok) {
+                if (putRes.status === 401 || putRes.status === 403) {
+                    showResult('error', '❌ Kayıt Yapılamadı', `Firebase veritabanı yazma izni kapalı (HTTP ${putRes.status}).<br/><br/>Firebase Konsolu'ndan Realtime Database Kuralları'nı <strong>".write": true</strong> olarak ayarlayınız.`);
+                } else {
+                    showResult('error', '❌ Kayıt Başarısız', `Firebase sunucu hatası (HTTP ${putRes.status}). Lütfen tekrar deneyiniz.`);
+                }
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Yoklamayı Onayla</span>';
+                return;
+            }
 
             try {
                 const lockKey = getDeviceLockKey(sessId, sessionData.week, sessionData.sessionVersion);
