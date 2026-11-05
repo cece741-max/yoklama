@@ -216,12 +216,13 @@ async function executeAttendanceSave(sessId,studentNo,studentName,pastAttended,d
    return d&&!isNaN(d.getTime())?`${d.getDate()} ${MONTHS[d.getMonth()]}`:s}
 
   let hist='';
-  if(Array.isArray(raw.history)){
-   const list=raw.history.filter(h=>h&&!h.isHoliday);
+  {
+   const list=(Array.isArray(raw.history)?raw.history:[]).filter(h=>h&&!h.isHoliday);
+   list.push({week:sessionData.week||'Bu hafta',date:new Date(timestamp).toLocaleDateString('tr-TR'),attended:true,now:true});
    if(list.length){
     hist=`<div style="margin-top:16px;text-align:left;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px"><div style="font-weight:700;font-size:14px;color:#1a202c;margin-bottom:10px">Haftalık Katılım Detayı</div>`+
     list.map(h=>{const p=h.attended||h.status==='Var',d=h.date?fmtDate(h.date):'';
-     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:6px;background:${p?'#f0fff4':'#fff5f5'};border:1px solid ${p?'#c6f6d5':'#fed7d7'};border-radius:10px;font-size:13px"><div><strong>${esc(h.week||'')}</strong>${d?`<span style="font-size:11px;color:#718096;margin-left:6px">(${esc(d)})</span>`:''}</div><span style="font-weight:700;color:${p?'#22543d':'#742a2a'}">${p?'✓ Var':'✕ Yok'}</span></div>`}).join('')+`</div>`}}
+     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:6px;background:${p?'#f0fff4':'#fff5f5'};border:1px solid ${p?'#c6f6d5':'#fed7d7'};border-radius:10px;font-size:13px"><div><strong>${esc(h.week||'')}</strong>${d?`<span style="font-size:11px;color:#718096;margin-left:6px">(${esc(d)}${h.now?' · bugün':''})</span>`:''}</div><span style="font-weight:700;color:${p?'#22543d':'#742a2a'}">${p?'✓ Var':'✕ Yok'}</span></div>`}).join('')+`</div>`}}
 
   const html=`<div class="done-hero"><div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
    <div class="done-kicker">Yoklamanız alındı</div><div class="done-name">${esc(studentName)}</div><div class="done-no">${esc(studentNo)}</div></div>
