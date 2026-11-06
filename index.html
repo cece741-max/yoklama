@@ -74,24 +74,21 @@ input:focus{border-color:#3182ce}
 </head>
 <body oncontextmenu="return false;">
 
-<div class="card" id="consentCard">
- <div class="summary-box">Yoklama için yalnızca öğrenci numaranız kullanılır, konum bilgisi alınmaz. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.</div>
- <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">▼ Tam aydınlatma metnini oku</div>
- <div class="full-text" id="fullTextContent">Öğrenci numaranız ve isminiz dersin devam takibini yapmak amacıyla kullanılmaktadır. Konum bilgisi alınmaz ve kaydedilmez. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.</div>
- <div class="checkbox-group">
-  <label class="checkbox-item"><input type="checkbox" id="readNoticeConsent" onchange="validateConsentForm()"><span class="checkbox-label">Aydınlatma metnini okudum.</span></label>
- </div>
- <button id="proceedBtn" class="btn-primary" disabled onclick="proceedToAttendance()">Devam et</button>
- <p class="footer-text">Mobil Yoklama Sistemi</p>
-</div>
-
-<div class="card text-center" id="attendanceCard" style="display:none">
+<div class="card text-center" id="attendanceCard">
  <h2 id="courseTitle">Ders Yoklaması</h2>
  <p class="subtitle" id="sessionInfo">Öğrenci Numarası ile Giriş Yapınız</p>
  <div id="formContainer">
   <div class="form-group" id="sessionGroup" style="display:none"><label for="sessionIdInput">Oturum / Şifre Kodu</label><input type="number" id="sessionIdInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
   <div class="form-group"><label for="studentNoInput">Öğrenci Numarası</label><input type="number" id="studentNoInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
-  <button id="submitBtn" class="btn-primary" onclick="submitAttendance()">Yoklamayı Onayla</button>
+  <div style="text-align:left;margin-top:20px">
+   <div class="summary-box">Yoklama için yalnızca öğrenci numaranız kullanılır, konum bilgisi alınmaz. Veriler oturum süresince (2-3 dakika) yurt dışındaki bir sunucuda geçici olarak tutulur, yoklama bitince otomatik olarak silinir. Devam kayıtları her dönem final sınavları sonrası silinir.</div>
+   <div class="toggle-btn" id="toggleFullTextBtn" onclick="toggleFullText()">▼ Tam aydınlatma metnini oku</div>
+   <div class="full-text" id="fullTextContent">Öğrenci numaranız ve isminiz dersin devam takibini yapmak amacıyla kullanılmaktadır. Konum bilgisi alınmaz ve kaydedilmez. Bu veriler yoklama sırasında hizmet sağlayıcı Google (Firebase) altyapısında geçici olarak tutulur, oturum verisi yoklama kapatılınca silinir, devam kayıtları final sınavları sonrası silinir. Bu yöntemi kullanmak istemezseniz öğretim elemanına bildirerek kâğıt imza gibi alternatif bir yolla yoklamaya katılabilirsiniz.</div>
+   <div class="checkbox-group">
+  <label class="checkbox-item"><input type="checkbox" id="readNoticeConsent" onchange="validateConsentForm()"><span class="checkbox-label">Aydınlatma metnini okudum.</span></label>
+   </div>
+  </div>
+  <button id="submitBtn" class="btn-primary" disabled onclick="submitAttendance()">Yoklamayı Onayla</button>
  </div>
  <div id="resultBox" class="result-box"><div class="result-title" id="resultTitle"></div><div class="result-desc" id="resultDesc"></div></div>
  <p class="footer-text">© Mobil Yoklama Sistemi</p>
@@ -106,10 +103,7 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
 function toggleFullText(){const f=$('fullTextContent'),b=$('toggleFullTextBtn'),o=f.style.display==='block';f.style.display=o?'none':'block';b.innerText=o?'▼ Tam aydınlatma metnini oku':'▲ Tam aydınlatma metnini gizle'}
-function validateConsentForm(){$('proceedBtn').disabled=!$('readNoticeConsent').checked}
-function proceedToAttendance(){
- if(!$('readNoticeConsent').checked)return;
- $('consentCard').style.display='none';$('attendanceCard').style.display='block'}
+function validateConsentForm(){$('submitBtn').disabled=!$('readNoticeConsent').checked}
 
 function getDeviceLockKey(sessId,weekStr,ver){return 'yoklama_done_'+sessId+'_'+String(ver||weekStr||'active').replace(/[^a-zA-Z0-9]/g,'_')}
 function checkDeviceLock(sessId,weekStr,ver){
@@ -135,6 +129,7 @@ async function loadSession(sessId){
 function resetBtn(b){b.disabled=false;b.innerText='Yoklamayı Onayla'}
 
 async function submitAttendance(){
+ if(!$('readNoticeConsent').checked)return showResult('warning','⚠️ Uyarı','Devam etmek için aydınlatma metnini okuduğunuzu onaylayınız.');
  let sessId=activeSessionId;
  if(!sessId){const i=$('sessionIdInput');sessId=i?i.value.trim():''}
  if(sessionData&&checkDeviceLock(sessId,sessionData.week,sessionData.sessionVersion))return;
