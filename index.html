@@ -411,7 +411,50 @@ function sheet(){
  <table><colgroup><col style="width:9mm"><col style="width:24mm"><col><col style="width:22mm"><col style="width:22mm"><col style="width:22mm"></colgroup><thead><tr><th>Sıra</th><th>Öğrenci No</th><th>Ad Soyad</th>${('<th>..../..../'+yr+'</th>').repeat(3)}</tr></thead><tbody>${rows}</tbody></table>`;
  $('sheet').style.display='block';$('sheet').scrollTop=0;fitSheet()}
 function fitSheet(){$('pg').style.zoom=Math.min(1,($('sheet').clientWidth-24)/(170*3.7795))}
-function printSheet(){const t=document.title;document.title=cur.name+' - Yoklama Listesi';window.onafterprint=()=>{document.title=t;window.onafterprint=null};window.print()}
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function mkPdf(jpg,w,h){
+ const enc=new TextEncoder(),parts=[],off=[];let pos=0;
+ const add=d=>{const b=typeof d==='string'?enc.encode(d):d;parts.push(b);pos+=b.length};
+ const obj=(i,body)=>{off[i]=pos;add(`${i} 0 obj\n${body}\nendobj\n`)};
+ add('%PDF-1.4\n');
+ obj(1,'<</Type/Catalog/Pages 2 0 R>>');obj(2,'<</Type/Pages/Kids[3 0 R]/Count 1>>');
+ obj(3,'<</Type/Page/Parent 2 0 R/MediaBox[0 0 595.28 841.89]/Resources<</XObject<</I 4 0 R>>>>/Contents 5 0 R>>');
+ off[4]=pos;add(`4 0 obj\n<</Type/XObject/Subtype/Image/Width ${w}/Height ${h}/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length ${jpg.length}>>\nstream\n`);add(jpg);add('\nendstream\nendobj\n');
+ const cs='q 595.28 0 0 841.89 0 0 cm /I Do Q';obj(5,`<</Length ${cs.length}>>\nstream\n${cs}\nendstream`);
+ const xr=pos;let x='xref\n0 6\n0000000000 65535 f \n';for(let i=1;i<=5;i++)x+=String(off[i]).padStart(10,'0')+' 00000 n \n';
+ add(x+`trailer\n<</Size 6/Root 1 0 R>>\nstartxref\n${xr}\n%%EOF`);
+ return new Blob(parts,{type:'application/pdf'})}
+function sheetPdf(){
+ const c=cur,n=Math.max(c.students.length,1),cr=Math.max(1,c.credit),yr=new Date().getFullYear();
+ const rh=Math.min(8.2,232/n),fs=Math.max(5.5,Math.min(10.5,rh*3.78*.55));
+ const K=8,P=px=>px*.2646*K,W=210*K,H=297*K,A='Arial,Helvetica,sans-serif';
+ const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+ const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,W,H);g.fillStyle='#000';g.strokeStyle='#000';
+ const L=20*K,T=10*K;g.textBaseline='top';
+ g.font=`bold ${P(17)}px ${A}`;g.fillText(`${c.name} - Yoklama Listesi`,L,T,138*K);
+ g.font=`${P(11)}px ${A}`;let y=T+P(17)*1.2+P(4);
+ const ln=t=>{g.fillText(t,L,y,138*K);y+=P(11)*1.15+P(3)};
+ if(c.instructor)ln('Öğretim Elemanı: '+c.instructor);
+ ln(`Ders Kredisi: ${cr} saat · ${cr===3?'Tek haftalık liste (her saat için imza)':'3 haftalık liste (her hafta için tek imza)'}`);
+ const q=qrcode(0,'M');q.addData(`${webUrl()}?session=${c.id}`);q.make();
+ const m=q.getModuleCount(),cs=26*K/(m+4),qx=190*K-26*K,qy=T;
+ for(let r=0;r<m;r++)for(let k=0;k<m;k++)if(q.isDark(r,k)){const x0=Math.round(qx+(k+2)*cs),y0=Math.round(qy+(r+2)*cs);g.fillRect(x0,y0,Math.round(qx+(k+3)*cs)-x0,Math.round(qy+(r+3)*cs)-y0)}
+ const cw=[9,24,71,22,22,22].map(v=>v*K),ty=39*K,hh=9*K,rp=rh*K,pad=P(3);
+ const xs=[L];cw.forEach((w,i)=>xs.push(xs[i]+w));
+ g.lineWidth=P(1);g.textBaseline='middle';
+ const cell=(i,y0,h,t,al,font)=>{g.strokeRect(xs[i],y0,cw[i],h);if(!t)return;g.save();g.beginPath();g.rect(xs[i],y0,cw[i],h);g.clip();g.font=font;g.textAlign=al;g.fillText(t,al==='center'?xs[i]+cw[i]/2:xs[i]+pad,y0+h/2);g.restore()};
+ ['Sıra','Öğrenci No','Ad Soyad',...Array(3).fill('..../..../'+yr)].forEach((t,i)=>cell(i,ty,hh,t,'center',`${P(9)}px ${A}`));
+ for(let i=0;i<n;i++){const s=c.students[i],y0=ty+hh+i*rp,f=`${P(fs)}px ${A}`;
+  cell(0,y0,rp,String(i+1),'center',f);cell(1,y0,rp,s?s.studentNo:'','center',f);cell(2,y0,rp,s?s.fullName:'','left',f);cell(3,y0,rp,'','center',f);cell(4,y0,rp,'','center',f);cell(5,y0,rp,'','center',f)}
+ g.lineWidth=P(1.6);for(let i=4;i<n;i+=5){const yy=ty+hh+(i+1)*rp;g.beginPath();g.moveTo(L,yy);g.lineTo(L+170*K,yy);g.stroke()}
+ const bin=atob(cv.toDataURL('image/jpeg',.85).split(',')[1]),jpg=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)jpg[i]=bin.charCodeAt(i);
+ return mkPdf(jpg,W,H)}
+async function savePdf(){
+ const blob=sheetPdf(),fn=cur.name.replace(/[\\/:*?"<>|]+/g,'_')+' - Yoklama Listesi.pdf',f=new File([blob],fn,{type:'application/pdf'});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:fn})}catch(e){if(e.name!=='AbortError')window.open(URL.createObjectURL(blob),'_blank')}return}
+ window.open(URL.createObjectURL(blob),'_blank')}
+
+function printSheet(){if(IOS)return savePdf();const t=document.title;document.title=cur.name+' - Yoklama Listesi';window.onafterprint=()=>{document.title=t;window.onafterprint=null};window.print()}
 function closeSheet(){$('sheet').style.display='none'}
 addEventListener('resize',()=>{if($('sheet').style.display==='block')fitSheet()});
 
